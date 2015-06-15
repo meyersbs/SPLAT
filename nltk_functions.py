@@ -113,19 +113,31 @@ def display_command_list():
 	print(command_list)
 
 ##### MAIN #######################################
-while(True):
-	user_command = raw_input('Please provide a command: ')
-	command = word_tokenize(user_command)
-	#print(command)
-	if command[0] == 't' and len(command) == 2:
-		get_tokens(command[1])
-	elif command[0] == 'f' and len(command) == 3:
-		get_freqs(command[1], int(command[2]))
-	elif command[0] == 'h' and len(command) == 1:
-		display_command_list()
-	elif command[0] == '!' and len(command) == 1:
-		run_accuracy_tests()
-	elif command[0] == 'q' and len(command) == 1:
-		break
-	else:
-		print('Invalid Command.\nFor Help, type \'h\'.')
+def main():
+	print('#################################################')
+	print('# CAAP - Corpus Annotator & Analyzer in Python \t#')
+	print('# Version 0.00 \tJune 15, 2015 \t3:55 PM UTC \t#')
+	print('# Developed by Benjamin S. Meyers\t\t#')
+	print('#\t\t\t\t\t\t#')
+	print('# Welcome! Type "h" for help.\t\t\t#')
+	print('#################################################')
+	while(True):
+		user_command = raw_input('Please provide a command: ')
+		command = word_tokenize(user_command)
+		#print(command)
+		if command[0] == 't' and len(command) == 2:
+			get_tokens(command[1])
+		elif command[0] == 'f' and len(command) == 3:
+			get_freqs(command[1], int(command[2]))
+		elif command[0] == 'h' and len(command) == 1:
+			display_command_list()
+		elif command[0] == '!' and len(command) == 1:
+			run_accuracy_tests()
+		elif command[0] == 'q' and len(command) == 1:
+			print('\nHappy Annotating!\n')
+			break
+		else:
+			print('Invalid Command.\nFor Help, type \'h\'.')
+
+if __name__ == "__main__":
+    main()
