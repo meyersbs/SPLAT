@@ -102,14 +102,15 @@ def run_accuracy_tests():
 
 ##### DISPLAY COMMAND LIST #######################
 def display_command_list():
-	command_list = '##################################################'
-	command_list += '\ncommand arg1 \targ2 \tdescription\n'
-	command_list += '\nf \tstr \tint \tget_freqs(str, int)'
-	command_list += '\nh \t-- \t-- \tdisplay_command_list()'
-	command_list += '\nt \tstr \t-- \tget_tokens(str)'
-	command_list += '\n! \t-- \t-- \trun_accuracy_tests()'
-	command_list += '\nq \t-- \t-- \tquit program.'
-	command_list += '\n##################################################'
+	command_list = '#################################################'
+	command_list += '\n# command arg1 \targ2 \tdescription\t\t#'
+	command_list += '\n#\t\t\t\t\t\t#'
+	command_list += '\n# f \tstr \tint \tget_freqs(str, int)\t#'
+	command_list += '\n# h \t-- \t-- \tdisplay_command_list()\t#'
+	command_list += '\n# t \tstr \t-- \tget_tokens(str)\t\t#'
+	command_list += '\n# ! \t-- \t-- \trun_accuracy_tests()\t#'
+	command_list += '\n# q \t-- \t-- \tquit program.\t\t#'
+	command_list += '\n#################################################'
 	print(command_list)
 
 ##### MAIN #######################################
@@ -119,7 +120,12 @@ def main():
 	print('# Version 0.00 \tJune 15, 2015 \t3:55 PM UTC \t#')
 	print('# Developed by Benjamin S. Meyers\t\t#')
 	print('#\t\t\t\t\t\t#')
-	print('# Welcome! Type "h" for help.\t\t\t#')
+	print('# This application may not be copied, altered,\t#')
+	print('# or distributed without written consent from\t#')
+	print('# the product owner. \t\t\t\t#')
+	print('# Type "~" for more information. \t\t#')
+	print('#\t\t\t\t\t\t#')
+	print('# Welcome to CAAP! Type "h" for help.\t\t#')
 	print('#################################################')
 	while(True):
 		user_command = raw_input('Please provide a command: ')
@@ -133,6 +139,10 @@ def main():
 			display_command_list()
 		elif command[0] == '!' and len(command) == 1:
 			run_accuracy_tests()
+		elif command[0] == '~' and len(command) == 1:
+			print('Coming Soon!')
+		elif len(command) == 1 and command[0] == '42':
+			print('\nLook at you, getting all existential on me!\n')
 		elif command[0] == 'q' and len(command) == 1:
 			print('\nHappy Annotating!\n')
 			break
