@@ -1,3 +1,6 @@
+# CLAAP
+## Corpus & Linguistics Annotating & Analyzing in Python
+
 ### Research Topic:
 &nbsp;&nbsp;&nbsp;&nbsp;Computational Analysis of Trajectories of Linguistic Development in Autism
 
