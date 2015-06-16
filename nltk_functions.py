@@ -1,7 +1,7 @@
 #########################################################################################
 # File Name: nltk_functions.py
 # Date Created: 06-15-2015
-# Date Revised: 06-15-2015
+# Date Revised: 06-16-2015
 # Author: Benjamin S. Meyers
 # Email: bsm9339@rit.edu
 # 	Advisor: Emily Prud'hommeaux
@@ -12,6 +12,7 @@
 from nltk.probability import FreqDist
 from nltk.tokenize import RegexpTokenizer
 from nltk.tokenize import word_tokenize
+import random
 import re
 
 ##### GLOBAL VARIABLES ###########################
@@ -56,6 +57,8 @@ TD3_p_TS = 'TD3_T2_participant_time.txt'
 TD3_p_NS = 'TD3_T2_participant_noTS.txt'
 TD3_s_TS = 'TD3_T2_Stereo_time.txt'
 TD3_s_NS = 'TD3_T2_Stereo_noTS.txt'
+
+exit_messages = [("If you're happy and you know it, CLAAP your hands!"),("Petrichor\n(noun)\na pleasant smell that frequently accompanies the first rain after a long period of warm, dry weather."), ("Syzygy is the only word in English that contains three 'y's."), ("Tmesis is the only word in the English language that begins with 'tm'."), ("In Old English, bagpipes were called 'doodle sacks'."), ("A 'quire' is two-dozen sheets of paper."), ("'Buffalo buffalo Buffalo buffalo buffalo buffalo Buffalo buffalo' is a grammatically correct sentence in American English."), ("J.R.R. Tolkien coined the term 'glossopoeia,' which is the act of inventing languages."), ("Beowulf is an English work, but if you try to read it in its original form, it will look like gibberish!"), ("'To Be Or Not To Be' = 'U+0032 U+0042 U+2228 U+0021 U+0032 U+0042'")]
 
 ##### FUNCTIONS ##################################
 
@@ -115,18 +118,18 @@ def display_command_list():
 
 ##### MAIN #######################################
 def main():
-	print('#################################################')
-	print('# CAAP - Corpus Annotator & Analyzer in Python \t#')
-	print('# Version 0.00 \tJune 15, 2015 \t3:55 PM UTC \t#')
-	print('# Developed by Benjamin S. Meyers\t\t#')
-	print('#\t\t\t\t\t\t#')
-	print('# This application may not be copied, altered,\t#')
-	print('# or distributed without written consent from\t#')
-	print('# the product owner. \t\t\t\t#')
-	print('# Type "~" for more information. \t\t#')
-	print('#\t\t\t\t\t\t#')
-	print('# Welcome to CAAP! Type "h" for help.\t\t#')
-	print('#################################################')
+	print('#################################################################')
+	print('# CLAAP - Corpus & Linguistics Annotating & Analyzing in Python #')
+	print('# Version 0.00 \tJune 15, 2015 \t3:55 PM UTC \t\t\t#')
+	print('# Developed by Benjamin S. Meyers\t\t\t\t#')
+	print('#\t\t\t\t\t\t\t\t#')
+	print('# This application may not be copied, altered, or distributed \t#')
+	print('# without written consent from the product owner. \t\t#')
+	print('# \t\t\t\t\t\t\t\t#')
+	print('# Type "~" for more information. \t\t\t\t#')
+	print('#\t\t\t\t\t\t\t\t#')
+	print('# Welcome to CLAAP! Type "h" for help.\t\t\t\t#')
+	print('#################################################################')
 	while(True):
 		user_command = raw_input('Please provide a command: ')
 		command = word_tokenize(user_command)
@@ -144,7 +147,7 @@ def main():
 		elif len(command) == 1 and command[0] == '42':
 			print('\nLook at you, getting all existential on me!\n')
 		elif command[0] == 'q' and len(command) == 1:
-			print('\nHappy Annotating!\n')
+			print('\n' + random.choice(exit_messages) + '\n')
 			break
 		else:
 			print('Invalid Command.\nFor Help, type \'h\'.')
