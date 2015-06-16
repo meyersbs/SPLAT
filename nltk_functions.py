@@ -60,6 +60,8 @@ TD3_s_NS = 'TD3_T2_Stereo_noTS.txt'
 
 exit_messages = [("If you're happy and you know it, CLAAP your hands!"),("Petrichor\n(noun)\na pleasant smell that frequently accompanies the first rain after a long period of warm, dry weather."), ("Syzygy is the only word in English that contains three 'y's."), ("Tmesis is the only word in the English language that begins with 'tm'."), ("In Old English, bagpipes were called 'doodle sacks'."), ("A 'quire' is two-dozen sheets of paper."), ("'Buffalo buffalo Buffalo buffalo buffalo buffalo Buffalo buffalo' is a grammatically correct sentence in American English."), ("J.R.R. Tolkien coined the term 'glossopoeia,' which is the act of inventing languages."), ("Beowulf is an English work, but if you try to read it in its original form, it will look like gibberish!"), ("'To Be Or Not To Be' = 'U+0032 U+0042 U+2228 U+0021 U+0032 U+0042'")]
 
+more_info = "\nThis application was developed by Benjamin S. Meyers beginning on June 1, 2015 for an Undergraduate Research Internship at the Rochester Institute of Technology. CLAAP's primary application is to allow an easy-to-use tool for Linguists to annotate and analyze corpora consisting of discourse and dialogue.\n\tVersion 0.00\tJune 15, 2015\t3:55 PM UTC\n\tVersion 0.01\tJune 16, 2015\t11:29 AM UTC"
+
 ##### FUNCTIONS ##################################
 
 #Display the top x most frequent tokens (words) in the given text_file.
@@ -105,15 +107,15 @@ def run_accuracy_tests():
 
 ##### DISPLAY COMMAND LIST #######################
 def display_command_list():
-	command_list = '#################################################'
-	command_list += '\n# command arg1 \targ2 \tdescription\t\t#'
-	command_list += '\n#\t\t\t\t\t\t#'
-	command_list += '\n# f \tstr \tint \tget_freqs(str, int)\t#'
-	command_list += '\n# h \t-- \t-- \tdisplay_command_list()\t#'
-	command_list += '\n# t \tstr \t-- \tget_tokens(str)\t\t#'
-	command_list += '\n# ! \t-- \t-- \trun_accuracy_tests()\t#'
-	command_list += '\n# q \t-- \t-- \tquit program.\t\t#'
-	command_list += '\n#################################################'
+	command_list = '#################################################################'
+	command_list += '\n# command \targ1 \targ2 \tdescription\t\t\t#'
+	command_list += '\n#\t\t\t\t\t\t\t\t#'
+	command_list += '\n# f \t\tstr \tint \tget_freqs(str, int)\t\t#'
+	command_list += '\n# h \t\t-- \t-- \tdisplay_command_list()\t\t#'
+	command_list += '\n# t \t\tstr \t-- \tget_tokens(str)\t\t\t#'
+	command_list += '\n# ! \t\t-- \t-- \trun_accuracy_tests()\t\t#'
+	command_list += '\n# q \t\t-- \t-- \tquit program.\t\t\t#'
+	command_list += '\n#################################################################'
 	print(command_list)
 
 ##### MAIN #######################################
@@ -143,7 +145,7 @@ def main():
 		elif command[0] == '!' and len(command) == 1:
 			run_accuracy_tests()
 		elif command[0] == '~' and len(command) == 1:
-			print('Coming Soon!')
+			print(more_info)
 		elif len(command) == 1 and command[0] == '42':
 			print('\nLook at you, getting all existential on me!\n')
 		elif command[0] == 'q' and len(command) == 1:
