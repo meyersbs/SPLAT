@@ -12,13 +12,20 @@
 from nltk_functions import *
 
 ##### TEST FUNCTIONS ############################################
-def check_tokenize_accuracy():
+def check_get_tokens():
 	if get_tokens('moby_dick.txt') == get_tokens('moby_dick.txt'):
+		return 'PASSED!'
+	else:
+		return 'FAILED!'
+
+def check_get_types():
+	if get_types('moby_dick.txt') == get_types('moby_dick.txt'):
 		return 'PASSED!'
 	else:
 		return 'FAILED!'
 
 def run_tests():
 	print('##### RUNNING TESTS #############################################')
-	print('\nget_tokens(str) status: ' + check_tokenize_accuracy())
+	print('\nget_types(str) status: ' + check_get_types())
+	print('\nget_tokens(str) status: ' + check_get_tokens())
 	print('\n#################################################################')
