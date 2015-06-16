@@ -1,13 +1,13 @@
 #################################################################
-# File Name: nltk_main.py										#
-# Date Created: 06-16-2015										#
-# Date Revised: 06-16-2015										#
-# Author: Benjamin S. Meyers									#
-# Email: bsm9339@rit.edu										#
-# 	Advisor: Emily Prud'hommeaux								#
-# 	Email: emilypx@rit.edu										#
-# 	Advisor: Cissi Ovesdotter-Alm								#
-# 	Email: coagla@rit.edu										#
+# File Name: nltk_main.py					#
+# Date Created: 06-16-2015					#
+# Date Revised: 06-16-2015					#
+# Author: Benjamin S. Meyers					#
+# Email: bsm9339@rit.edu					#
+# 	Advisor: Emily Prud'hommeaux				#
+# 	Email: emilypx@rit.edu					#
+# 	Advisor: Cissi Ovesdotter-Alm				#
+# 	Email: coagla@rit.edu					#
 #################################################################
 from nltk_functions import *
 
