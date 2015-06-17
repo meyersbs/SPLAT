@@ -23,9 +23,13 @@ def main():
 		#print(get_lexical_diversity('moby_dick.txt'))
 		#print(get_word_count('moby_dick.txt'))
 		if command[0] == 'tk' and len(command) == 2:
-			get_tokens(command[1])
+			print(get_tokens(command[1]))
 		elif command[0] == 'ty' and len(command) == 2:
-			get_types(command[1])
+			print(get_types(command[1]))
+		elif command[0] == 'wc' and len(command) == 2:
+			print(get_word_count(command[1]))
+		elif command[0] == 'uwc' and len(command) == 2:
+			print(get_unique_word_count(command[1]))
 		elif command[0] == 'f' and len(command) == 3:
 			get_freqs(command[1], int(command[2]))
 		elif command[0] == 'h' and len(command) == 1:
