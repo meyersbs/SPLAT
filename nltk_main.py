@@ -1,7 +1,7 @@
 #################################################################
 # File Name: nltk_main.py					#
 # Date Created: 06-16-2015					#
-# Date Revised: 06-16-2015					#
+# Date Revised: 06-17-2015					#
 # Author: Benjamin S. Meyers					#
 # Email: bsm9339@rit.edu					#
 # 	Advisor: Emily Prud'hommeaux				#
@@ -10,6 +10,7 @@
 # 	Email: coagla@rit.edu					#
 #################################################################
 from nltk_functions import *
+from nltk_variables import *
 from nltk_tests import run_tests
 
 ##### MAIN ######################################################
@@ -19,8 +20,8 @@ def main():
 		user_command = raw_input('Please provide a command: ')
 		command = word_tokenize(user_command)
 		#print(command)
-		print(get_lexical_diversity('moby_dick.txt'))
-		print(get_word_count('moby_dick.txt'))
+		#print(get_lexical_diversity('moby_dick.txt'))
+		#print(get_word_count('moby_dick.txt'))
 		if command[0] == 'tk' and len(command) == 2:
 			get_tokens(command[1])
 		elif command[0] == 'ty' and len(command) == 2:
@@ -33,13 +34,13 @@ def main():
 			run_tests()
 		elif command[0] == '~' and len(command) == 1:
 			print(more_info)
-		elif len(command) == 1 and command[0] == '42':
+		elif command[0] == '42' and len(command) == 1:
 			print(douglas)
-		elif command[0] == 'q' and len(command) == 1:
+		elif command[0] == 'quit' and len(command) == 1:
 			print('\n' + random.choice(exit_messages) + '\n')
 			break
 		else:
-			print('Invalid Command.\nFor Help, type \'h\'.')
+			print(invalid_command)
 
 if __name__ == "__main__":
     main()
