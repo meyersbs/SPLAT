@@ -9,8 +9,7 @@
 # 	Advisor: Cissi Ovesdotter-Alm				#
 # 	Email: coagla@rit.edu					#
 #################################################################
-from nltk_functions import *
-from termcolor import *
+import termcolor
 
 ##### GLOBAL VARIABLES ##########################################
 startup_info = '#################################################################'
