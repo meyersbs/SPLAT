@@ -53,35 +53,23 @@ def get_tokens(text_file):
 
 #Generate Types from a given text file, ignoring all annotations.
 def get_types(text_file):
-	types = []
-	with open(text_file) as f:
-		for line in f:
-			line.replace('  ', ' ')
-			line.replace('\n', '')
-			word_line = line.split()
-			for word in word_line:
-				types.append(word.strip(' \n'))
-
-		for word in types:
-			if re.search(r'{SL}', word):
-				types.remove(word)
-			elif re.search(r'{NS}', word):
-				types.remove(word)
-			elif re.search(r'{BR}', word):
-				types.remove(word)
-			elif re.search(r'{LS}', word):
-				types.remove(word)
-			else:
-				types = types
+	tokens = get_tokens(text_file)
+	types = set(tokens)
 
 	return types
 
 #Generate Word Count from a given text file, ignoring all annotations.
 def get_word_count(text_file):
-	types = get_types(text_file)
-	word_count = len(types)
+	tokens = get_tokens(text_file)
+	word_count = len(tokens)
 
 	return word_count
+
+def get_unique_word_count(text_file):
+	types = get_types(text_file)
+	unique_word_count = len(types)
+
+	return unique_word_count
 
 def get_lexical_diversity(text_file):
 	types = get_types(text_file)
@@ -98,6 +86,8 @@ def display_command_list():
 	command_list += '\n# f \t\tstr \tint \tget_freqs(str, int)\t\t#'
 	command_list += '\n# tk \t\tstr \t-- \tget_tokens(str)\t\t\t#'
 	command_list += '\n# ty \t\tstr \t-- \tget_types(str)\t\t\t#'
+	command_list += '\n# uwc \t\tstr \t-- \tUnique Word Count.\t\t#'
+	command_list += '\n# wc \t\tstr \t-- \tTotal Word Count.\t\t#'
 	command_list += '\n#\t\t\t\t\t\t\t\t#'
 	command_list += '\n# h \t\t-- \t-- \tShow Valid Commands.\t\t#'
 	command_list += '\n# ~ \t\t-- \t-- \tShow Info.\t\t\t#'
