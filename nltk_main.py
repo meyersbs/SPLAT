@@ -30,8 +30,14 @@ def main():
 			print(get_word_count(command[1]))
 		elif command[0] == 'uwc' and len(command) == 2:
 			print(get_unique_word_count(command[1]))
-		elif command[0] == 'f' and len(command) == 3:
-			get_freqs(command[1], int(command[2]))
+		elif command[0] == 'ld' and len(command) == 2:
+			print(get_lexical_diversity(command[1]))
+		elif command[0] == 'mf' and len(command) == 3:
+			print(get_most_frequent(command[1], int(command[2])))
+		elif command[0] == 'lf' and len(command) == 3:
+			print(get_least_frequent(command[1], int(command[2])))
+		elif command[0] == 's' and len(command) == 3:
+			print(look_up_word(command[1], command[2]))
 		elif command[0] == 'h' and len(command) == 1:
 			display_command_list()
 		elif command[0] == '!' and len(command) == 1:
