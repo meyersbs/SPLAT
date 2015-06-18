@@ -19,6 +19,18 @@
 ## Project Description
 
 - - - -
+## System Requirements
+Currently, CLAAP has only been tested on 64-bit Ubuntu 15.04 with Python 2.7.9. 
+
+- - - -
+## Installation
+Ensure that Python is installed on your machine.
+
+Run the following in a command line.
+    
+    bash ./setup.sh
+
+- - - -
 ## Goals
 
 - - - -
