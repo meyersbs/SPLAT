@@ -19,6 +19,9 @@ def main():
 	while(True):
 		user_command = raw_input('Please provide a command: ')
 		command = word_tokenize(user_command)
+		#print(tag_parts_of_speech('test_words.txt'))
+		#print(get_most_frequent('test_words.txt', -1))
+		#print(get_pos_counts('test_words.txt'))
 		#print(command)
 		#print(get_lexical_diversity('moby_dick.txt'))
 		#print(get_word_count('moby_dick.txt'))
@@ -36,8 +39,16 @@ def main():
 			print(get_most_frequent(command[1], int(command[2])))
 		elif command[0] == 'lf' and len(command) == 3:
 			print(get_least_frequent(command[1], int(command[2])))
+		elif command[0] == 'pfd' and len(command) == 3:
+			plot_freq_dist(command[1], int(command[2]))
+		elif command[0] == 'pfd' and len(command) == 2:
+			plot_freq_dist(command[1], -1)
 		elif command[0] == 's' and len(command) == 3:
 			print(look_up_word(command[1], command[2]))
+		elif command[0] == 'pos' and len(command) == 2:
+			print(tag_parts_of_speech(command[1]))
+		elif command[0] == 'psc' and len(command) == 2:
+			print(get_pos_counts(command[1]))
 		elif command[0] == 'h' and len(command) == 1:
 			display_command_list()
 		elif command[0] == '!' and len(command) == 1:
