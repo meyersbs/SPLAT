@@ -14,14 +14,15 @@ from nltk.probability import FreqDist
 from nltk.tokenize import RegexpTokenizer
 from nltk.tokenize import word_tokenize
 from nltk_variables import *
+from matplotlib import *
 import nltk
 import random
 import re
 
 ##### FUNCTIONS #################################################
 
-#Display the top x most frequent tokens (words) in the given text_file.
-def get_most_frequent(text_file, x):
+#Calculate the frequency distribution for a given text file.
+def get_freq_dist(text_file):
 	all_words = get_tokens(text_file)
 	new_words = []
 	for token in all_words:
@@ -39,8 +40,18 @@ def get_most_frequent(text_file, x):
 
 	freq_dist = FreqDist(new_words)
 
-	return freq_dist.most_common(x)
+	return freq_dist
 
+#Display the top x most frequent tokens (words) in the given text_file.
+def get_most_frequent(text_file, x):
+	freq_dist = get_freq_dist(text_file)
+
+	if(x == -1):
+		return freq_dist.most_common()
+	else:
+		return freq_dist.most_common(x)
+
+#Display the top x least frequent tokens (words) in the given text_file.
 def get_least_frequent(text_file, x):
 	most_common = get_most_frequent(text_file, get_word_count(text_file))
 
@@ -58,8 +69,6 @@ def get_tokens(text_file):
 	f = open(text_file)
 	raw = f.read()
 	tokens = RegexpTokenizer(r'[^\d\s\:\(\)]+').tokenize(raw)
-
-	#print(len(tokens))
 
 	return tokens
 
@@ -94,26 +103,41 @@ def get_lexical_diversity(text_file):
 
 #Look up a given word in a given text file and return its number of occurences.
 def look_up_word(text_file, word):
-	all_words = get_tokens(text_file)
-	new_words = []
-	for token in all_words:
-		#print(token)
-		if re.match(r'^F', token):
-			new_words = new_words
-		elif re.match(r'^S', token):
-			new_words = new_words
-		elif re.match(r'^T', token):
-			new_words = new_words
-		elif re.match(r'^SILENCE', token):
-			new_words = new_words
-		else:
-			new_words.append(token)
-
-	freq_dist = FreqDist(new_words)
+	freq_dist = get_freq_dist(text_file)
 
 	word_query = freq_dist[word]
 
 	return word_query
+
+#Plot the frequency distribution.
+def plot_freq_dist(text_file, x):
+	freq_dist = get_freq_dist(text_file)
+
+	if x == -1:
+		freq_dist.plot()
+	else:
+		freq_dist.plot(x)
+#Tag all types with parts of speech.
+def tag_parts_of_speech(text_file):
+	tokens = get_tokens(text_file)
+	parts_of_speech = nltk.pos_tag(tokens)
+
+	return parts_of_speech
+
+#Return counts for the parts of speech in a given text file.
+def get_pos_counts(text_file):
+	pos = dict(tag_parts_of_speech(text_file))
+	
+	#print(pos)
+
+	pos_counts = {}
+	for (k,v) in pos.items():
+		if v in pos_counts.keys():
+			pos_counts[v] += 1
+		else:
+			pos_counts.update({v:1})
+
+	return pos_counts
 
 ##### DISPLAY COMMAND LIST ######################################
 def display_command_list():
@@ -123,6 +147,9 @@ def display_command_list():
 	command_list += '\n# mf \t\tstr \tint \tMost Frequent Words in str\t#'
 	command_list += '\n# ld \t\tstr \tint \tLexical Diversity\t\t#'
 	command_list += '\n# lf \t\tstr \tint \tLeast Frequent Words in str\t#'
+	command_list += '\n# pfd \t\tstr \t*int \tPlot Frequency Distribution\t#'
+	command_list += '\n# pos \t\tstr \t-- \tDisplay Parts of Speech\t\t#'
+	command_list += '\n# psc \t\tstr \t-- \tDisplay POS Counts\t\t#'
 	command_list += '\n# s \t\tstr1 \tstr2 \tFind Occurrences of str2 in str1#'
 	command_list += '\n# tk \t\tstr \t-- \tDisplay All Tokens\t\t#'
 	command_list += '\n# ty \t\tstr \t-- \tDisplay All Types\t\t#'
