@@ -15,11 +15,21 @@ from nltk.tokenize import RegexpTokenizer
 from nltk.tokenize import word_tokenize
 from nltk_variables import *
 from matplotlib import *
+import csv
 import nltk
 import random
 import re
 
 ##### FUNCTIONS #################################################
+
+#Build a dictionary of file aliases.
+def build_alias_dict():
+	alias_dict = {}
+	reader = csv.reader(open('aliases.txt', 'r'))
+	for k,v in reader:
+		alias_dict[k] = v
+
+	return alias_dict		
 
 #Calculate the frequency distribution for a given text file.
 def get_freq_dist(text_file):
@@ -93,13 +103,13 @@ def get_unique_word_count(text_file):
 
 	return unique_word_count
 
-#Calculate the Lexical Diversity (num_tokens / num_types) for a given text file.
-def get_lexical_diversity(text_file):
+#Calculate the Type-Token Ratio (TTR) for a given text file.
+def get_TTR(text_file):
 	num_types = get_unique_word_count(text_file)
 	num_tokens = get_word_count(text_file)
-	lexical_diversity = float(num_types) / num_tokens
+	type_token_ratio = float(num_types) / num_tokens * 100
 
-	return lexical_diversity
+	return round(type_token_ratio, 2)
 
 #Look up a given word in a given text file and return its number of occurences.
 def look_up_word(text_file, word):
@@ -145,13 +155,13 @@ def display_command_list():
 	command_list += '\n# command \targ1 \targ2 \tdescription\t\t\t#'
 	command_list += '\n#\t\t\t\t\t\t\t\t#'
 	command_list += '\n# mf \t\tstr \tint \tMost Frequent Words in str\t#'
-	command_list += '\n# ld \t\tstr \tint \tLexical Diversity\t\t#'
 	command_list += '\n# lf \t\tstr \tint \tLeast Frequent Words in str\t#'
 	command_list += '\n# pfd \t\tstr \t*int \tPlot Frequency Distribution\t#'
 	command_list += '\n# pos \t\tstr \t-- \tDisplay Parts of Speech\t\t#'
 	command_list += '\n# psc \t\tstr \t-- \tDisplay POS Counts\t\t#'
 	command_list += '\n# s \t\tstr1 \tstr2 \tFind Occurrences of str2 in str1#'
 	command_list += '\n# tk \t\tstr \t-- \tDisplay All Tokens\t\t#'
+	command_list += '\n# ttr \t\tstr \t-- \tType-Token Ratio\t\t#'
 	command_list += '\n# ty \t\tstr \t-- \tDisplay All Types\t\t#'
 	command_list += '\n# uwc \t\tstr \t-- \tDisplay Unique Word Count\t#'
 	command_list += '\n# wc \t\tstr \t-- \tDisplay Total Word Count\t#'
