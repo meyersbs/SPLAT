@@ -88,6 +88,12 @@ def main():
 				print(look_up_word(file_aliases[command[1]], command[2]))
 			else:
 				print(look_up_word(command[1], command[2]))
+		elif command[0] == 'delal' and len(command) == 2:
+			del_alias(command[1])
+			file_aliases = build_alias_dict()
+		elif command[0] == 'addal' and len(command) == 3:
+			add_alias(command[1], command[2])
+			file_aliases = build_alias_dict()
 		elif command[0] == 'h' and len(command) == 1:
 			display_command_list()
 		elif command[0] == '!' and len(command) == 1:
@@ -96,6 +102,9 @@ def main():
 			print(more_info)
 		elif command[0] == '42' and len(command) == 1:
 			print(douglas)
+		elif command[0] == 'aliases' and len(command) == 1:
+			file_aliases = build_alias_dict()
+			display_aliases(file_aliases)
 		elif command[0] == 'quit' and len(command) == 1:
 			print('\n' + random.choice(exit_messages) + '\n')
 			break
