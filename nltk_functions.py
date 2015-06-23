@@ -29,7 +29,31 @@ def build_alias_dict():
 	for k,v in reader:
 		alias_dict[k] = v
 
-	return alias_dict		
+	return alias_dict
+
+def add_alias(alias, text_file):
+	with open('aliases.txt', "r+") as f:
+		for line in f:
+			f.write(line)
+
+		f.write(str(alias) + ',' + str(text_file))
+
+	print('Alias ' + alias + ' for ' + text_file + ' created.')
+
+def del_alias(alias):
+	list_aliases = []
+	with open('aliases.txt', "r+") as f:
+		for line in f:
+			if line[0:len(alias)] != alias:
+				list_aliases.append(line)
+			else:
+				list_aliases=list_aliases #Do nothing
+		f.seek(0)
+		f.truncate()
+		for item in list_aliases:
+			f.write(item)
+	print('Alias ' + alias + ' removed.')
+	
 
 #Calculate the frequency distribution for a given text file.
 def get_freq_dist(text_file):
@@ -166,9 +190,23 @@ def display_command_list():
 	command_list += '\n# uwc \t\tstr \t-- \tDisplay Unique Word Count\t#'
 	command_list += '\n# wc \t\tstr \t-- \tDisplay Total Word Count\t#'
 	command_list += '\n#\t\t\t\t\t\t\t\t#'
+	command_list += '\n# aliases \t-- \t-- \tDisplay Filename Aliases.\t#'
+	command_list += '\n# addal \tstr1 \tstr2 \tAdd Alias str1 for str2.\t#'
+	command_list += '\n# delal \t-- \t-- \tDelete an Alias.\t\t#'
+	command_list += '\n#\t\t\t\t\t\t\t\t#'
 	command_list += '\n# h \t\t-- \t-- \tShow Valid Commands.\t\t#'
 	command_list += '\n# ~ \t\t-- \t-- \tShow Info.\t\t\t#'
 	command_list += '\n# ! \t\t-- \t-- \tRun Tests.\t\t\t#'
 	command_list += '\n# quit \t\t-- \t-- \tQuit Program.\t\t\t#'
 	command_list += '\n#################################################################'
 	print(command_list)
+
+def display_aliases(file_aliases):
+	alias_list = '\n##### LIST OF FILE ALIASES ######################################'
+	alias_list += '\n# alias \t\tfilename'
+	alias_list += '\n#'
+	for k in file_aliases.keys():
+		alias_list += '\n# ' + k + '\t\t\t' + file_aliases[k]
+	
+	alias_list += '\n#################################################################'
+	print(alias_list)
