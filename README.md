@@ -39,6 +39,15 @@ CLAAP is a command-line application designed to make it easy for linguists (both
 CLAAP is designed to help you annotate text files and it is assumed that most input files will not be already annotated. In order for CLAAP to function properly, you should ensure that the input files that you provide do not contain any annotations. Because there are so many variations of linguistic annotation schemes, it would simply be impossible to account for all of them in the initial parsing of input files; it is easier for you to remove any existing annotations than it is for me to do so.
 
 - - - -
+## Version 1.0 Release Notes
+* 
+* 
+
+# Included Functionality
+
+# Known Bugs
+
+- - - -
 ## System Requirements
 Currently, CLAAP has only been tested on 64-bit Ubuntu 15.04 with Python 2.7.9. 
 
