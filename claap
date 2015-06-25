@@ -1,0 +1,20 @@
+#!/usr/bin/python
+
+import sys
+import termcolor
+from claap_functions import *
+
+commands = {'--usage':print_usage_instructions, '--version':version_info, '--info':info, '--commands':display_command_list, 'tokens':get_tokens, 'types':get_types, 'wc':get_word_count, 'uwc':get_unique_word_count, 'ttr':get_TTR, 'pos':tag_pos, 'posc':get_pos_counts, 'pfd':plot_freq_dist, 'mf':get_most_frequent, 'lf':get_least_frequent}	
+
+def main():
+	if len(sys.argv) == 2 and sys.argv[1] in commands.keys():
+		print(commands[sys.argv[1]]())
+	elif len(sys.argv) == 3 and sys.argv[1] in commands.keys():
+		print(commands[sys.argv[1]](sys.argv[2]))
+	elif len(sys.argv) == 4 and sys.argv[1] in commands.keys():
+                print(commands[sys.argv[1]](sys.argv[2], sys.argv[3]))
+	else:
+		print('For a list of available commands, use ' + colored('--commands', 'green') + '.')
+
+if __name__ == "__main__":
+    main()
