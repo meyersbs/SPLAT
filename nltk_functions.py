@@ -151,6 +151,7 @@ def plot_freq_dist(text_file, x):
 		freq_dist.plot()
 	else:
 		freq_dist.plot(x)
+
 #Tag all types with parts of speech.
 def tag_parts_of_speech(text_file):
 	tokens = get_tokens(text_file)
