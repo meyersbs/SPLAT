@@ -13,58 +13,6 @@ import re
 
 versions = ['Version 1.00\t06-24-15\t04:24 PM UTC', 'Version 0.10\t06-16-15\t11:29 AM UTC', 'Version 0.00\t06-15-15\t03:55 PM UTC']
 
-# Print the Usage Instructions to stdout.
-def display_command_list():
-	command_list = '##### COMMAND LIST ##############################################'
-	command_list += '\n# command \targ1 \targ2 \tdescription\t\t\t#'
-	command_list += '\n#\t\t\t\t\t\t\t\t#'
-	command_list += '\n# mf \t\tstr \t*int \tMost Frequent Words in str\t#'
-	command_list += '\n# lf \t\tstr \t*int \tLeast Frequent Words in str\t#'
-	command_list += '\n# pfd \t\tstr \t*int \tPlot Frequency Distribution\t#'
-	command_list += '\n# pos \t\tstr \t-- \tDisplay Parts of Speech\t\t#'
-	command_list += '\n# psc \t\tstr \t-- \tDisplay POS Counts\t\t#'
-	command_list += '\n# s \t\tstr1 \tstr2 \tFind Occurrences of str2 in str1#'
-	command_list += '\n# tokens \tstr \t-- \tDisplay All Tokens\t\t#'
-	command_list += '\n# ttr \t\tstr \t-- \tType-Token Ratio\t\t#'
-	command_list += '\n# types \tstr \t-- \tDisplay All Types\t\t#'
-	command_list += '\n# uwc \t\tstr \t-- \tDisplay Unique Word Count\t#'
-	command_list += '\n# wc \t\tstr \t-- \tDisplay Total Word Count\t#'
-	command_list += '\n#\t\t\t\t\t\t\t\t#'
-	command_list += '\n# --usage \t-- \t-- \tShow Usage Info.\t\t#'
-	command_list += '\n# --commands \t-- \t-- \tShow Valid Commands.\t\t#'
-	command_list += '\n# --info \t-- \t-- \tShow Info.\t\t\t#'
-	command_list += '\n# --version \t-- \t-- \tDisplay Installed Version.\t#'
-	command_list += '\n#################################################################'
-	print(command_list)
-
-def print_usage_instructions():
-	usage = '\nInvalid command. For a list of available commands, use ' + colored('--commands', 'green') + '.'
-	usage+= '\nCommands look like this: ' + colored('claap', 'blue') + ' ' + colored('COMMAND', 'green') + ' ' + colored('arg1 arg2 ...', 'red')
-	usage+= '\n'
-
-	print(usage)
-
-# Print the program info to stdout.
-def info():
-	prog_info = '#################################################################'
-	prog_info +='\n# CLAAP - Corpus & Linguistics Annotating & Analyzing in Python #'
-	prog_info +='\n# Version 1.00 \tJune 24, 2015 \t04:24 PM UTC \t\t\t#'
-	prog_info +='\n# Developed by Benjamin S. Meyers\t\t\t\t#'
-	prog_info +='\n#\t\t\t\t\t\t\t\t#'
-	prog_info +='\n# This application may not be copied, altered, or distributed \t#'
-	prog_info +='\n# without written consent from the product owner. \t\t#'
-	prog_info +='\n# \t\t\t\t\t\t\t\t#'
-	prog_info +='\n# For documentation, visit: https://github.com/meyersbs/CLAAP \t#'
-	prog_info +='\n# \t\t\t\t\t\t\t\t#'
-	prog_info +="\n# If you're happy and you know it, CLAAP your hands!\t\t#"
-	prog_info +='\n#\t\t\t\t\t\t\t\t#'
-	prog_info +='\n#################################################################'
-
-	print(prog_info)
-
-def version_info():
-	print(versions[0])
-
 #Calculate the frequency distribution.
 def get_freq_dist(text_file):
 	all_words = get_tokens(text_file)
@@ -177,3 +125,103 @@ def get_least_frequent(text_file, x=None):
 				count+=1
 
 	return freq_dist
+
+##### JUST PRINTING FUNCTIONS ########################################
+# Print the Usage Instructions to stdout.
+def display_command_list():
+	command_list = '##### COMMAND LIST ##############################################'
+	command_list += '\n# command \targ1 \targ2 \tdescription\t\t\t#'
+	command_list += '\n#\t\t\t\t\t\t\t\t#'
+	command_list += '\n# mf \t\tstr \t*int \tMost Frequent Words in str\t#'
+	command_list += '\n# lf \t\tstr \t*int \tLeast Frequent Words in str\t#'
+	command_list += '\n# pfd \t\tstr \t*int \tPlot Frequency Distribution\t#'
+	command_list += '\n# pos \t\tstr \t-- \tDisplay Parts of Speech\t\t#'
+	command_list += '\n# psc \t\tstr \t-- \tDisplay POS Counts\t\t#'
+	command_list += '\n# s \t\tstr1 \tstr2 \tFind Occurrences of str2 in str1#'
+	command_list += '\n# tokens \tstr \t-- \tDisplay All Tokens\t\t#'
+	command_list += '\n# ttr \t\tstr \t-- \tType-Token Ratio\t\t#'
+	command_list += '\n# types \tstr \t-- \tDisplay All Types\t\t#'
+	command_list += '\n# uwc \t\tstr \t-- \tDisplay Unique Word Count\t#'
+	command_list += '\n# wc \t\tstr \t-- \tDisplay Total Word Count\t#'
+	command_list += '\n#\t\t\t\t\t\t\t\t#'
+	command_list += '\n# --usage \t-- \t-- \tShow Usage Info.\t\t#'
+	command_list += '\n# --commands \t-- \t-- \tShow Valid Commands.\t\t#'
+	command_list += '\n# --info \t-- \t-- \tShow Info.\t\t\t#'
+	command_list += '\n# --version \t-- \t-- \tDisplay Installed Version.\t#'
+	command_list += '\n#################################################################'
+	print(command_list)
+	return ''
+
+def print_usage_instructions():
+	usage = '\nInvalid command. For a list of available commands, use ' + colored('--commands', 'green') + '.'
+	usage+= '\nCommands look like this: ' + colored('claap', 'blue') + ' ' + colored('COMMAND', 'green') + ' ' + colored('arg1 arg2 ...', 'red')
+	#usage+= '\n'
+
+	print(usage)
+	return ''
+
+def random_fact():
+	exit_messages = [("If you're happy and you know it, CLAAP your hands!"),
+			("Petrichor\n(noun)\na pleasant smell that frequently accompanies the first rain after a long period of warm, dry weather."),
+			("Syzygy is the only word in English that contains three 'y's."),
+			("Tmesis is the only word in the English language that begins with 'tm'."),
+			("In Old English, bagpipes were called 'doodle sacks'."),
+			("A 'quire' is two-dozen sheets of paper."),
+			("'Buffalo buffalo Buffalo buffalo buffalo buffalo Buffalo buffalo' is a grammatically correct sentence in American English."),
+			("J.R.R. Tolkien coined the term 'glossopoeia,' which is the act of inventing languages."),
+			("Beowulf is an English work, but if you try to read it in its original form, it will look like gibberish!"),
+			("'To Be Or Not To Be' = 'U+0032 U+0042 U+2228 U+0021 U+0032 U+0042'")]
+
+	print('\n' + random.choice(exit_messages))
+	return ''
+
+# Print the program info to stdout.
+def info(opt='-1'):
+	prog_info = '#################################################################'
+	prog_info +='\n# CLAAP - Corpus & Linguistics Annotating & Analyzing in Python #'
+	prog_info +='\n# Version 1.00 \tJune 24, 2015 \t04:24 PM UTC \t\t\t#'
+	prog_info +='\n# Developed by Benjamin S. Meyers\t\t\t\t#'
+	prog_info +='\n#\t\t\t\t\t\t\t\t#'
+	prog_info +='\n# This application may not be copied, altered, or distributed \t#'
+	prog_info +='\n# without written consent from the product owner. \t\t#'
+	prog_info +='\n# \t\t\t\t\t\t\t\t#'
+	prog_info +='\n# For documentation, visit: https://github.com/meyersbs/CLAAP \t#'
+	prog_info +='\n# \t\t\t\t\t\t\t\t#'
+	prog_info +="\n# If you're happy and you know it, CLAAP your hands!\t\t#"
+	prog_info +='\n#\t\t\t\t\t\t\t\t#'
+	prog_info +='\n#################################################################'
+
+	if opt == '-1':
+		print(prog_info)
+		return
+	elif opt == '42':
+		douglas = "\n           o o o   .-\'\"\"\"\'-.   o o o             DON\'T PANIC!"
+		douglas +="\n           \\\|/  .'         '.  \|//"
+		douglas +="\n            \-;o/             \o;-/"
+		douglas +="\n            // ;               ; \\\\"
+		douglas +="\n           //__; :.         .: ;__\\\\"
+		douglas +="\n          `-----\\'.'-.....-'.'/-----'           444    2222222"
+		douglas +="\n                 '.'.-.-,_.'.'                 4444   222   222"
+		douglas +="\n                   '(  (..-'                  44 44         22"
+		douglas +="\n      |              '-'                     44  44        22"
+		douglas +="\n  |           |                             444444444     22"
+		douglas +="\n |  |  |    |                                    44      22"
+		douglas +="\n     |     |  |                                  44    222"
+		douglas +="\n| |   |     %%%                                  44   222222222"
+		douglas +="\n    ___    _\|/_         _%%_____"
+		douglas +="\n\,-\' \'_|   \___/      __/___ \'   \\"                    
+		douglas +="\n/\"\"----\'          ___/__  \'   \'\'  \__%__       __%____%%%___"
+		douglas +="\n                 /   \" \'   _%__ \'   \'   \_____/____ \'  __ \" \\"
+		douglas +="\n           __%%_/__\'\' __     \'   _%_\'_   \     \"\'    _%__ \'\' \_"
+		douglas +="\n __/\__%%_/_/___\___ \'\'   \'_%_\"___   \"    \_%__ \'___\"     \"\'   \\"
+		douglas +="\n/_________________\____\'_RIP Douglas___\"_______\_______\'_____\"__\\"
+		#douglas +="\n"
+		print(douglas)
+		return ''
+	else:
+		print_usage_instructions()
+		return ''
+
+def version_info():
+	print(versions[0])
+	return ''

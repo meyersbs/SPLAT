@@ -11,6 +11,38 @@ except ImportError:
 INSTALLED
 }
 
+function check_termcolor {
+python - <<INSTALLED
+try:
+	import termcolor
+	print('y')
+except ImportError:
+	print('termcolor is not installed!')
+	print('n')
+INSTALLED
+}
+
+function check_nltk {
+python - <<INSTALLED
+try:
+	import nltk
+	print('y')
+except ImportError:
+	print('nltk is not installed!')
+	print('n')
+INSTALLED
+}
+
+function setup_nltk {
+python - <<SETUP
+try:
+	import nltk
+	nltk.download()
+except ImportError:
+	print('nltk is not installed!')
+SETUP
+}
+
 if [ "$(uname)" == "Darwin" ]; then
 	echo 'Detected Mac Operating System...'
 	echo 'Unfortunately, Mac OS is not currently supported by CLAAP.'
@@ -21,16 +53,29 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 	echo 'Installing pip...'
 	sudo easy_install pip
 	# NLTK
-	echo 'Installing NLTK...'
-	sudo pip install -U nltk
-	echo 'Setting up NLTK...'
-	sudo python setup.py
+	STAT=$(check_nltk)
+	if [[ $STAT == "n" ]]; then
+		echo 'Installing NLTK...'
+		sudo pip install -U nltk
+		setup_nltk
+	elif [[ $STAT == "y" ]]; then
+		echo 'nltk is already installed!'
+	else
+		echo 'Unable to determine if nltk is installed...'
+	fi
 	# termcolor
-	echo 'Installing termcolor...'
-	sudo pip install termcolor
+	STAT=$(check_termcolor)
+	if [[ $STAT == "n" ]]; then
+		echo 'Installing termcolor...'
+		sudo pip install termcolor
+	elif [[ $STAT == "y" ]]; then
+		echo 'termcolor is already installed!'
+	else
+		echo 'Unable to determine if termcolor is installed...'
+	fi
+	# matplotlib
 	STAT=$(check_matplotlib)
 	if [[ $STAT == "n" ]]; then
-		# matplotlib
 		echo 'Downloading matplotlib...'
 		sudo git clone git://github.com/matplotlib/matplotlib.git
 		echo 'Building matplotlib dependencies...'
