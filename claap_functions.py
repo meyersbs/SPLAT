@@ -13,6 +13,42 @@ import re
 
 versions = ['Version 1.00\t06-24-15\t04:24 PM UTC', 'Version 0.10\t06-16-15\t11:29 AM UTC', 'Version 0.00\t06-15-15\t03:55 PM UTC']
 
+#Save each utterance (line) into an array, stripping annotation.
+def get_utterances(text_file):
+	utterances = []
+	with open(text_file) as f:
+		for line in f:
+			if line[0] == '(':
+				new_line = line[15:]
+				utterances.append(new_line.strip('\n'))
+			elif line[0] == 'F' or line[0] == 'S' or line[0] == 'T':
+				new_line = line[4:]
+				utterances.append(new_line.strip('\n'))
+			elif line[0] == '\t' or line[0] == '\n':
+				new_line = new_line
+			else:
+				new_line = line
+				utterances.append(new_line.strip('\n'))
+
+	return utterances	
+
+#Display a list of utterances.
+def list_utterances(text_file):
+	utterances = get_utterances(text_file)
+	for item in utterances:
+		print(item + '\n')
+
+#Calculate the average utterance length.
+def get_avg_utterance_length(text_file):
+	num_words = get_word_count(text_file)
+	count = 0
+	utterances = get_utterances(text_file)
+	for item in utterances:
+		count+=1
+
+	avg = float(num_words) / count
+	return round(avg)
+
 #Calculate the frequency distribution.
 def get_freq_dist(text_file):
 	all_words = get_tokens(text_file)
@@ -132,8 +168,10 @@ def display_command_list():
 	command_list = '##### COMMAND LIST ##############################################'
 	command_list += '\n# command \targ1 \targ2 \tdescription\t\t\t#'
 	command_list += '\n#\t\t\t\t\t\t\t\t#'
+	command_list += '\n# alu \t\tstr \t-- \tAverage Utterance Length\t#'
 	command_list += '\n# mf \t\tstr \t*int \tMost Frequent Words in str\t#'
 	command_list += '\n# lf \t\tstr \t*int \tLeast Frequent Words in str\t#'
+	command_list += '\n# lu \t\tstr \t-- \tList Utterances\t\t#'
 	command_list += '\n# pfd \t\tstr \t*int \tPlot Frequency Distribution\t#'
 	command_list += '\n# pos \t\tstr \t-- \tDisplay Parts of Speech\t\t#'
 	command_list += '\n# psc \t\tstr \t-- \tDisplay POS Counts\t\t#'
