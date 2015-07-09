@@ -4,7 +4,7 @@ import sys
 import termcolor
 from claap_functions import *
 
-commands = {'--usage':print_usage_instructions, '--version':version_info, '--info':info, '--commands':display_command_list, '--random':random_fact, 'tokens':get_tokens, 'types':get_types, 'wc':get_word_count, 'uwc':get_unique_word_count, 'ttr':get_TTR, 'pos':tag_pos, 'posc':get_pos_counts, 'pfd':plot_freq_dist, 'mf':get_most_frequent, 'lf':get_least_frequent, 'lu':list_utterances, 'alu':get_avg_utterance_length}	
+commands = {'--usage':print_usage_instructions, '--version':version_info, '--info':info, '--commands':display_command_list, '--random':random_fact, 'tokens':get_tokens, 'types':get_types, 'wc':get_word_count, 'uwc':get_unique_word_count, 'ttr':get_TTR, 'pos':tag_pos, 'posc':get_pos_counts, 'pfd':plot_freq_dist, 'mf':get_most_frequent, 'lf':get_least_frequent, 'lu':list_utterances, 'alu':get_avg_utterance_length, 'lcw':get_content_words, 'lucw':get_unique_content_words, 'lfw':get_function_words, 'lufw':get_unique_function_words, 'cfr':get_content_function_ratio, 'normalize':normalize_text}	
 
 def main():
 	if len(sys.argv) == 2 and sys.argv[1] in commands.keys():

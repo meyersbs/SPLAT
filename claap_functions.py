@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 from matplotlib import *
+from nltk.corpus import stopwords
 from nltk.probability import FreqDist
 from nltk.tokenize import RegexpTokenizer
 from nltk.tokenize import word_tokenize
@@ -12,6 +13,27 @@ import random
 import re
 
 versions = ['Version 1.00\t06-24-15\t04:24 PM UTC', 'Version 0.10\t06-16-15\t11:29 AM UTC', 'Version 0.00\t06-15-15\t03:55 PM UTC']
+stopwords = stopwords.words('english') # List of Function Words
+
+#Take the given word, convert to lowercase and strip punctuation.
+def normalize_word(word):
+	tokenizer = RegexpTokenizer(r'\w+')
+	new_word = tokenizer.tokenize(word.lower())
+	try:
+		return new_word[0]
+	except IndexError:
+		return '-1'
+
+#Take the given text file and return it after normalization.
+def normalize_text(text_file):
+	normal_text = '\n'
+	with open(text_file) as f:
+		for line in f:
+			normal_line = ''
+			for word in line.split():
+				normal_line += normalize_word(word) + ' '
+			normal_text += normal_line + '\n'
+	return normal_text
 
 #Save each utterance (line) into an array, stripping annotation.
 def get_utterances(text_file):
@@ -74,7 +96,14 @@ def get_freq_dist(text_file):
 def get_tokens(text_file):
 	f = open(text_file)
 	raw = f.read()
-	tokens = RegexpTokenizer(r'[^\d\s\:\(\)]+').tokenize(raw)
+
+	normalized_raw = ''
+	for item in raw.split():
+		normal_item = normalize_word(item)
+		if normal_item != '-1':
+			normalized_raw += normal_item + '\n'
+
+	tokens = RegexpTokenizer(r'[^\d\s\:\(\)]+').tokenize(normalized_raw)
 
 	return tokens
 
@@ -162,6 +191,57 @@ def get_least_frequent(text_file, x=None):
 
 	return freq_dist
 
+#List all of the content words within the given text file.
+def get_content_words(text_file):
+	tokens = get_tokens(text_file)
+	content_words = []
+	for word in tokens:
+		if word.lower() not in stopwords:
+			content_words.append(word)
+
+	return content_words
+
+#List all of the unique content words within the given text file.
+def get_unique_content_words(text_file):
+	types = get_types(text_file)
+	content_words = []
+	for word in types:
+		if word.lower() not in stopwords:
+			content_words.append(word)
+
+	return content_words
+
+#List all of the function words within the given text file.
+def get_function_words(text_file):
+	tokens = get_tokens(text_file)
+	function_words = []
+	for word in tokens:
+		if word.lower() in stopwords:
+			function_words.append(word)
+
+	return function_words
+
+#List all of the unique function words within the given text file.
+def get_unique_function_words(text_file):
+	types = get_types(text_file)
+	function_words = []
+	for word in types:
+		if word.lower() in stopwords:
+			function_words.append(word)
+
+	return function_words
+
+#Calculate the ratio of content words to function words.
+def get_content_function_ratio(text_file):
+	content = get_content_words(text_file)
+	function = get_function_words(text_file)
+
+	print(len(content))
+	print(len(function))
+	ratio = float(len(content)) / float(len(function))
+
+	return round(ratio, 2)
+
 ##### JUST PRINTING FUNCTIONS ########################################
 # Print the Usage Instructions to stdout.
 def display_command_list():
@@ -169,9 +249,14 @@ def display_command_list():
 	command_list += '\n# command \targ1 \targ2 \tdescription\t\t\t#'
 	command_list += '\n#\t\t\t\t\t\t\t\t#'
 	command_list += '\n# alu \t\tstr \t-- \tAverage Utterance Length\t#'
-	command_list += '\n# mf \t\tstr \t*int \tMost Frequent Words in str\t#'
+	command_list += '\n# lcw \t\tstr \t-- \tList Content Words\t\t#'
 	command_list += '\n# lf \t\tstr \t*int \tLeast Frequent Words in str\t#'
-	command_list += '\n# lu \t\tstr \t-- \tList Utterances\t\t#'
+	command_list += '\n# lfw \t\tstr \t-- \tList Function Words\t\t#'
+	command_list += '\n# lu \t\tstr \t-- \tList Utterances\t\t\t#'
+	command_list += '\n# lucw \t\tstr \t-- \tList Unique Content Words\t#'
+	command_list += '\n# lufw \t\tstr \t-- \tList Unique Function Words\t#'
+	command_list += '\n# mf \t\tstr \t*int \tMost Frequent Words in str\t#'
+	command_list += '\n# normalize \tstr \t-- \tNormalize Text\t\t\t#'
 	command_list += '\n# pfd \t\tstr \t*int \tPlot Frequency Distribution\t#'
 	command_list += '\n# pos \t\tstr \t-- \tDisplay Parts of Speech\t\t#'
 	command_list += '\n# psc \t\tstr \t-- \tDisplay POS Counts\t\t#'
@@ -192,8 +277,8 @@ def display_command_list():
 
 def print_usage_instructions():
 	usage = '\nInvalid command. For a list of available commands, use ' + colored('--commands', 'green') + '.'
-	usage+= '\nCommands look like this: ' + colored('claap', 'blue') + ' ' + colored('COMMAND', 'green') + ' ' + colored('arg1 arg2 ...', 'red')
-	#usage+= '\n'
+	usage+= '\nCommands look like this: ' + colored('claap', 'blue') + ' ' + colored('COMMAND', 'green') + ' ' + colored('arg1 arg2 *arg3', 'red')
+	usage+= '\n' + colored('*', 'red') + ' denotes an optional argument.'
 
 	print(usage)
 	return ''
