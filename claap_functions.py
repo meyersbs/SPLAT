@@ -14,10 +14,13 @@ import re
 
 versions = ['Version 1.00\t06-24-15\t04:24 PM UTC', 'Version 0.10\t06-16-15\t11:29 AM UTC', 'Version 0.00\t06-15-15\t03:55 PM UTC']
 stopwords = stopwords.words('english') # List of Function Words
+pause_count = 0
+break_count = 0
+total_disfluencies = 0
 
 #Take the given word, convert to lowercase and strip punctuation.
 def normalize_word(word):
-	tokenizer = RegexpTokenizer(r'\w+')
+	tokenizer = RegexpTokenizer(r'^\w+-?$')
 	new_word = tokenizer.tokenize(word.lower())
 	try:
 		return new_word[0]
@@ -52,7 +55,16 @@ def get_utterances(text_file):
 				new_line = line
 				utterances.append(new_line.strip('\n'))
 
-	return utterances	
+	return utterances
+
+#Return the total number of utterances.
+def get_num_utterances(text_file):
+	count = 0
+	utterances = get_utterances(text_file)
+	for item in utterances:
+		count+=1
+
+	return count
 
 #Display a list of utterances.
 def list_utterances(text_file):
@@ -83,7 +95,7 @@ def get_freq_dist(text_file):
 			new_words = new_words
 		elif re.match(r'^T', token):
 			new_words = new_words
-		elif re.match(r'^SILENCE', token):
+		elif re.match(r'{SL}', token):
 			new_words = new_words
 		else:
 			new_words.append(token)
@@ -94,12 +106,28 @@ def get_freq_dist(text_file):
 
 #Generate a list of tokens.
 def get_tokens(text_file):
+	global pause_count
+	global break_count
+	pause_count = 0
+	break_count = 0
+	global total_disfluencies
+	total_disfluencies = 0
 	f = open(text_file)
 	raw = f.read()
 
 	normalized_raw = ''
 	for item in raw.split():
-		normal_item = normalize_word(item)
+		normal_item = '-1'
+		if re.match(r'^.:$', item):
+			pass
+		elif item == '{SL}':
+			pause_count+=1
+		elif re.match(r'^.*-$', item):
+			break_count+=1
+			normal_item = normalize_word(item)
+		else:
+			normal_item = normalize_word(item)
+
 		if normal_item != '-1':
 			normalized_raw += normal_item + '\n'
 
@@ -242,6 +270,71 @@ def get_content_function_ratio(text_file):
 
 	return round(ratio, 2)
 
+#Count the number of various disfluencies in a given text_file.
+def count_disfluencies(text_file):
+	global pause_count
+	global break_count
+	global total_disfluencies
+	um_count = 0
+	uh_count = 0
+	ah_count = 0
+	er_count = 0
+	hm_count = 0
+	rep_count = 0
+	tokens = get_tokens(text_file)
+	last_item = ''
+	for item in tokens:
+		if item == 'um':
+			um_count+=1
+		elif item == 'uh':
+			uh_count+=1
+		elif item == 'ah':
+			ah_count+=1
+		elif item == 'er':
+			er_count+=1
+		elif item == 'hm':
+			hm_count+=1
+		
+		if last_item == item:
+			rep_count+=1
+		last_item = item
+
+	nasal_filled = hm_count + um_count
+	non_nasal_filled = uh_count + ah_count + er_count
+	total_disfluencies = break_count + pause_count + nasal_filled + non_nasal_filled + rep_count
+
+	output =('UM Count: ' + str(um_count))
+	output+=('\nHM Count: ' + str(hm_count))
+	output+=('\nNasal-Filled Disfluency Count: ' + str(nasal_filled))
+	output+=('\nUH Count: ' + str(uh_count))
+	output+=('\nER Count: ' + str(er_count))
+	output+=('\nAH Count: ' + str(ah_count))
+	output+=('\nNon-Nasal-Filled Disfluency Count: ' + str(non_nasal_filled))
+	output+=('\nSilent Pause Count: ' + str(pause_count))
+	output+=('\nBreak Count: ' + str(break_count))
+	output+=('\nRepetition Count: ' + str(rep_count))
+	output+=('\nTotal Disfluency Count: ' + str(total_disfluencies))
+	
+	return output
+
+def get_stats(text_file):
+
+	output = '\n' + text_file
+	output+= '\n##### BASIC STATS ###############################################'
+	output+= '\nToken Count: ' + str(get_word_count(text_file))
+	output+= '\nType Count: ' + str(get_unique_word_count(text_file))
+	output+= '\nType-Token Ratio: ' + str(get_TTR(text_file))
+	output+= '\nUtterance Count: ' + str(get_num_utterances(text_file))
+	output+= '\nAverage Utterance Length: ' + str(get_avg_utterance_length(text_file))
+	output+= '\nTop 5 Words: ' + str(get_most_frequent(text_file, 5))
+	output+= '\n\n##### DISFLUENCY STATS ##########################################'
+	output+= '\n' + str(count_disfluencies(text_file))
+	output+= '\n\n##### ADVANCED STATS ############################################'
+	output+= '\nAverage Disfluencies per Utterance: ' + str(float(total_disfluencies)/get_num_utterances(text_file))
+	output+= '\nDisfluency-Word Ratio: ' + str(float(total_disfluencies)/get_word_count(text_file))
+
+	return output
+
 ##### JUST PRINTING FUNCTIONS ########################################
 # Print the Usage Instructions to stdout.
 def display_command_list():
@@ -249,6 +342,7 @@ def display_command_list():
 	command_list += '\n# command \targ1 \targ2 \tdescription\t\t\t#'
 	command_list += '\n#\t\t\t\t\t\t\t\t#'
 	command_list += '\n# alu \t\tstr \t-- \tAverage Utterance Length\t#'
+	command_list += '\n# disfluencies \tstr \t-- \tCount Disfluencies\t\t#'
 	command_list += '\n# lcw \t\tstr \t-- \tList Content Words\t\t#'
 	command_list += '\n# leastfreq \tstr \t*int \tLeast Frequent Words in str\t#'
 	command_list += '\n# lfw \t\tstr \t-- \tList Function Words\t\t#'
@@ -256,7 +350,8 @@ def display_command_list():
 	command_list += '\n# lufw \t\tstr \t-- \tList Unique Function Words\t#'
 	command_list += '\n# mostfreq \tstr \t*int \tMost Frequent Words in str\t#'
 	command_list += '\n# normalize \tstr \t-- \tNormalize Text\t\t\t#'
-	command_list += '\n# plotfreq \t\tstr \t*int \tPlot Frequency Distribution\t#'
+	command_list += '\n# nutterances \tstr \t-- \tCount Utterances\t\t#'
+	command_list += '\n# plotfreq \tstr \t*int \tPlot Frequency Distribution\t#'
 	command_list += '\n# pos \t\tstr \t-- \tDisplay Parts of Speech\t\t#'
 	command_list += '\n# poscounts \tstr \t-- \tDisplay POS Counts\t\t#'
 	#command_list += '\n# s \t\tstr1 \tstr2 \tFind Occurrences of str2 in str1#'
