@@ -1,25 +1,28 @@
 #!/usr/bin/python
 
+##### IMPORTS ########################################################
 from matplotlib import *
 from nltk.corpus import stopwords
 from nltk.probability import FreqDist
 from nltk.tokenize import RegexpTokenizer
 from nltk.tokenize import word_tokenize
 from termcolor import *
-
 import csv
 import nltk
 import random
 import re
 
+##### GLOBAL VARIABLES ###############################################
 versions = ['Version 1.00\t06-24-15\t04:24 PM UTC', 'Version 0.10\t06-16-15\t11:29 AM UTC', 'Version 0.00\t06-15-15\t03:55 PM UTC']
 stopwords = stopwords.words('english') # List of Function Words
+disfluency_list = ['um', 'uh', 'ah', 'er', 'hm']
 pause_count = 0
 break_count = 0
 total_disfluencies = 0
 
+##### NORMALIZATION FUNCTIONS ########################################
 #Take the given word, convert to lowercase and strip punctuation.
-def normalize_word(word):
+def __normalize_word(word):
 	tokenizer = RegexpTokenizer(r'^\w+-?$')
 	new_word = tokenizer.tokenize(word.lower())
 	try:
@@ -27,17 +30,18 @@ def normalize_word(word):
 	except IndexError:
 		return '-1'
 
-#Take the given text file and return it after normalization.
+#Take the given text file and return it after normalization of each word.
 def normalize_text(text_file):
 	normal_text = '\n'
 	with open(text_file) as f:
 		for line in f:
 			normal_line = ''
 			for word in line.split():
-				normal_line += normalize_word(word) + ' '
+				normal_line += __normalize_word(word) + ' '
 			normal_text += normal_line + '\n'
 	return normal_text
 
+##### UTTERANCE-BASED FEATURES #######################################
 #Save each utterance (line) into an array, stripping annotation.
 def get_utterances(text_file):
 	utterances = []
@@ -47,7 +51,7 @@ def get_utterances(text_file):
 				new_line = line[15:]
 				utterances.append(new_line.strip('\n'))
 			elif line[0] == 'F' or line[0] == 'S' or line[0] == 'T':
-				new_line = line[4:]
+				new_line = line[3:]
 				utterances.append(new_line.strip('\n'))
 			elif line[0] == '\t' or line[0] == '\n':
 				new_line = new_line
@@ -83,6 +87,7 @@ def get_avg_utterance_length(text_file):
 	avg = float(num_words) / count
 	return round(avg)
 
+##### FREQUENCY-BASED FEATURES #######################################
 #Calculate the frequency distribution.
 def get_freq_dist(text_file):
 	all_words = get_tokens(text_file)
@@ -104,6 +109,42 @@ def get_freq_dist(text_file):
 
 	return freq_dist
 
+#Plot the frequency distribution.
+def plot_freq_dist(text_file, x=None):
+	freq_dist = get_freq_dist(text_file)
+
+	if x == -1:
+		freq_dist.plot()
+	else:
+		freq_dist.plot(int(x))
+
+#Display the top x most frequent tokens.
+def get_most_frequent(text_file, x=None):
+	freq_dist = get_freq_dist(text_file)
+
+	if(x == None):
+		return freq_dist.most_common()
+	else:
+		return freq_dist.most_common(int(x))
+
+#Display the top x least frequent tokens.
+def get_least_frequent(text_file, x=None):
+	most_common = get_most_frequent(text_file, get_word_count(text_file))
+
+	freq_dist = []
+	count = 0
+
+	if x == None:
+		freq_dist = most_common
+	else:
+		for item in reversed(most_common):
+			if count < int(x):
+				freq_dist.append(item)
+				count+=1
+
+	return freq_dist
+
+##### TYPE-TOKEN-BASED FEATURES ######################################
 #Generate a list of tokens.
 def get_tokens(text_file):
 	global pause_count
@@ -124,9 +165,9 @@ def get_tokens(text_file):
 			pause_count+=1
 		elif re.match(r'^.*-$', item):
 			break_count+=1
-			normal_item = normalize_word(item)
+			normal_item = __normalize_word(item)
 		else:
-			normal_item = normalize_word(item)
+			normal_item = __normalize_word(item)
 
 		if normal_item != '-1':
 			normalized_raw += normal_item + '\n'
@@ -164,6 +205,19 @@ def get_TTR(text_file):
 
 	return round(type_token_ratio, 2)
 
+#Return a word count for each individual utterance in csv format.
+def get_words_per_utterance(text_file):
+	utterances = get_utterances(text_file)
+	count = 1
+	output = ''	
+	for line in utterances:
+		wordcount = len(line.split())
+		output+= ('\n' + str(count) + ',' + str(wordcount))
+		count+=1
+
+	return output
+
+##### SYNTAX-BASED FEATURES ##########################################
 #Tag all Types with Parts of Speech.
 def tag_pos(text_file):
 	tokens = get_tokens(text_file)
@@ -183,41 +237,6 @@ def get_pos_counts(text_file):
 			pos_counts.update({v:1})
 
 	return pos_counts
-
-#Plot the frequency distribution.
-def plot_freq_dist(text_file, x=None):
-	freq_dist = get_freq_dist(text_file)
-
-	if x == -1:
-		freq_dist.plot()
-	else:
-		freq_dist.plot(int(x))
-
-#Display the top x most frequent tokens.
-def get_most_frequent(text_file, x=None):
-	freq_dist = get_freq_dist(text_file)
-
-	if(x == None):
-		return freq_dist.most_common()
-	else:
-		return freq_dist.most_common(int(x))
-
-#Display the top x least frequent tokens.
-def get_least_frequent(text_file, x=None):
-	most_common = get_most_frequent(text_file, get_word_count(text_file))
-
-	freq_dist = []
-	count = 0
-
-	if x == None:
-		freq_dist = most_common
-	else:
-		for item in reversed(most_common):
-			if count < int(x):
-				freq_dist.append(item)
-				count+=1
-
-	return freq_dist
 
 #List all of the content words within the given text file.
 def get_content_words(text_file):
@@ -270,6 +289,7 @@ def get_content_function_ratio(text_file):
 
 	return round(ratio, 2)
 
+##### DISFLUENCY-BASED FEATURES ######################################
 #Count the number of various disfluencies in a given text_file.
 def count_disfluencies(text_file):
 	global pause_count
@@ -286,22 +306,32 @@ def count_disfluencies(text_file):
 	for item in tokens:
 		if item == 'um':
 			um_count+=1
+			#print(item)
 		elif item == 'uh':
 			uh_count+=1
+			#print(item)
 		elif item == 'ah':
 			ah_count+=1
+			#print(item)
 		elif item == 'er':
 			er_count+=1
+			#print(item)
 		elif item == 'hm':
 			hm_count+=1
-		
+			#print(item)
+
 		if last_item == item:
 			rep_count+=1
-		last_item = item
+			#print(item)
+
+		if item != '{SL}':
+			last_item = item
 
 	nasal_filled = hm_count + um_count
 	non_nasal_filled = uh_count + ah_count + er_count
 	total_disfluencies = break_count + pause_count + nasal_filled + non_nasal_filled + rep_count
+
+	#print(pause_count)
 
 	output =('UM Count: ' + str(um_count))
 	output+=('\nHM Count: ' + str(hm_count))
@@ -314,7 +344,39 @@ def count_disfluencies(text_file):
 	output+=('\nBreak Count: ' + str(break_count))
 	output+=('\nRepetition Count: ' + str(rep_count))
 	output+=('\nTotal Disfluency Count: ' + str(total_disfluencies))
-	
+
+	return output
+
+#Return a disfluency count for each individual utterance in csv format.
+def get_disfluencies_per_utterance(text_file):
+	utterances = get_utterances(text_file)
+	count = 1
+	dis_count = 0
+	output = ''
+	last_item = ''	
+	for line in utterances:
+		dis_count = 0
+		for item in line.split():
+			if item == '{SL}':
+				dis_count+=1
+				#print(str(count) + ': ' + item)
+			elif __normalize_word(item) in disfluency_list:
+				dis_count+=1
+				#print(str(count) + ': ' + item)
+			elif re.match(r'^.*-$', item):
+				dis_count+=1
+				#print(str(count) + ': ' + item)
+			
+			if last_item == item:
+				dis_count+=1
+				#print(str(count) + ': ' + item)
+
+			if item != '{SL}':
+				last_item = item
+
+		output+= ('\n' + str(count) + ',' + str(dis_count))
+		count+=1
+
 	return output
 
 def get_stats(text_file):
@@ -336,7 +398,7 @@ def get_stats(text_file):
 	return output
 
 ##### JUST PRINTING FUNCTIONS ########################################
-# Print the Usage Instructions to stdout.
+# Print the Command List to stdout.
 def display_command_list():
 	command_list = '##### COMMAND LIST ##############################################'
 	command_list += '\n# command \targ1 \targ2 \tdescription\t\t\t#'
@@ -361,6 +423,7 @@ def display_command_list():
 	command_list += '\n# utterances \tstr \t-- \tList Utterances\t\t\t#'
 	command_list += '\n# uwordcount \tstr \t-- \tDisplay Unique Word Count\t#'
 	command_list += '\n# wordcount \tstr \t-- \tDisplay Total Word Count\t#'
+	command_list += '\n# wpu \t\tstr \t-- \tDisplay Words per Utterance\t#'
 	command_list += '\n#\t\t\t\t\t\t\t\t#'
 	command_list += '\n# --usage \t-- \t-- \tShow Usage Info.\t\t#'
 	command_list += '\n# --commands \t-- \t-- \tShow Valid Commands.\t\t#'
@@ -370,6 +433,7 @@ def display_command_list():
 	print(command_list)
 	return ''
 
+# Print the Usage Instructions to stdout.
 def print_usage_instructions():
 	usage = '\nInvalid command. For a list of available commands, use ' + colored('--commands', 'green') + '.'
 	usage+= '\nCommands look like this: ' + colored('claap', 'blue') + ' ' + colored('COMMAND', 'green') + ' ' + colored('arg1 arg2 *arg3', 'red')
@@ -378,6 +442,7 @@ def print_usage_instructions():
 	print(usage)
 	return ''
 
+# Print a random linguistic fact to stdout.
 def random_fact():
 	exit_messages = [("If you're happy and you know it, CLAAP your hands!"),
 			("Petrichor\n(noun)\na pleasant smell that frequently accompanies the first rain after a long period of warm, dry weather."),
