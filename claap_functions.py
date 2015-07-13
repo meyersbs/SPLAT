@@ -476,7 +476,7 @@ def info(opt='-1'):
 
 	if opt == '-1':
 		print(prog_info)
-		return
+		return ''
 	elif opt == '42':
 		douglas = "\n           o o o   .-\'\"\"\"\'-.   o o o             DON\'T PANIC!"
 		douglas +="\n           \\\|/  .'         '.  \|//"
