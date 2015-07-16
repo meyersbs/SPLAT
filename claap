@@ -8,7 +8,7 @@ commands = {'--usage':print_usage_instructions, '--version':version_info, '--inf
 
 def main():
 	#print(sys.argv[1])
-	if sys.argv[1] == 'multi' and sys.argv[2] in commands.keys() and sys.argv[2][0] != '-':
+	if sys.argv[1] == '--multi' and sys.argv[2] in commands.keys() and sys.argv[2][0] != '-':
 		for i in range(3,len(sys.argv)):
 			#print(i)
 			print(commands[sys.argv[2]](sys.argv[i]))

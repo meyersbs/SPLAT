@@ -352,30 +352,46 @@ def get_disfluencies_per_utterance(text_file):
 	utterances = get_utterances(text_file)
 	count = 1
 	dis_count = 0
+	other_count = 0
+	total_count = 0
 	output = ''
-	last_item = ''	
+	last_item = ''
+	word_count = 0	
 	for line in utterances:
 		dis_count = 0
+		other_count = 0
+		word_count = 0
 		for item in line.split():
+			word_count+=1
 			if item == '{SL}':
 				dis_count+=1
+				#other_count+=1
 				#print(str(count) + ': ' + item)
 			elif __normalize_word(item) in disfluency_list:
 				dis_count+=1
+				if __normalize_word(item) != 'um' or __normalize_word(item) != 'uh':
+					other_count+=1
 				#print(str(count) + ': ' + item)
 			elif re.match(r'^.*-$', item):
 				dis_count+=1
+				#other_count+=1
 				#print(str(count) + ': ' + item)
 			
 			if last_item == item:
+				dis_count = dis_count
 				dis_count+=1
+				#other_count+=1
 				#print(str(count) + ': ' + item)
 
 			if item != '{SL}':
 				last_item = item
-
+		
+		#total_count+=other_count
 		output+= ('\n' + str(count) + ',' + str(dis_count))
+		#output+= ('\n' + str(other_count))
 		count+=1
+
+	#output+=('\n' + str(total_count))
 
 	return output
 
@@ -401,22 +417,24 @@ def get_stats(text_file):
 # Print the Command List to stdout.
 def display_command_list():
 	command_list = '##### COMMAND LIST ##############################################'
-	command_list += '\n# command \targ1 \targ2 \tdescription\t\t\t#'
+	command_list += '\n# ' + colored('command','green') + colored('\targ1 \targ2','blue') + '\tdescription\t\t\t#'
 	command_list += '\n#\t\t\t\t\t\t\t\t#'
 	command_list += '\n# alu \t\tstr \t-- \tAverage Utterance Length\t#'
 	command_list += '\n# disfluencies \tstr \t-- \tCount Disfluencies\t\t#'
+	command_list += '\n# dpu \t\tstr \t-- \tDisfluencies per Utterance\t#'
 	command_list += '\n# lcw \t\tstr \t-- \tList Content Words\t\t#'
-	command_list += '\n# leastfreq \tstr \t*int \tLeast Frequent Words in str\t#'
+	command_list += '\n# leastfreq \tstr ' + colored('\t*','red') + 'int \tLeast Frequent Words in str\t#'
 	command_list += '\n# lfw \t\tstr \t-- \tList Function Words\t\t#'
 	command_list += '\n# lucw \t\tstr \t-- \tList Unique Content Words\t#'
 	command_list += '\n# lufw \t\tstr \t-- \tList Unique Function Words\t#'
-	command_list += '\n# mostfreq \tstr \t*int \tMost Frequent Words in str\t#'
+	command_list += '\n# mostfreq \tstr ' + colored('\t*','red') + 'int \tMost Frequent Words in str\t#'
 	command_list += '\n# normalize \tstr \t-- \tNormalize Text\t\t\t#'
 	command_list += '\n# nutterances \tstr \t-- \tCount Utterances\t\t#'
-	command_list += '\n# plotfreq \tstr \t*int \tPlot Frequency Distribution\t#'
+	command_list += '\n# plotfreq \tstr ' + colored('\t*','red') + 'int \tPlot Frequency Distribution\t#'
 	command_list += '\n# pos \t\tstr \t-- \tDisplay Parts of Speech\t\t#'
 	command_list += '\n# poscounts \tstr \t-- \tDisplay POS Counts\t\t#'
 	#command_list += '\n# s \t\tstr1 \tstr2 \tFind Occurrences of str2 in str1#'
+	command_list += '\n# stats \tstr \t-- \tDisplay Various Stats\t\t#'
 	command_list += '\n# tokens \tstr \t-- \tDisplay All Tokens\t\t#'
 	command_list += '\n# ttr \t\tstr \t-- \tType-Token Ratio\t\t#'
 	command_list += '\n# types \tstr \t-- \tDisplay All Types\t\t#'
@@ -429,6 +447,9 @@ def display_command_list():
 	command_list += '\n# --commands \t-- \t-- \tShow Valid Commands.\t\t#'
 	command_list += '\n# --info \t-- \t-- \tShow Info.\t\t\t#'
 	command_list += '\n# --version \t-- \t-- \tDisplay Installed Version.\t#'
+	command_list += '\n#\t\t\t\t\t\t\t\t#'
+	command_list += '\n# ' + colored('--multi', 'red') + ' ' + colored('command', 'green') + ' ' + colored('*', 'red') + colored('args','blue') + ' ' + colored('file1 file2 ... fileN','yellow') + '\t\t\t#'
+	command_list += '\n#\t\t\t\tRun ' + colored('command', 'green') + ' on all ' + colored('files','yellow') + '\t#'
 	command_list += '\n#################################################################'
 	print(command_list)
 	return ''
@@ -436,8 +457,9 @@ def display_command_list():
 # Print the Usage Instructions to stdout.
 def print_usage_instructions():
 	usage = '\nInvalid command. For a list of available commands, use ' + colored('--commands', 'green') + '.'
-	usage+= '\nCommands look like this: ' + colored('claap', 'blue') + ' ' + colored('COMMAND', 'green') + ' ' + colored('arg1 arg2 *arg3', 'red')
+	usage+= '\nCommands look like this: ' + colored('claap', 'red') + ' ' + colored('COMMAND', 'green') + ' ' + colored('arg1 arg2 *arg3', 'blue')
 	usage+= '\n' + colored('*', 'red') + ' denotes an optional argument.'
+	usage+= '\n\nWarning: Large inputs, such as Moby Dick, will take longer to process.'
 
 	print(usage)
 	return ''
@@ -505,6 +527,7 @@ def info(opt='-1'):
 		print_usage_instructions()
 		return ''
 
+# Print most recent version of CLAAP.
 def version_info():
 	print(versions[0])
 	return ''

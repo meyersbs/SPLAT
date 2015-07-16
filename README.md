@@ -35,11 +35,11 @@ Run the following in a command line.
 
 - - - -
 ## Project Goals
-* Develop a command-line interface.
+* Develop a command-line interface.<span style="color:green;">✓</span>
 * Provide basic metric gathering features.
 * Provide basic annotation insertion features.
-* Create a script for installing dependencies.
-* Integrate with the bash shell.
+* Create a script for installing dependencies.<span style="color:red;">✓</span>
+* Integrate with the bash shell.<span style="color:red;">✓</span>
 * Port for Mac OS X.
 * Port for Windows 7+.
 
@@ -51,4 +51,4 @@ I would like to thank Emily Prud'hommeaux and Cissi Ovesdotter-Alm for their gui
 
 &nbsp;&nbsp;&nbsp;&nbsp;Cissi Ovesdotter-Alm < <coacla@rit.edu> > < [CLaSP](http://www.rit.edu/clasp/people.html) >
 
-&nbsp;&nbsp;&nbsp;&nbsp;Bryan T. Meyers < <btm5529@rit.edu> >
+&nbsp;&nbsp;&nbsp;&nbsp;Bryan T. Meyers < <btm5529@rit.edu> > < [DataDrake](http://www.datadrake.com/) >
