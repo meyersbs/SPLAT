@@ -35,13 +35,13 @@ Run the following in a command line.
 
 - - - -
 ## Project Goals
-* Develop a command-line interface.<span style="color:green;">✓</span>
-* Provide basic metric gathering features.
-* Provide basic annotation insertion features.
-* Create a script for installing dependencies.<span style="color:red;">✓</span>
-* Integrate with the bash shell.<span style="color:red;">✓</span>
-* Port for Mac OS X.
-* Port for Windows 7+.
+* ``` ✓ ``` Develop a command-line interface.
+* ``` _ ``` Provide basic metric gathering features.
+* ``` _ ``` Provide basic annotation insertion features.
+* ``` ✓ ``` Create a script for installing dependencies.>
+* ``` ✓ ``` Integrate with the bash shell.
+* ``` _ ``` Port for Mac OS X.
+* ``` _ ``` Port for Windows 7+.
 
 - - - -
 ## Acknowledgments
