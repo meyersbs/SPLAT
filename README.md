@@ -38,8 +38,9 @@ Run the following in a command line.
 * ``` ✓ ``` Develop a command-line interface.
 * ``` _ ``` Provide basic metric gathering features.
 * ``` _ ``` Provide basic annotation insertion features.
-* ``` ✓ ``` Create a script for installing dependencies.>
+* ``` ✓ ``` Create a script for installing dependencies.
 * ``` ✓ ``` Integrate with the bash shell.
+* ``` ✓ ``` Integrate features from the Berkeley Parser.
 * ``` _ ``` Port for Mac OS X.
 * ``` _ ``` Port for Windows 7+.
 
