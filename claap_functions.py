@@ -11,6 +11,7 @@ import csv
 import nltk
 import random
 import re
+import subprocess
 
 ##### GLOBAL VARIABLES ###############################################
 versions = ['Version 1.00\t06-24-15\t04:24 PM UTC', 'Version 0.10\t06-16-15\t11:29 AM UTC', 'Version 0.00\t06-15-15\t03:55 PM UTC']
@@ -289,6 +290,63 @@ def get_content_function_ratio(text_file):
 
 	return round(ratio, 2)
 
+##### BERKELEY PARSER FEATURES #######################################
+
+#Use the Berkeley Parser to obtain parse trees for each sentence in a text file.
+def get_parse_trees(text_file):
+	parse_trees = []
+	parse_trees.append(subprocess.check_output(['java', '-jar', 'BerkeleyParser-1.7.jar', '-gr', 'eng_sm6.gr', '-inputFile', str(text_file)], shell=False).strip('\n'))
+
+	#print(parse_tree)
+	return parse_trees
+
+#Takes in a properly formatted Berkeley Parse Tree and calculates max depth.
+def get_max_depths(text_file):
+	count = 0
+	curr_depth = 0
+	max_depth = 0
+	depths = {}
+	lines = []
+	with open(text_file) as f:
+		for line in f:
+			lines.append(line.strip('\n').strip('.').strip(','))
+
+	#print(lines)
+	trees = get_parse_trees(text_file)
+	for item in trees:
+		#print(item)
+		curr_depth = 0
+		max_depth = 0
+		for sentence in item.split('\n'):
+			#print(sentence)
+			for word in sentence.split():
+				#print(word)
+				for char in word:
+					if char == '(':
+						#stack.append(c)
+						curr_depth+=1
+					elif char == ')':
+						#stack.pop()
+						curr_depth-=1
+					else:
+						curr_depth = curr_depth
+
+					if curr_depth > max_depth:
+						max_depth = curr_depth
+
+			depths[lines[count]] = max_depth
+			count+=1
+
+	return depths
+
+#Prints the max depths of the parse tree for each sentence in the given text_file
+def print_max_depths(text_file):
+	output = 'max depth,sentence'
+	depths = get_max_depths(text_file)
+	for key in depths.keys():
+		output+= ('\n' + str(depths[key]) + ',' + key)
+
+	return output
 ##### DISFLUENCY-BASED FEATURES ######################################
 #Count the number of various disfluencies in a given text_file.
 def count_disfluencies(text_file):
@@ -416,40 +474,38 @@ def get_stats(text_file):
 ##### JUST PRINTING FUNCTIONS ########################################
 # Print the Command List to stdout.
 def display_command_list():
-	command_list = '##### COMMAND LIST ##############################################'
-	command_list += '\n# ' + colored('command','green') + colored('\targ1 \targ2','blue') + '\tdescription\t\t\t#'
-	command_list += '\n#\t\t\t\t\t\t\t\t#'
-	command_list += '\n# alu \t\tstr \t-- \tAverage Utterance Length\t#'
-	command_list += '\n# disfluencies \tstr \t-- \tCount Disfluencies\t\t#'
-	command_list += '\n# dpu \t\tstr \t-- \tDisfluencies per Utterance\t#'
-	command_list += '\n# lcw \t\tstr \t-- \tList Content Words\t\t#'
-	command_list += '\n# leastfreq \tstr ' + colored('\t*','red') + 'int \tLeast Frequent Words in str\t#'
-	command_list += '\n# lfw \t\tstr \t-- \tList Function Words\t\t#'
-	command_list += '\n# lucw \t\tstr \t-- \tList Unique Content Words\t#'
-	command_list += '\n# lufw \t\tstr \t-- \tList Unique Function Words\t#'
-	command_list += '\n# mostfreq \tstr ' + colored('\t*','red') + 'int \tMost Frequent Words in str\t#'
-	command_list += '\n# normalize \tstr \t-- \tNormalize Text\t\t\t#'
-	command_list += '\n# nutterances \tstr \t-- \tCount Utterances\t\t#'
-	command_list += '\n# plotfreq \tstr ' + colored('\t*','red') + 'int \tPlot Frequency Distribution\t#'
-	command_list += '\n# pos \t\tstr \t-- \tDisplay Parts of Speech\t\t#'
-	command_list += '\n# poscounts \tstr \t-- \tDisplay POS Counts\t\t#'
-	#command_list += '\n# s \t\tstr1 \tstr2 \tFind Occurrences of str2 in str1#'
-	command_list += '\n# stats \tstr \t-- \tDisplay Various Stats\t\t#'
-	command_list += '\n# tokens \tstr \t-- \tDisplay All Tokens\t\t#'
-	command_list += '\n# ttr \t\tstr \t-- \tType-Token Ratio\t\t#'
-	command_list += '\n# types \tstr \t-- \tDisplay All Types\t\t#'
-	command_list += '\n# utterances \tstr \t-- \tList Utterances\t\t\t#'
-	command_list += '\n# uwordcount \tstr \t-- \tDisplay Unique Word Count\t#'
-	command_list += '\n# wordcount \tstr \t-- \tDisplay Total Word Count\t#'
-	command_list += '\n# wpu \t\tstr \t-- \tDisplay Words per Utterance\t#'
-	command_list += '\n#\t\t\t\t\t\t\t\t#'
-	command_list += '\n# --usage \t-- \t-- \tShow Usage Info.\t\t#'
-	command_list += '\n# --commands \t-- \t-- \tShow Valid Commands.\t\t#'
-	command_list += '\n# --info \t-- \t-- \tShow Info.\t\t\t#'
-	command_list += '\n# --version \t-- \t-- \tDisplay Installed Version.\t#'
-	command_list += '\n#\t\t\t\t\t\t\t\t#'
-	command_list += '\n# ' + colored('--multi', 'red') + ' ' + colored('command', 'green') + ' ' + colored('*', 'red') + colored('args','blue') + ' ' + colored('file1 file2 ... fileN','yellow') + '\t\t\t#'
-	command_list += '\n#\t\t\t\tRun ' + colored('command', 'green') + ' on all ' + colored('files','yellow') + '\t#'
+	command_list  = '##### COMMAND LIST ##############################################'
+	command_list += '\n' + colored('command','green') + colored('\t\targ1 \t\targ2','blue') + '\tdescription\t\t\t'
+	command_list += '\n'
+	command_list += '\nalu \t\tfilename \t-- \tAverage Utterance Length\t'
+	command_list += '\ndisfluencies \tfilename \t-- \tCount Disfluencies\t\t'
+	command_list += '\ndpu \t\tfilename \t-- \tDisfluencies per Utterance\t'
+	command_list += '\nlcw \t\tfilename \t-- \tList Content Words\t\t'
+	command_list += '\nleastfreq \tfilename ' + colored('\t*','red') + 'int \tLeast Frequent Words in str\t'
+	command_list += '\nlfw \t\tfilename \t-- \tList Function Words\t\t'
+	command_list += '\nlucw \t\tfilename \t-- \tList Unique Content Words\t'
+	command_list += '\nlufw \t\tfilename \t-- \tList Unique Function Words\t'
+	command_list += '\nmostfreq \tfilename ' + colored('\t*','red') + 'int \tMost Frequent Words in str\t'
+	command_list += '\nnormalize \tfilename \t-- \tNormalize Text\t\t\t'
+	command_list += '\nnutterances \tfilename \t-- \tCount Utterances\t\t'
+	command_list += '\nplotfreq \tfilename ' + colored('\t*','red') + 'int \tPlot Frequency Distribution\t'
+	command_list += '\npos \t\tfilename \t-- \tDisplay Parts of Speech\t\t'
+	command_list += '\nposcounts \tfilename \t-- \tDisplay POS Counts\t\t'
+	command_list += '\nstats \t\tfilename \t-- \tDisplay Various Stats\t\t'
+	command_list += '\ntokens \t\tfilename \t-- \tDisplay All Tokens\t\t'
+	command_list += '\nttr \t\tfilename \t-- \tType-Token Ratio\t\t'
+	command_list += '\ntypes \t\tfilename \t-- \tDisplay All Types\t\t'
+	command_list += '\nutterances \tfilename \t-- \tList Utterances\t\t\t'
+	command_list += '\nuwordcount \tfilename \t-- \tDisplay Unique Word Count\t'
+	command_list += '\nwordcount \tfilename \t-- \tDisplay Total Word Count\t'
+	command_list += '\nwpu \t\tfilename \t-- \tDisplay Words per Utterance\t'
+	command_list += '\n'
+	command_list += '\n--usage \t-- \t\t-- \tShow Usage Info.\t\t'
+	command_list += '\n--commands \t-- \t\t-- \tShow Valid Commands.\t\t'
+	command_list += '\n--info \t\t-- \t\t-- \tShow Info.\t\t\t'
+	command_list += '\n--version \t-- \t\t-- \tDisplay Installed Version.\t'
+	command_list += '\n'
+	command_list += '\n' + colored('--multi', 'red') + ' ' + colored('command', 'green') + ' ' + colored('*', 'red') + colored('args','blue') + ' ' + colored('filenames','yellow') + '\t\tRun ' + colored('command', 'green') + ' on all ' + colored('files','yellow') + '\t'
 	command_list += '\n#################################################################'
 	print(command_list)
 	return ''
@@ -462,22 +518,6 @@ def print_usage_instructions():
 	usage+= '\n\nWarning: Large inputs, such as Moby Dick, will take longer to process.'
 
 	print(usage)
-	return ''
-
-# Print a random linguistic fact to stdout.
-def random_fact():
-	exit_messages = [("If you're happy and you know it, CLAAP your hands!"),
-			("Petrichor\n(noun)\na pleasant smell that frequently accompanies the first rain after a long period of warm, dry weather."),
-			("Syzygy is the only word in English that contains three 'y's."),
-			("Tmesis is the only word in the English language that begins with 'tm'."),
-			("In Old English, bagpipes were called 'doodle sacks'."),
-			("A 'quire' is two-dozen sheets of paper."),
-			("'Buffalo buffalo Buffalo buffalo buffalo buffalo Buffalo buffalo' is a grammatically correct sentence in American English."),
-			("J.R.R. Tolkien coined the term 'glossopoeia,' which is the act of inventing languages."),
-			("Beowulf is an English work, but if you try to read it in its original form, it will look like gibberish!"),
-			("'To Be Or Not To Be' = 'U+0032 U+0042 U+2228 U+0021 U+0032 U+0042'")]
-
-	print('\n' + random.choice(exit_messages))
 	return ''
 
 # Print the program info to stdout.
