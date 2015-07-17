@@ -51,4 +51,12 @@ I would like to thank Emily Prud'hommeaux and Cissi Ovesdotter-Alm for their gui
 
 &nbsp;&nbsp;&nbsp;&nbsp;Cissi Ovesdotter-Alm < <coacla@rit.edu> > < [CLaSP](http://www.rit.edu/clasp/people.html) >
 
-&nbsp;&nbsp;&nbsp;&nbsp;Bryan T. Meyers < <btm5529@rit.edu> > < [DataDrake](http://www.datadrake.com/) >
+&nbsp;&nbsp;&nbsp;&nbsp;Bryan T. Meyers < <btm5529@rit.edu> > < [DataDrake](http://www.datadrake.com/) > < [GitHub](https://github.com/DataDrake) >
+
+- - - -
+## Licensing
+The files listed below are part of the [Berkeley Parser](https://github.com/slavpetrov/berkeleyparser):
+* BerkeleyParser-1.7.jar
+* eng_sm6.gr
+
+For questions regarding the Berkeley Parser, please contact Slav Petrov < <petrov@cs.berkeley.edu> >.
