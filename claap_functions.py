@@ -19,12 +19,28 @@ pause_count = 0
 break_count = 0
 total_disfluencies = 0
 
+penn_tree_bank = {'CC': 'Coordination Conjunction', 'CD': 'Cardinal Number', 'DT': 'Determiner',
+                  'EX': 'Existential there', 'FW': 'Foreign Word', 'IN': 'Preposition or Subordinating Conjunction',
+                  'JJ': 'Adjective', 'JJR': 'Adjective, Comparative', 'JJS': 'Adjective, Superlative',
+                  'LS': 'List Item Marker', 'MD': 'Modal', 'NN': 'Noun, Singular or Mass', 'NNS': 'Noun, Plural',
+                  'NNP': 'Proper Noun, Singular', 'NNPS': 'Proper Noun, Plural', 'PDT': 'Predeterminer',
+                  'POS': 'Possessive Ending', 'PRP': 'Personal Pronoun', 'PRP$': 'Possessive Pronoun',
+                  'RB': 'Adverb', 'RBR': 'Adverb, Comparative', 'RBS': 'Adverb, Superlative', 'RP': 'Particle',
+                  'SYM': 'Symbol', 'TO': 'To', 'UH': 'Interjection', 'VB': 'Verb, Base Form',
+                  'VBD': 'Verb, Past Tense', 'VBG': 'Verb, Gerund or Present Participle',
+                  'VBN': 'Verb, Past Participle', 'VBP': 'Verb, Non-3rd-Person Singular Present',
+                  'VBZ': 'Verb, 3rd-Person Singular Present', 'WDT': 'WH-Determiner', 'WP': 'WH-Pronoun',
+                  'WP$': 'WH-Pronoun, Possessive', 'WRB': 'WH-Adverb'}
+
 
 # ##### NORMALIZATION FUNCTIONS ########################################
 # Take the given word, convert to lowercase and strip punctuation.
 def __normalize_word(word):
-    tokenizer = RegexpTokenizer(r'^\w+$')
-    new_word = tokenizer.tokenize(word.strip('.').lower())
+    # Remove all non-word-characters from the given word.
+    tokenizer = RegexpTokenizer(r'^[\w\']*')
+    new_word = tokenizer.tokenize(word.strip('.').strip(',').lower())
+    # print new_word
+
     try:
         return new_word[0]
     except IndexError:
@@ -37,11 +53,13 @@ def normalize_text(text_file):
     with open(text_file) as curr_file:
         for line in curr_file:
             normal_line = ''
-            print line.split()
+            # print line.split()
             for word in line.split():
-                normal_line += __normalize_word(word) + ' '
+                if word != '{SL}' and word != 'S:':
+                    normal_line += __normalize_word(word) + ' '
             normal_text += normal_line + '\n'
     return normal_text
+# ######################################################################
 
 
 # ##### UTTERANCE-BASED FEATURES #######################################
@@ -87,6 +105,7 @@ def get_avg_utterance_length(text_file):
 
     avg = float(num_words) / count
     return round(avg)
+# ######################################################################
 
 
 # ##### FREQUENCY-BASED FEATURES #######################################
@@ -147,6 +166,7 @@ def get_least_frequent(text_file, x=None):
                 count += 1
 
     return freq_dist
+# ######################################################################
 
 
 # ##### TYPE-TOKEN-BASED FEATURES ######################################
@@ -227,6 +247,7 @@ def get_words_per_utterance(text_file):
         count += 1
 
     return output
+# ######################################################################
 
 
 # ##### SYNTAX-BASED FEATURES ##########################################
@@ -257,19 +278,38 @@ def calc_content_density(text_file):
     pos = dict(tag_pos(text_file))
     # print pos
     open_class_list = ['NN', 'NNS', 'NNP', 'NNPS', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ', 'JJ', 'JJR', 'JJS', 'RB',
-                       'RBR', 'RBS', 'SYM']
+                       'RBR', 'RBS', 'FW']
+    ignore_list = ['LS', 'SYM', 'UH', 'LBR', 'RBR', '-LBR-', '-RBR-', '$', '``', '"', '\'\'', '(', ')', '()', '( )',
+                   '\,', '\-\-', '\.', '\:']
     open_class_count = 0
     closed_class_count = 0
 
     for (k, v) in pos.items():
+        # print v
         if v in open_class_list:
             open_class_count += 1
-        else:
+        elif v not in ignore_list:
             closed_class_count += 1
-
+        else:
+            open_class_count = open_class_count
+            closed_class_count = closed_class_count
     # print open_class_count
     # print closed_class_count
     return float(open_class_count) / closed_class_count
+
+
+# Calculate the Idea Density of a given text_file.
+def calc_idea_density(text_file):
+    pos = dict(tag_pos(text_file))
+    word_count = get_word_count(text_file)
+    proposition_count = 0
+    proposition_list = ['CC', 'CD', 'DT', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ', 'JJ', 'JJR', 'JJS', 'RB', 'RBR',
+                        'RBS', 'IN', 'CC', 'PDT', 'POS', 'PP$', 'PRP$', 'TO', 'WDT', 'WP', 'WPS', 'WRB']
+    for (k, v) in pos.items():
+        if v in proposition_list:
+            proposition_count += 1
+
+    return float(proposition_count) / word_count
 
 
 # List all of the content words within the given text file.
@@ -326,6 +366,7 @@ def get_content_function_ratio(text_file):
     ratio = float(len(content)) / float(len(function))
 
     return round(ratio, 2)
+# ######################################################################
 
 
 # ##### BERKELEY PARSER FEATURES #######################################
@@ -380,6 +421,7 @@ def print_max_depths(text_file):
         output += ('\n' + str(depths[key]) + ',' + key)
 
     return output
+# ######################################################################
 
 
 # ##### DISFLUENCY-BASED FEATURES ######################################
@@ -480,8 +522,10 @@ def get_disfluencies_per_utterance(text_file):
     # output+=('\n' + str(total_count))
 
     return output
+# ######################################################################
 
 
+# ##### PRINT ALL STATS ################################################
 def get_stats(text_file):
     output = '\n' + text_file
     output += '\n##### BASIC STATS ###############################################'
