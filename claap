@@ -11,7 +11,7 @@ commands = {'--usage': print_usage_instructions, '--version': version_info, '--i
             'cfr': get_content_function_ratio, 'normalize': normalize_text, 'nutterances': get_num_utterances,
             'disfluencies': count_disfluencies, 'stats': get_stats, 'wpu': get_words_per_utterance,
             'dpu': get_disfluencies_per_utterance, 'maxdepth': get_max_depths, 'parsetree': get_parse_trees,
-            'printdepths': print_max_depths}
+            'printdepths': print_max_depths, 'cdensity':calc_content_density}
 
 
 def main():

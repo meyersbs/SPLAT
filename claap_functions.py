@@ -177,7 +177,7 @@ def get_tokens(text_file):
         if normal_item != '-1':
             normalized_raw += normal_item + '\n'
 
-    print normalized_raw
+    # print normalized_raw
     tokens = RegexpTokenizer(r'[^\d\s\:\(\)]+').tokenize(normalized_raw)
 
     return tokens
@@ -250,6 +250,26 @@ def get_pos_counts(text_file):
             pos_counts.update({v: 1})
 
     return pos_counts
+
+
+# Calculate the Content Density of a given text_file.
+def calc_content_density(text_file):
+    pos = dict(tag_pos(text_file))
+    # print pos
+    open_class_list = ['NN', 'NNS', 'NNP', 'NNPS', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ', 'JJ', 'JJR', 'JJS', 'RB',
+                       'RBR', 'RBS', 'SYM']
+    open_class_count = 0
+    closed_class_count = 0
+
+    for (k, v) in pos.items():
+        if v in open_class_list:
+            open_class_count += 1
+        else:
+            closed_class_count += 1
+
+    # print open_class_count
+    # print closed_class_count
+    return float(open_class_count) / closed_class_count
 
 
 # List all of the content words within the given text file.
