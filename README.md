@@ -25,14 +25,15 @@ Currently, CLAAP has only been tested on 64-bit Ubuntu 15.04 with Python 2.7.9.
 Ensure that Python is installed on your machine.
 
 Run the following in a command line.
-    
+``` bash    
     bash install
-
+```
 - - - -
-## Execution
-
-    claap COMMAND arg1 arg2 arg3 ...
-
+## Example Execution
+``` bash
+    claap COMMAND arg1 arg2 filename
+    claap --multi COMMAND arg1 arg2 filename1 filename2 ... filenameN
+```
 - - - -
 ## Project Goals
 * ``` ✓ ``` Develop a command-line interface.
@@ -52,7 +53,8 @@ I would like to thank Emily Prud'hommeaux and Cissi Ovesdotter-Alm for their gui
 
 &nbsp;&nbsp;&nbsp;&nbsp;Cissi Ovesdotter-Alm < <coacla@rit.edu> > < [CLaSP](http://www.rit.edu/clasp/people.html) >
 
-&nbsp;&nbsp;&nbsp;&nbsp;Bryan T. Meyers < <btm5529@rit.edu> > < [DataDrake](http://www.datadrake.com/) > < [GitHub](https://github.com/DataDrake) >
+&nbsp;&nbsp;&nbsp;&nbsp;Bryan T. Meyers < <bmeyers@datadrake.com> > < [DataDrake](http://www.datadrake.com/) > < 
+[GitHub](https://github.com/DataDrake) >
 
 - - - -
 ## Licensing

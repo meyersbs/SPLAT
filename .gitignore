@@ -1,2 +1,7 @@
+claap_tests.py
 output.txt
-Task_2/*
+asd_data/**/*
+test_data/**/*
+*~
+*.pyc
+.idea/**/*
