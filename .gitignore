@@ -2,6 +2,7 @@ claap_tests.py
 output.txt
 asd_data/**/*
 test_data/**/*
+reference_data/**/*
 *~
 *.pyc
 .idea/**/*
