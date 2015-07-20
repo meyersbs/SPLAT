@@ -1,2 +1,0 @@
-( (S (NP (PRP I)) (VP (VBP celebrate) (NP (NN myself,)))) )
-( (SBARQ (CC And) (WHNP (WP what)) (SQ (NP (PRP I)) (VP (VB assume) (SBAR (S (NP (PRP you)) (VP (MD shall) (VP (VB assume,)))))))) )
