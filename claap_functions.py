@@ -341,7 +341,7 @@ def get_formatted_trees(text_file):
     raw_trees = get_parse_trees(text_file)
     form_trees = []
     for item in raw_trees[0].split('\n'):
-        form_trees.append('(ROOT' + item[1:] + '\n')
+        form_trees.append('( ' + item + ' )\n')
     return form_trees
 
 
@@ -359,7 +359,7 @@ def print_formatted_trees(text_file):
 def draw_trees(text_file):
     form_trees = get_formatted_trees(text_file)
     for tree_string in form_trees:
-        sentence = ParentedTree.fromstring(tree_string)
+        sentence = Tree.fromstring(tree_string)
         sentence.draw()
 
     return ''
@@ -403,6 +403,83 @@ def print_max_depths(text_file):
         output += ('\n' + str(depths[key]) + ',' + key)
 
     return output
+########################################################################################################################
+
+
+##### YNGVE & FRAZIER SCORING ##########################################################################################
+# Calculate word score.
+def get_word_score(tree):
+    if type(tree) == str: return 1
+    else:
+        count = 0
+        for child in tree: count += get_word_score(child)
+        return count
+
+
+# Determine if it is a sentence.
+def is_sentence(value):
+    if len(value) > 0 and value[0] == "S":  return True
+    else:                                   return False
+
+
+# Calculate the Yngve Score for a given text_file.
+def calc_yngve_score(tree, parent):
+    if type(tree) == str: return parent
+    else:
+        count = 0
+        for i, child in enumerate(reversed(tree)): count += calc_yngve_score(child, parent+i)
+        return count
+
+
+# Calculate the Frazier Score for a given text_file.
+def calc_frazier_score(tree, parent, parent_label):
+    if type(tree) == str: return parent - 1
+    else:
+        count = 0
+        for i, child in enumerate(tree):
+            score = 0
+            if i == 0:
+                my_lab = tree.label()
+                if is_sentence(my_lab): score = (0 if is_sentence(parent_label) else parent + 1.5)
+                elif my_lab != "" and my_lab != "ROOT" and my_lab != "TOP": score = parent + 1
+            count += calc_frazier_score(child, score, my_lab)
+        return count
+
+
+def get_yngve_score(text_file):
+    sentences = 0
+    total_yngve_score = 0
+    trees = get_formatted_trees(text_file)
+    for tree_line in trees:
+        if tree_line.strip() == "":
+            continue
+        tree = Tree.fromstring(tree_line)
+        words = get_word_score(tree)
+        sentences += 1
+        raw_ygnve_score = calc_yngve_score(tree, 0)
+        mean_yngve_score = float(raw_ygnve_score) / words
+        total_yngve_score += mean_yngve_score
+
+    average_yngve_score = float(total_yngve_score) / sentences
+    return average_yngve_score
+
+
+def get_frazier_score(text_file):
+    sentences = 0
+    total_frazier_score = 0
+    trees = get_formatted_trees(text_file)
+    for tree_line in trees:
+        if tree_line.strip() == "":
+            continue
+        tree = Tree.fromstring(tree_line)
+        words = get_word_score(tree)
+        sentences += 1
+        raw_frazier_score = calc_frazier_score(tree, 0, "")
+        mean_frazier_score = float(raw_frazier_score) / words
+        total_frazier_score += mean_frazier_score
+
+    average_frazier_score = float(total_frazier_score) / sentences
+    return average_frazier_score
 ########################################################################################################################
 
 
@@ -508,7 +585,7 @@ def get_stats(text_file):
 ##### JUST PRINTING FUNCTIONS ##########################################################################################
 # Print the Command List to stdout.
 def display_command_list():
-    print '\033[4mcommand\t\targ1\t\targ2\tdescription\t\t\t\t\033[0m'
+    print 'command\t\targ1\t\targ2\tdescription\t\t\t\t'
     for item in collections.OrderedDict(sorted(command_info.items())):
         print colored(item, 'green')\
               + colored(command_args[item], 'blue')\

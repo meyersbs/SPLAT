@@ -31,7 +31,9 @@ command_info = {'alu':          'Get Average Utterance Length',         'disflue
                 'wpu':          'List Words per Utterance',             '--commands':   'List Valid Commands',
                 '--help':       'List Help Info',                       '--info':       'List Program Info',
                 '--usage':      'List Usage Info',                      '--version':    'Get Program Version',
-                '--multi':      'Run a Command Multiple Times',         'cfr':          'Get Content-Function Ratio'}
+                '--multi':      'Run a Command Multiple Times',         'cfr':          'Get Content-Function Ratio',
+                'idensity':     'Get Idea Density',                     'cdensity':     'Get Content Density',
+                'yngve':        'Get Yngve Score',                      'frazier':      'Get Frazier Score'}
 
 command_args = {'alu':          '\t\tfilename\t--', 'disfluencies':     '\tfilename\t--',
                 'dpu':          '\t\tfilename\t--', 'drawtrees':        '\tfilename\t--',
@@ -48,5 +50,7 @@ command_args = {'alu':          '\t\tfilename\t--', 'disfluencies':     '\tfilen
                 'wpu':          '\t\tfilename\t--', '--commands':       '\t--\t\t--',
                 '--help':       '\t\t--\t\t--',     '--info':           '\t\t--\t\t--',
                 '--usage':      '\t\t--\t\t--',     '--version':        '\t--\t\t--',
-                '--multi':      '\t\t--\t\t--',     'cfr':              '\t\tfilename\t--'}
+                '--multi':      '\t\t--\t\t--',     'cfr':              '\t\tfilename\t--',
+                'idensity':     '\tfilename\t--',   'cdensity':         '\tfilename\t--',
+                'yngve':        '\t\tfilename\t--', 'frazier':          '\t\tfilename\t--'}
 ########################################################################################################################

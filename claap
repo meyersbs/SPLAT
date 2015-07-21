@@ -18,7 +18,8 @@ commands = {'--usage':      print_usage_instructions,       '--version':    vers
             'stats':        get_stats,                      'wpu':          get_words_per_utterance,
             'dpu':          get_disfluencies_per_utterance, 'drawtrees':    draw_trees,
             'parsetrees':   print_formatted_trees,          'cdensity':     calc_content_density,
-            'idensity':     calc_idea_density,              '--help':       print_help}
+            'idensity':     calc_idea_density,              '--help':       print_help,
+            'yngve':        get_yngve_score,                'frazier':      get_frazier_score}
 
 
 def main():
