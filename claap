@@ -1,37 +1,34 @@
 #!/usr/bin/python
 
 from claap_functions import *
+import sys
 
-commands = {'--usage': print_usage_instructions, '--version': version_info, '--info': info,
-            '--commands': display_command_list, 'tokens': get_tokens, 'types': get_types, 'wordcount': get_word_count,
-            'uwordcount': get_unique_word_count, 'ttr': get_ttr, 'pos': tag_pos, 'poscounts': get_pos_counts,
-            'plotfreq': plot_freq_dist, 'mostfreq': get_most_frequent, 'leastfreq': get_least_frequent,
-            'utterances': list_utterances, 'alu': get_avg_utterance_length, 'lcw': get_content_words,
-            'lucw': get_unique_content_words, 'lfw': get_function_words, 'lufw': get_unique_function_words,
-            'cfr': get_content_function_ratio, 'normalize': normalize_text, 'nutterances': get_num_utterances,
-            'disfluencies': count_disfluencies, 'stats': get_stats, 'wpu': get_words_per_utterance,
-            'dpu': get_disfluencies_per_utterance, 'maxdepth': get_max_depths, 'parsetree': get_parse_trees,
-            'printdepths': print_max_depths, 'cdensity':calc_content_density, 'idensity':calc_idea_density}
+commands = {'--usage':      print_usage_instructions,       '--version':    version_info,
+            '--info':       info,                           '--commands':   display_command_list,
+            'tokens':       get_tokens,                     'types':        get_types,
+            'wc':           get_word_count,                 'uwc':          get_unique_word_count,
+            'ttr':          get_ttr,                        'pos':          tag_pos,
+            'poscounts':    get_pos_counts,                 'plotfreq':     plot_freq_dist,
+            'mostfreq':     get_most_frequent,              'leastfreq':    get_least_frequent,
+            'utterances':   list_utterances,                'alu':          get_avg_utterance_length,
+            'lcw':          get_content_words,              'lucw':         get_unique_content_words,
+            'lfw':          get_function_words,             'lufw':         get_unique_function_words,
+            'cfr':          get_content_function_ratio,     'normalize':    normalize_text,
+            'numutts':      get_num_utterances,             'disfluencies': count_disfluencies,
+            'stats':        get_stats,                      'wpu':          get_words_per_utterance,
+            'dpu':          get_disfluencies_per_utterance, 'drawtrees':    draw_trees,
+            'parsetrees':   print_formatted_trees,          'cdensity':     calc_content_density,
+            'idensity':     calc_idea_density,              '--help':       print_help}
 
 
 def main():
     # RUN MULTI COMMAND
-    if sys.argv[1] == '--multi' and sys.argv[2] in commands.keys() and sys.argv[2][0] != '-':
-        for i in range(3, len(sys.argv)):
-            # print(i)
-            print(commands[sys.argv[2]](sys.argv[i]))
-    # RUN COMMAND WITH NO ARGUMENTS
-    elif len(sys.argv) == 2 and sys.argv[1] in commands.keys():
-        print(commands[sys.argv[1]]())
-    # RUN COMMAND WITH ONE ARGUMENT
-    elif len(sys.argv) == 3 and sys.argv[1] in commands.keys():
-        print(commands[sys.argv[1]](sys.argv[2]))
-    # RUN COMMAND WITH TWO ARGUMENTS
-    elif len(sys.argv) == 4 and sys.argv[1] in commands.keys():
-        print(commands[sys.argv[1]](sys.argv[2], sys.argv[3]))
-    # DISPLAY PROPER SYNTAX
-    else:
-        print_usage_instructions()
+    if sys.argv[1] == '--multi' and sys.argv[2] in commands.keys():
+        for i in range(3, len(sys.argv)):                       print(commands[sys.argv[2]](sys.argv[i]))
+    elif len(sys.argv) == 2 and sys.argv[1] in commands.keys(): print(commands[sys.argv[1]]())
+    elif len(sys.argv) == 3 and sys.argv[1] in commands.keys(): print(commands[sys.argv[1]](sys.argv[2]))
+    elif len(sys.argv) == 4 and sys.argv[1] in commands.keys(): print(commands[sys.argv[1]](sys.argv[2], sys.argv[3]))
+    else:                                                       print_usage_instructions()
 
 
 if __name__ == "__main__":

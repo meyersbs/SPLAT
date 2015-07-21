@@ -1,45 +1,24 @@
 #!/usr/bin/python
 
-# ##### IMPORTS ########################################################
-from matplotlib import *
-from nltk.corpus import stopwords
+##### IMPORTS ##########################################################################################################
 from nltk.probability import FreqDist
 from nltk.tokenize import RegexpTokenizer
+from nltk.tree import *
 from termcolor import *
+from claap_global_vars import *
+import collections
 import nltk
 import re
 import subprocess
-
-# ##### GLOBAL VARIABLES ###############################################
-versions = ['Version 1.00\t06-24-15\t04:24 PM UTC', 'Version 0.10\t06-16-15\t11:29 AM UTC',
-            'Version 0.00\t06-15-15\t03:55 PM UTC']
-stopwords = stopwords.words('english')  # List of Function Words
-disfluency_list = ['um', 'uh', 'ah', 'er', 'hm']
-pause_count = 0
-break_count = 0
-total_disfluencies = 0
-
-penn_tree_bank = {'CC': 'Coordination Conjunction', 'CD': 'Cardinal Number', 'DT': 'Determiner',
-                  'EX': 'Existential there', 'FW': 'Foreign Word', 'IN': 'Preposition or Subordinating Conjunction',
-                  'JJ': 'Adjective', 'JJR': 'Adjective, Comparative', 'JJS': 'Adjective, Superlative',
-                  'LS': 'List Item Marker', 'MD': 'Modal', 'NN': 'Noun, Singular or Mass', 'NNS': 'Noun, Plural',
-                  'NNP': 'Proper Noun, Singular', 'NNPS': 'Proper Noun, Plural', 'PDT': 'Predeterminer',
-                  'POS': 'Possessive Ending', 'PRP': 'Personal Pronoun', 'PRP$': 'Possessive Pronoun',
-                  'RB': 'Adverb', 'RBR': 'Adverb, Comparative', 'RBS': 'Adverb, Superlative', 'RP': 'Particle',
-                  'SYM': 'Symbol', 'TO': 'To', 'UH': 'Interjection', 'VB': 'Verb, Base Form',
-                  'VBD': 'Verb, Past Tense', 'VBG': 'Verb, Gerund or Present Participle',
-                  'VBN': 'Verb, Past Participle', 'VBP': 'Verb, Non-3rd-Person Singular Present',
-                  'VBZ': 'Verb, 3rd-Person Singular Present', 'WDT': 'WH-Determiner', 'WP': 'WH-Pronoun',
-                  'WP$': 'WH-Pronoun, Possessive', 'WRB': 'WH-Adverb'}
+########################################################################################################################
 
 
-# ##### NORMALIZATION FUNCTIONS ########################################
+##### NORMALIZATION FUNCTIONS ##########################################################################################
 # Take the given word, convert to lowercase and strip punctuation.
 def __normalize_word(word):
     # Remove all non-word-characters from the given word.
     tokenizer = RegexpTokenizer(r'^[\w\']*')
     new_word = tokenizer.tokenize(word.strip('.').strip(',').lower())
-    # print new_word
 
     try:
         return new_word[0]
@@ -53,16 +32,15 @@ def normalize_text(text_file):
     with open(text_file) as curr_file:
         for line in curr_file:
             normal_line = ''
-            # print line.split()
             for word in line.split():
                 if word != '{SL}' and word != 'S:':
                     normal_line += __normalize_word(word) + ' '
             normal_text += normal_line + '\n'
     return normal_text
-# ######################################################################
+########################################################################################################################
 
 
-# ##### UTTERANCE-BASED FEATURES #######################################
+##### UTTERANCE-BASED FEATURES #########################################################################################
 # Save each utterance (line) into an array, stripping annotation.
 def get_utterances(text_file):
     utterances = []
@@ -97,6 +75,8 @@ def list_utterances(text_file):
     for item in utterances:
         print(item + '\n')
 
+    return ''
+
 
 # Calculate the average utterance length.
 def get_avg_utterance_length(text_file):
@@ -104,26 +84,21 @@ def get_avg_utterance_length(text_file):
     count = get_num_utterances(text_file)
 
     avg = float(num_words) / count
-    return round(avg)
-# ######################################################################
+    return round(avg, 4)
+########################################################################################################################
 
 
-# ##### FREQUENCY-BASED FEATURES #######################################
+##### FREQUENCY-BASED FEATURES #########################################################################################
 # Calculate the frequency distribution.
 def get_freq_dist(text_file):
     all_words = get_tokens(text_file)
     new_words = []
     for token in all_words:
-        if re.match(r'^F', token):
-            new_words = new_words
-        elif re.match(r'^S', token):
-            new_words = new_words
-        elif re.match(r'^T', token):
-            new_words = new_words
-        elif re.match(r'{SL}', token):
-            new_words = new_words
-        else:
-            new_words.append(token)
+        if re.match(r'^F', token):      new_words = new_words
+        elif re.match(r'^S', token):    new_words = new_words
+        elif re.match(r'^T', token):    new_words = new_words
+        elif re.match(r'{SL}', token):  new_words = new_words
+        else:                           new_words.append(token)
 
     freq_dist = FreqDist(new_words)
 
@@ -131,27 +106,25 @@ def get_freq_dist(text_file):
 
 
 # Plot the frequency distribution.
-def plot_freq_dist(text_file, x=None):
+def plot_freq_dist(text_file, x = None):
     freq_dist = get_freq_dist(text_file)
 
-    if x == -1:
-        freq_dist.plot()
-    else:
-        freq_dist.plot(int(x))
+    if x is None:   freq_dist.plot()
+    else:           freq_dist.plot(int(x))
+
+    return ''
 
 
 # Display the top x most frequent tokens.
-def get_most_frequent(text_file, x=None):
+def get_most_frequent(text_file, x = None):
     freq_dist = get_freq_dist(text_file)
 
-    if x is None:
-        return freq_dist.most_common()
-    else:
-        return freq_dist.most_common(int(x))
+    if x is None:   return freq_dist.most_common()
+    else:           return freq_dist.most_common(int(x))
 
 
 # Display the top x least frequent tokens.
-def get_least_frequent(text_file, x=None):
+def get_least_frequent(text_file, x = None):
     most_common = get_most_frequent(text_file, get_word_count(text_file))
 
     freq_dist = []
@@ -166,10 +139,10 @@ def get_least_frequent(text_file, x=None):
                 count += 1
 
     return freq_dist
-# ######################################################################
+########################################################################################################################
 
 
-# ##### TYPE-TOKEN-BASED FEATURES ######################################
+##### TYPE-TOKEN-BASED FEATURES ########################################################################################
 # Generate a list of tokens.
 def get_tokens(text_file):
     global pause_count
@@ -197,7 +170,6 @@ def get_tokens(text_file):
         if normal_item != '-1':
             normalized_raw += normal_item + '\n'
 
-    # print normalized_raw
     tokens = RegexpTokenizer(r'[^\d\s\:\(\)]+').tokenize(normalized_raw)
 
     return tokens
@@ -233,7 +205,7 @@ def get_ttr(text_file):
     num_tokens = get_word_count(text_file)
     type_token_ratio = float(num_types) / num_tokens * 100
 
-    return round(type_token_ratio, 2)
+    return round(type_token_ratio, 4)
 
 
 # Return a word count for each individual utterance in csv format.
@@ -247,10 +219,10 @@ def get_words_per_utterance(text_file):
         count += 1
 
     return output
-# ######################################################################
+########################################################################################################################
 
 
-# ##### SYNTAX-BASED FEATURES ##########################################
+##### SYNTAX-BASED FEATURES ############################################################################################
 # Tag all Types with Parts of Speech.
 def tag_pos(text_file):
     tokens = get_tokens(text_file)
@@ -265,10 +237,8 @@ def get_pos_counts(text_file):
 
     pos_counts = {}
     for (k, v) in pos.items():
-        if v in pos_counts.keys():
-            pos_counts[v] += 1
-        else:
-            pos_counts.update({v: 1})
+        if v in pos_counts.keys():  pos_counts[v] += 1
+        else:                       pos_counts.update({v: 1})
 
     return pos_counts
 
@@ -276,16 +246,10 @@ def get_pos_counts(text_file):
 # Calculate the Content Density of a given text_file.
 def calc_content_density(text_file):
     pos = dict(tag_pos(text_file))
-    # print pos
-    open_class_list = ['NN', 'NNS', 'NNP', 'NNPS', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ', 'JJ', 'JJR', 'JJS', 'RB',
-                       'RBR', 'RBS', 'FW']
-    ignore_list = ['LS', 'SYM', 'UH', 'LBR', 'RBR', '-LBR-', '-RBR-', '$', '``', '"', '\'\'', '(', ')', '()', '( )',
-                   '\,', '\-\-', '\.', '\:']
     open_class_count = 0
     closed_class_count = 0
 
     for (k, v) in pos.items():
-        # print v
         if v in open_class_list:
             open_class_count += 1
         elif v not in ignore_list:
@@ -293,8 +257,7 @@ def calc_content_density(text_file):
         else:
             open_class_count = open_class_count
             closed_class_count = closed_class_count
-    # print open_class_count
-    # print closed_class_count
+
     return float(open_class_count) / closed_class_count
 
 
@@ -303,11 +266,9 @@ def calc_idea_density(text_file):
     pos = dict(tag_pos(text_file))
     word_count = get_word_count(text_file)
     proposition_count = 0
-    proposition_list = ['CC', 'CD', 'DT', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ', 'JJ', 'JJR', 'JJS', 'RB', 'RBR',
-                        'RBS', 'IN', 'CC', 'PDT', 'POS', 'PP$', 'PRP$', 'TO', 'WDT', 'WP', 'WPS', 'WRB']
+    proposition_list
     for (k, v) in pos.items():
-        if v in proposition_list:
-            proposition_count += 1
+        if v in proposition_list: proposition_count += 1
 
     return float(proposition_count) / word_count
 
@@ -317,8 +278,7 @@ def get_content_words(text_file):
     tokens = get_tokens(text_file)
     content_words = []
     for word in tokens:
-        if word.lower() not in stopwords:
-            content_words.append(word)
+        if word.lower() not in stopwords: content_words.append(word)
 
     return content_words
 
@@ -328,8 +288,7 @@ def get_unique_content_words(text_file):
     types = get_types(text_file)
     content_words = []
     for word in types:
-        if word.lower() not in stopwords:
-            content_words.append(word)
+        if word.lower() not in stopwords: content_words.append(word)
 
     return content_words
 
@@ -339,8 +298,7 @@ def get_function_words(text_file):
     tokens = get_tokens(text_file)
     function_words = []
     for word in tokens:
-        if word.lower() in stopwords:
-            function_words.append(word)
+        if word.lower() in stopwords: function_words.append(word)
 
     return function_words
 
@@ -350,8 +308,7 @@ def get_unique_function_words(text_file):
     types = get_types(text_file)
     function_words = []
     for word in types:
-        if word.lower() in stopwords:
-            function_words.append(word)
+        if word.lower() in stopwords: function_words.append(word)
 
     return function_words
 
@@ -365,18 +322,47 @@ def get_content_function_ratio(text_file):
     print(len(function))
     ratio = float(len(content)) / float(len(function))
 
-    return round(ratio, 2)
-# ######################################################################
+    return round(ratio, 4)
+########################################################################################################################
 
 
-# ##### BERKELEY PARSER FEATURES #######################################
+##### BERKELEY PARSER FEATURES #########################################################################################
 # Use the Berkeley Parser to obtain parse trees for each sentence in a text file.
 def get_parse_trees(text_file):
     parse_trees = []
     parse_trees.append(subprocess.check_output(['java', '-jar', 'BerkeleyParser-1.7.jar', '-gr', 'eng_sm6.gr',
-                                                '-inputFile', str(text_file)], shell=False).strip('\n'))
+                                                '-inputFile', str(text_file)], shell = False).strip('\n'))
 
     return parse_trees
+
+
+# Format parse trees for Frazier & Yngve Scoring.
+def get_formatted_trees(text_file):
+    raw_trees = get_parse_trees(text_file)
+    form_trees = []
+    for item in raw_trees[0].split('\n'):
+        form_trees.append('(ROOT' + item[1:] + '\n')
+    return form_trees
+
+
+# Prints the formatted tree strings.
+def print_formatted_trees(text_file):
+    form_trees = get_formatted_trees(text_file)
+    output = ''
+    for tree_string in form_trees:
+        output += tree_string
+
+    return output
+
+
+# Takes a text_file, parses and formats into trees, and draws the trees.
+def draw_trees(text_file):
+    form_trees = get_formatted_trees(text_file)
+    for tree_string in form_trees:
+        sentence = ParentedTree.fromstring(tree_string)
+        sentence.draw()
+
+    return ''
 
 
 # Takes in a properly formatted Berkeley Parse Tree and calculates max depth.
@@ -397,15 +383,11 @@ def get_max_depths(text_file):
         for sentence in item.split('\n'):
             for word in sentence.split():
                 for char in word:
-                    if char == '(':
-                        curr_depth += 1
-                    elif char == ')':
-                        curr_depth -= 1
-                    else:
-                        curr_depth = curr_depth
+                    if char == '(':     curr_depth += 1
+                    elif char == ')':   curr_depth -= 1
+                    else:               curr_depth = curr_depth
 
-                    if curr_depth > max_depth:
-                        max_depth = curr_depth
+                    if curr_depth > max_depth: max_depth = curr_depth
 
             depths[lines[count]] = max_depth
             count += 1
@@ -421,10 +403,10 @@ def print_max_depths(text_file):
         output += ('\n' + str(depths[key]) + ',' + key)
 
     return output
-# ######################################################################
+########################################################################################################################
 
 
-# ##### DISFLUENCY-BASED FEATURES ######################################
+##### DISFLUENCY-BASED FEATURES ########################################################################################
 # Count the number of various disfluencies in a given text_file.
 def count_disfluencies(text_file):
     global pause_count
@@ -439,22 +421,14 @@ def count_disfluencies(text_file):
     tokens = get_tokens(text_file)
     last_item = ''
     for item in tokens:
-        if item == 'um':
-            um_count += 1
-        elif item == 'uh':
-            uh_count += 1
-        elif item == 'ah':
-            ah_count += 1
-        elif item == 'er':
-            er_count += 1
-        elif item == 'hm':
-            hm_count += 1
+        if item == 'um':    um_count += 1
+        elif item == 'uh':  uh_count += 1
+        elif item == 'ah':  ah_count += 1
+        elif item == 'er':  er_count += 1
+        elif item == 'hm':  hm_count += 1
 
-        if last_item == item:
-            rep_count += 1
-
-        if item != '{SL}':
-            last_item = item
+        if last_item == item:   rep_count += 1
+        if item != '{SL}':      last_item = item
 
     nasal_filled = hm_count + um_count
     non_nasal_filled = uh_count + ah_count + er_count
@@ -479,12 +453,8 @@ def count_disfluencies(text_file):
 def get_disfluencies_per_utterance(text_file):
     utterances = get_utterances(text_file)
     count = 1
-    dis_count = 0
-    other_count = 0
-    total_count = 0
     output = ''
     last_item = ''
-    word_count = 0
     for line in utterances:
         dis_count = 0
         other_count = 0
@@ -493,39 +463,28 @@ def get_disfluencies_per_utterance(text_file):
             word_count += 1
             if item == '{SL}':
                 dis_count += 1
-            # other_count+=1
-            # print(str(count) + ': ' + item)
             elif __normalize_word(item) in disfluency_list:
                 dis_count += 1
                 if __normalize_word(item) != 'um' or __normalize_word(item) != 'uh':
                     other_count += 1
-                # print(str(count) + ': ' + item)
             elif re.match(r'^.*-$', item):
                 dis_count += 1
-            # other_count+=1
-            # print(str(count) + ': ' + item)
 
             if last_item == item:
                 dis_count = dis_count
                 dis_count += 1
-            # other_count+=1
-            # print(str(count) + ': ' + item)
 
             if item != '{SL}':
                 last_item = item
 
-        # total_count+=other_count
         output += ('\n' + str(count) + ',' + str(dis_count))
-        # output+= ('\n' + str(other_count))
         count += 1
 
-    # output+=('\n' + str(total_count))
-
     return output
-# ######################################################################
+########################################################################################################################
 
 
-# ##### PRINT ALL STATS ################################################
+##### PRINT ALL STATS ##################################################################################################
 def get_stats(text_file):
     output = '\n' + text_file
     output += '\n##### BASIC STATS ###############################################'
@@ -538,70 +497,41 @@ def get_stats(text_file):
     output += '\n\n##### DISFLUENCY STATS ##########################################'
     output += '\n' + str(count_disfluencies(text_file))
     output += '\n\n##### ADVANCED STATS ############################################'
-    output += '\nAverage Disfluencies per Utterance: '\
+    output += '\nAverage Disfluencies per Utterance: ' \
               + str(float(total_disfluencies) / get_num_utterances(text_file))
     output += '\nDisfluency-Word Ratio: ' + str(float(total_disfluencies) / get_word_count(text_file))
 
     return output
+########################################################################################################################
 
 
-# ##### JUST PRINTING FUNCTIONS ########################################
+##### JUST PRINTING FUNCTIONS ##########################################################################################
 # Print the Command List to stdout.
 def display_command_list():
-    command_list = '##### COMMAND LIST ##############################################'
-    command_list += '\n' + colored('command', 'green') + colored('\t\targ1 \t\targ2', 'blue') + '\tdescription\t\t\t'
-    command_list += '\n'
-    command_list += '\nalu \t\tfilename \t-- \tAverage Utterance Length\t'
-    command_list += '\ndisfluencies \tfilename \t-- \tCount Disfluencies\t\t'
-    command_list += '\ndpu \t\tfilename \t-- \tDisfluencies per Utterance\t'
-    command_list += '\nlcw \t\tfilename \t-- \tList Content Words\t\t'
-    command_list += '\nleastfreq \tfilename ' + colored('\t*', 'red') + 'int \tLeast Frequent Words in str\t'
-    command_list += '\nlfw \t\tfilename \t-- \tList Function Words\t\t'
-    command_list += '\nlucw \t\tfilename \t-- \tList Unique Content Words\t'
-    command_list += '\nlufw \t\tfilename \t-- \tList Unique Function Words\t'
-    command_list += '\nmostfreq \tfilename ' + colored('\t*', 'red') + 'int \tMost Frequent Words in str\t'
-    command_list += '\nnormalize \tfilename \t-- \tNormalize Text\t\t\t'
-    command_list += '\nnutterances \tfilename \t-- \tCount Utterances\t\t'
-    command_list += '\nplotfreq \tfilename ' + colored('\t*', 'red') + 'int \tPlot Frequency Distribution\t'
-    command_list += '\npos \t\tfilename \t-- \tDisplay Parts of Speech\t\t'
-    command_list += '\nposcounts \tfilename \t-- \tDisplay POS Counts\t\t'
-    command_list += '\nstats \t\tfilename \t-- \tDisplay Various Stats\t\t'
-    command_list += '\ntokens \t\tfilename \t-- \tDisplay All Tokens\t\t'
-    command_list += '\nttr \t\tfilename \t-- \tType-Token Ratio\t\t'
-    command_list += '\ntypes \t\tfilename \t-- \tDisplay All Types\t\t'
-    command_list += '\nutterances \tfilename \t-- \tList Utterances\t\t\t'
-    command_list += '\nuwordcount \tfilename \t-- \tDisplay Unique Word Count\t'
-    command_list += '\nwordcount \tfilename \t-- \tDisplay Total Word Count\t'
-    command_list += '\nwpu \t\tfilename \t-- \tDisplay Words per Utterance\t'
-    command_list += '\n'
-    command_list += '\n--usage \t-- \t\t-- \tShow Usage Info.\t\t'
-    command_list += '\n--commands \t-- \t\t-- \tShow Valid Commands.\t\t'
-    command_list += '\n--info \t\t-- \t\t-- \tShow Info.\t\t\t'
-    command_list += '\n--version \t-- \t\t-- \tDisplay Installed Version.\t'
-    command_list += '\n'
-    command_list += '\n' + colored('--multi', 'red') + ' ' + colored('command', 'green') + ' '\
-                    + colored('*', 'red') + colored('args', 'blue') + ' ' + colored('filenames', 'yellow')\
-                    + '\t\tRun ' + colored('command', 'green') + ' on all ' + colored('files', 'yellow') + '\t'
-    command_list += '\n#################################################################'
-    print(command_list)
+    print '\033[4mcommand\t\targ1\t\targ2\tdescription\t\t\t\t\033[0m'
+    for item in collections.OrderedDict(sorted(command_info.items())):
+        print colored(item, 'green')\
+              + colored(command_args[item], 'blue')\
+              + colored('\t' + command_info[item], 'yellow')
+    print '\n\t\t\t\t' + colored('*', 'red') + colored('\tDenotes an Optional Argument', 'yellow')
     return ''
 
 
 # Print the Usage Instructions to stdout.
 def print_usage_instructions():
-    usage = '\nInvalid command. For a list of available commands, use ' + colored('--commands', 'green') + '.'
-    usage += '\nCommands look like this: ' + colored('claap', 'red') + ' ' + colored('COMMAND', 'green') + ' '\
-             + colored('*', 'red') + colored('arg1', 'blue') + ' ' + colored('*', 'red') + colored('arg2', 'blue')\
+    usage =  '\nInvalid command. For a list of available commands, use ' + colored('--commands', 'green') + '.'
+    usage += '\nCommands look like this: ' + colored('claap', 'red') + ' ' + colored('COMMAND', 'green') + ' ' \
+             + colored('*', 'red') + colored('arg1', 'blue') + ' ' + colored('*', 'red') + colored('arg2', 'blue') \
              + ' ' + colored('filename', 'yellow')
     usage += '\n' + colored('*', 'red') + ' denotes an optional argument.'
-    usage += '\n\n' + colored('Warning:', 'red') + ' Large inputs, such as Moby Dick, will take longer to process.\n'
+    usage += '\n\n' + colored('Warning:', 'red') + ' Large inputs, such as Moby Dick, will take longer to process.'
 
     print(usage)
     return ''
 
 
 # Print the program info to stdout.
-def info(opt='-1'):
+def info(opt = None):
     prog_info = '#################################################################'
     prog_info += '\n# CLAAP - Corpus & Linguistics Annotating & Analyzing in Python #'
     prog_info += '\n# Version 1.00 \tJune 24, 2015 \t04:24 PM UTC \t\t\t#'
@@ -616,7 +546,7 @@ def info(opt='-1'):
     prog_info += '\n#\t\t\t\t\t\t\t\t#'
     prog_info += '\n#################################################################'
 
-    if opt == '-1':
+    if opt is None:
         print(prog_info)
         return ''
     elif opt == '42':
@@ -652,3 +582,21 @@ def info(opt='-1'):
 def version_info():
     print(versions[0])
     return ''
+
+
+# Print help info.
+def print_help(command = None):
+    output = '\n' + colored('command', 'green')\
+             + colored('\t\targ1\t\targ2', 'blue')\
+             + colored('\tdescription', 'yellow')
+    if command is None:
+        output += '\n' + colored('--commands', 'green') + colored('\t\t\t\t' + command_info['--commands'], 'yellow')
+        output += '\n' + colored('--info', 'green') + colored('\t\t\t\t\t' + command_info['--info'], 'yellow')
+        output += '\n' + colored('--usage', 'green') + colored('\t\t\t\t\t' + command_info['--usage'], 'yellow')
+        output += '\n' + colored('--version', 'green') + colored('\t\t\t\t' + command_info['--version'], 'yellow')
+    elif command in command_info.keys():
+        output += '\n' + colored(command, 'green')\
+                  + colored(command_args[command], 'blue')\
+                  + colored('\t' + command_info[command], 'yellow')
+    return output
+########################################################################################################################
