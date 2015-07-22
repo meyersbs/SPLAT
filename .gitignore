@@ -6,4 +6,4 @@ reference_data/**/*
 *~
 *.pyc
 .idea/**/*
-test.py
+graham_neubig.py

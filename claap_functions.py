@@ -407,6 +407,12 @@ def print_max_depths(text_file):
 
 
 ##### YNGVE & FRAZIER SCORING ##########################################################################################
+# The code contained in this section was adapted based on the code located here:
+# https://github.com/neubig/util-scripts/blob/96c91e43b650136bb88bbb087edb1d31b65d389f/syntactic-complexity.py
+# Permission was granted by Graham Neubig, the code creator, to use his code. For questions regarding his code,
+# he may be contacted by email < neubig@is.naist.jp > or you can visit his website
+# http://www.phontron.com/index.php
+
 # Calculate word score.
 def get_word_score(tree):
     if type(tree) == str: return 1
