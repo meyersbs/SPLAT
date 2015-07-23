@@ -12,70 +12,6 @@ CLAAP is a command-line application designed to make it easy for linguists (both
 CLAAP is designed to help you annotate text files and it is assumed that most input files will not be already annotated. In order for CLAAP to function properly, you should ensure that the input files that you provide do not contain any annotations. Because there are so many variations of linguistic annotation schemes, it would simply be impossible to account for all of them in the initial parsing of input files; it is easier for you to remove any existing annotations than it is for me to do so.
 
 - - - -
-## Functionality \& Usage
-* Types \& Tokens
-```bash
-    claap tokens filename       # List all Tokens
-    claap types filename        # List all Types
-    claap ttr filename          # Calculate Type-Token Ratio
-    claap wc filename           # Word Count (Token Count)
-    claap uwc filename          # Unique Word Count (Type Count)
-```
-* Content \& Idea Density Calculation
-```bash
-    claap cdensity filename     # Calculate Content-Density
-    claap idensity filename     # Calculate Idea Density
-```
-* Yngve \& Frazier Scoring
-```bash
-    claap yngve filename        # Calculate Yngve-Score
-    claap frazier filename      # Calculate Frazier-Score
-```
-* Listing Content \& Function Words
-```bash
-    claap lfw filename          # List all Function Words
-    claap lcw filename          # List all Content Words
-    claap lufw filename         # Unique Function Words
-    claap lucw filename         # Unique Content Words
-    claap cfr filename          # Calculate Content-Function Ratio
-```
-* Utterances
-```bash
-    claap utterances filename   # List all Utterances
-    claap alu filename          # Calculate Mean Length Utterance
-    claap numutts filename      # Utterance Count
-    claap wpu filename          # List the Number of Words in each Utterance
-```
-* Frequency Distributions
-```bash
-    claap mostfreq filename x   # List the x Most Frequent Words
-    claap leastfreq filename x  # List the x Least Frequent Words
-    claap plotfreq filename x   # Draw and Display a Frequency Graph
-```
-* Disfluencies
-```bash
-    claap disfluencies filename # Calculate various Disfluency Counts
-    claap dpu filename          # List the Number of Disfluencies in each Utterance
-```
-* Parse Trees
-```bash
-    claap parsetrees filename   # List Parse-Tree Strings for each Utterance
-    claap maxdepth filename     # Calculate Max Tree Depth
-    claap drawtrees filename    # Draw Parse Trees
-```
-
-- - - -
-## Release 2.0 Notes
-* The Berkeley Parser and NLTK have been integrated with the application.
-* The provided functionality is, for the most part, complete - that is, there isn't much more I plan to add at this 
-time.
-
-- - - -
-## Release 1.0 Notes
-* The application is now fully integrated with bash, removing some nasty reimplementing of code from previous versions.
-* The provided functionality is far from complete; more will be coming, hopefully soon!
-
-- - - -
 ## System Requirements
 Currently, CLAAP has only been tested on 64-bit Ubuntu 15.04 with Python 2.7.9. 
 
@@ -89,15 +25,67 @@ Run the following in a command line.
 ```
 
 - - - -
-## Project Goals
-* ``` ✓ ``` Develop a command-line interface.
-* ``` ✓ ``` Provide basic metric gathering features.
-* ``` _ ``` Provide basic annotation insertion features.
-* ``` ✓ ``` Create a script for installing dependencies.
-* ``` ✓ ``` Integrate with the bash shell.
-* ``` ✓ ``` Integrate features from the Berkeley Parser.
-* ``` _ ``` Port for Mac OS X.
-* ``` _ ``` Port for Windows 7+.
+## Functionality \& Usage
+#### Types \& Tokens
+```bash
+    claap tokens filename       # List all Tokens
+    claap types filename        # List all Types
+    claap ttr filename          # Calculate Type-Token Ratio
+    claap wc filename           # Word Count (Token Count)
+    claap uwc filename          # Unique Word Count (Type Count)
+```
+#### Content \& Idea Density Calculation
+```bash
+    claap cdensity filename     # Calculate Content-Density
+    claap idensity filename     # Calculate Idea Density
+```
+#### Yngve \& Frazier Scoring
+```bash
+    claap yngve filename        # Calculate Yngve-Score
+    claap frazier filename      # Calculate Frazier-Score
+```
+#### Listing Content \& Function Words
+```bash
+    claap lfw filename          # List all Function Words
+    claap lcw filename          # List all Content Words
+    claap lufw filename         # Unique Function Words
+    claap lucw filename         # Unique Content Words
+    claap cfr filename          # Calculate Content-Function Ratio
+```
+#### Utterances
+```bash
+    claap utterances filename   # List all Utterances
+    claap alu filename          # Calculate Mean Length Utterance
+    claap numutts filename      # Utterance Count
+    claap wpu filename          # List the Number of Words in each Utterance
+```
+#### Frequency Distributions
+```bash
+    claap mostfreq filename x   # List the x Most Frequent Words
+    claap leastfreq filename x  # List the x Least Frequent Words
+    claap plotfreq filename x   # Draw and Display a Frequency Graph
+```
+#### Disfluencies
+```bash
+    claap disfluencies filename # Calculate various Disfluency Counts
+    claap dpu filename          # List the Number of Disfluencies in each Utterance
+```
+#### Parse Trees
+```bash
+    claap parsetrees filename   # List Parse-Tree Strings for each Utterance
+    claap maxdepth filename     # Calculate Max Tree Depth
+    claap drawtrees filename    # Draw Parse Trees
+```
+
+- - - -
+## Release Notes
+#### Release 2.0
+* The Berkeley Parser and NLTK have been integrated with the application.
+* The provided functionality is, for the most part, complete - that is, there isn't much more I plan to add at this time.
+
+#### Release 1.0
+* The application is now fully integrated with bash, removing some nasty reimplementing of code from previous versions.
+* The provided functionality is far from complete; more will be coming, hopefully soon!
 
 - - - -
 ## Acknowledgments
