@@ -19,7 +19,9 @@ commands = {'--usage':      print_usage_instructions,       '--version':    vers
             'dpu':          get_disfluencies_per_utterance, 'drawtrees':    draw_trees,
             'parsetrees':   print_formatted_trees,          'cdensity':     calc_content_density,
             'idensity':     calc_idea_density,              '--help':       print_help,
-            'yngve':        get_yngve_score,                'frazier':      get_frazier_score}
+            'yngve':        get_yngve_score,                'frazier':      get_frazier_score,
+            'ism':          insert_speaker_markers,         'iqm':          insert_quarteroni_markers,
+            'rsm':          remove_speaker_markers,         'rqm':          remove_quarteroni_markers}
 
 
 def main():

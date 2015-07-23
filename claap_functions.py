@@ -13,6 +13,112 @@ import subprocess
 ########################################################################################################################
 
 
+##### ANNOTATION FUNCTIONS #############################################################################################
+# Interactively insert Speaker Markers into a given text_file.
+def insert_speaker_markers(text_file):
+    annotated_file = open('annotated_file.txt', 'w')
+    with open(text_file) as f:
+        for line in f:
+            print 'Please enter a speaker marker for: ' + colored(line, 'green')
+            marker = raw_input()
+
+            annotated_file.write(marker + ': ' + line)
+
+    annotated_file.close()
+
+    this_file = open(text_file, 'w')
+    with open(annotated_file.name) as f:
+        for line in f:
+            this_file.write(line)
+
+    this_file.close()
+    os.remove(annotated_file.name)
+
+    return ''
+
+    # text = text_file.split('/')
+    # out_name = text[-1][:-4] + "_SM.txt"
+    # #print out_name
+    # out_file = open(out_name, 'w')
+    # with open(text_file) as f:
+    #     for line in f:
+    #         print 'Please enter a speaker marker for: ' + colored(line, 'green')
+    #         marker = raw_input()
+    #         out_file.write(marker + ': ' + line)
+    # out_file.close()
+    # return ''
+
+
+# Remove all Speaker Markers from a given text_file.
+def remove_speaker_markers(text_file):
+    stripped_file = open('stripped_file.txt', 'w')
+    with open(text_file) as f:
+        for line in f:
+            line = re.sub(r'.:\s', '', line)
+            stripped_file.write(line)
+
+    stripped_file.close()
+
+    this_file = open(text_file, 'w')
+    with open(stripped_file.name) as f:
+        for line in f:
+            this_file.write(line)
+
+    this_file.close()
+    os.remove(stripped_file.name)
+
+    return ''
+
+
+# Interactively insert Dialog-Act Markers into a given text_file.
+def insert_quarteroni_markers(text_file):
+    annotated_file = open('annotated_file.txt', 'w')
+    with open(text_file) as f:
+        for line in f:
+            print 'Please select a dialog act for: ' + colored(line, 'green')
+            print dialog_acts
+            marker = raw_input()
+            while marker not in numbers or int(marker) not in dialog_act_dict.keys():
+                    marker = raw_input()
+
+            annotated_file.write(line.strip('\n') + ' (' + dialog_act_dict[int(marker)] + ')\n')
+
+    annotated_file.close()
+
+    this_file = open(text_file, 'w')
+    with open(annotated_file.name) as f:
+        for line in f:
+            this_file.write(line)
+
+    this_file.close()
+    os.remove(annotated_file.name)
+
+    return ''
+
+
+# Remove all Speaker Markers from a given text_file.
+def remove_quarteroni_markers(text_file):
+    stripped_file = open('stripped_file.txt', 'w')
+    with open(text_file) as f:
+        for line in f:
+            line = re.sub(r'\(.*\)', '', line)
+            stripped_file.write(line)
+
+    stripped_file.close()
+
+    this_file = open(text_file, 'w')
+    with open(stripped_file.name) as f:
+        for line in f:
+            this_file.write(line)
+
+    this_file.close()
+    os.remove(stripped_file.name)
+
+    return ''
+
+########################################################################################################################
+
+
 ##### NORMALIZATION FUNCTIONS ##########################################################################################
 # Take the given word, convert to lowercase and strip punctuation.
 def __normalize_word(word):
@@ -37,6 +143,20 @@ def normalize_text(text_file):
                     normal_line += __normalize_word(word) + ' '
             normal_text += normal_line + '\n'
     return normal_text
+
+
+# Strip annotation from a file and return a new filename.
+def strip_annotation(text_file):
+    stripped_file = open('stripped_file.txt', 'w')
+    with open(text_file) as f:
+        for line in f:
+            line = re.sub(r'.:\s', '', line)
+            line = re.sub(r'\(.*\)', '', line)
+            stripped_file.write(line.replace('.', '').replace(',', '').replace('!', '').replace('?', ''))
+
+    stripped_file.close()
+
+    return stripped_file.name
 ########################################################################################################################
 
 
@@ -329,10 +449,11 @@ def get_content_function_ratio(text_file):
 ##### BERKELEY PARSER FEATURES #########################################################################################
 # Use the Berkeley Parser to obtain parse trees for each sentence in a text file.
 def get_parse_trees(text_file):
+    clean_file = strip_annotation(text_file)
     parse_trees = []
     parse_trees.append(subprocess.check_output(['java', '-jar', 'BerkeleyParser-1.7.jar', '-gr', 'eng_sm6.gr',
-                                                '-inputFile', str(text_file)], shell = False).strip('\n'))
-
+                                                '-inputFile', clean_file], shell = False).strip('\n'))
+    os.remove(clean_file)
     return parse_trees
 
 

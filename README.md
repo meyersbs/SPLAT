@@ -25,7 +25,7 @@ Run the following in a command line.
 ```
 
 - - - -
-## Functionality \& Usage
+## Analysis Functionality \& Usage
 #### Types \& Tokens
 ```bash
     claap tokens filename       # List all Tokens
@@ -75,6 +75,19 @@ Run the following in a command line.
     claap parsetrees filename   # List Parse-Tree Strings for each Utterance
     claap maxdepth filename     # Calculate Max Tree Depth
     claap drawtrees filename    # Draw Parse Trees
+```
+
+- - - -
+## Annotation Functionality \& Usage
+#### Speaker Markers
+```bash
+    claap ism filename          # Insert Speaker Markers
+    claap rsm filename          # Remove Speaker Markers
+```
+#### Quarteroni Dialog-Acts
+```bash
+    claap iqm filename          # Insert Dialog-Acts
+    claap rqm filename          # Remove Dialog-Acts
 ```
 
 - - - -

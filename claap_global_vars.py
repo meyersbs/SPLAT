@@ -35,7 +35,9 @@ command_info = {'alu':          'Get Average Utterance Length',         'disflue
                 '--usage':      'List Usage Info',                      '--version':    'Get Program Version',
                 '--multi':      'Run a Command Multiple Times',         'cfr':          'Get Content-Function Ratio',
                 'idensity':     'Get Idea Density',                     'cdensity':     'Get Content Density',
-                'yngve':        'Get Yngve Score',                      'frazier':      'Get Frazier Score'}
+                'yngve':        'Get Yngve Score',                      'frazier':      'Get Frazier Score',
+                'ism':          'Insert Speaker Markers',               'iqm':          'Insert Dialog Act Markers',
+                'rsm':          'Remove Speaker Markers',               'rqm':          'Remove Dialog Act Markers'}
 
 command_args = {'alu':          '\t\tfilename\t--', 'disfluencies':     '\tfilename\t--',
                 'dpu':          '\t\tfilename\t--', 'drawtrees':        '\tfilename\t--',
@@ -54,5 +56,27 @@ command_args = {'alu':          '\t\tfilename\t--', 'disfluencies':     '\tfilen
                 '--usage':      '\t\t--\t\t--',     '--version':        '\t--\t\t--',
                 '--multi':      '\t\t--\t\t--',     'cfr':              '\t\tfilename\t--',
                 'idensity':     '\tfilename\t--',   'cdensity':         '\tfilename\t--',
-                'yngve':        '\t\tfilename\t--', 'frazier':          '\t\tfilename\t--'}
+                'yngve':        '\t\tfilename\t--', 'frazier':          '\t\tfilename\t--',
+                'ism':          '\t\tfilename\t--', 'iqm':              '\t\tfilename\t--',
+                'rsm':          '\t\tfilename\t--', 'rqm':              '\t\tfilename\t--'}
+
+dialog_act_dict = {1:       'Info-Request',             2:      'Action-Request',
+                   3:       'Yes-Answer',               4:      'No-Answer',
+                   5:       'Answer',                   6:      'Offer',
+                   7:       'Report-On-Action',         8:      'Inform',
+                   9:       'Greet',                    10:     'Quit',
+                   11:      'Apology',                  12:     'Thank',
+                   13:      'Clarification-Request',    14:     'Ack',
+                   15:      'Filler',                   16:     'Other'}
+
+dialog_acts = ' 1\t' + dialog_act_dict[1] + '\t\t 2\t' + dialog_act_dict[2] + '\n'
+dialog_acts+= ' 3\t' + dialog_act_dict[3] + '\t\t 4\t' + dialog_act_dict[4] + '\n'
+dialog_acts+= ' 5\t' + dialog_act_dict[5] + '\t\t\t 6\t' + dialog_act_dict[6] + '\n'
+dialog_acts+= ' 7\t' + dialog_act_dict[7] + '\t 8\t' + dialog_act_dict[8] + '\n'
+dialog_acts+= ' 9\t' + dialog_act_dict[9] + '\t\t\t10\t' + dialog_act_dict[10] + '\n'
+dialog_acts+= '11\t' + dialog_act_dict[11] + '\t\t\t12\t' + dialog_act_dict[12] + '\n'
+dialog_acts+= '13\t' + dialog_act_dict[13] + '\t14\t' + dialog_act_dict[14] + '\n'
+dialog_acts+= '15\t' + dialog_act_dict[15] + '\t\t\t16\t' + dialog_act_dict[16] + '\n'
+
+numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16']
 ########################################################################################################################
