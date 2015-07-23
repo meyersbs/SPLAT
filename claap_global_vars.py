@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 from nltk.corpus import stopwords
 
 ##### GLOBAL VARIABLES #################################################################################################
