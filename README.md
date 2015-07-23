@@ -89,13 +89,6 @@ Run the following in a command line.
 ```
 
 - - - -
-## Example Execution
-``` bash
-    claap COMMAND arg1 arg2 filename
-    claap --multi COMMAND arg1 arg2 filename1 filename2 ... filenameN
-```
-
-- - - -
 ## Project Goals
 * ``` ✓ ``` Develop a command-line interface.
 * ``` ✓ ``` Provide basic metric gathering features.
