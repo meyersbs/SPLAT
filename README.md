@@ -28,66 +28,71 @@ Run the following in a command line.
 ## Analysis Functionality \& Usage
 #### Types \& Tokens
 ```bash
-    claap tokens filename       # List all Tokens
-    claap types filename        # List all Types
-    claap ttr filename          # Calculate Type-Token Ratio
-    claap wc filename           # Word Count (Token Count)
-    claap uwc filename          # Unique Word Count (Type Count)
+    claap tokens filename           # List all Tokens
+    claap types filename            # List all Types
+    claap ttr filename              # Calculate Type-Token Ratio
+    claap wc filename               # Word Count (Token Count)
+    claap uwc filename              # Unique Word Count (Type Count)
 ```
 #### Content \& Idea Density Calculation
 ```bash
-    claap cdensity filename     # Calculate Content-Density
-    claap idensity filename     # Calculate Idea Density
+    claap cdensity filename         # Calculate Content-Density
+    claap idensity filename         # Calculate Idea Density
 ```
 #### Yngve \& Frazier Scoring
 ```bash
-    claap yngve filename        # Calculate Yngve-Score
-    claap frazier filename      # Calculate Frazier-Score
+    claap yngve filename            # Calculate Yngve-Score
+    claap frazier filename          # Calculate Frazier-Score
 ```
 #### Listing Content \& Function Words
 ```bash
-    claap lfw filename          # List all Function Words
-    claap lcw filename          # List all Content Words
-    claap lufw filename         # Unique Function Words
-    claap lucw filename         # Unique Content Words
-    claap cfr filename          # Calculate Content-Function Ratio
+    claap lfw filename              # List all Function Words
+    claap lcw filename              # List all Content Words
+    claap lufw filename             # Unique Function Words
+    claap lucw filename             # Unique Content Words
+    claap cfr filename              # Calculate Content-Function Ratio
 ```
 #### Utterances
 ```bash
-    claap utterances filename   # List all Utterances
-    claap alu filename          # Calculate Mean Length Utterance
-    claap numutts filename      # Utterance Count
-    claap wpu filename          # List the Number of Words in each Utterance
+    claap utterances filename       # List all Utterances
+    claap alu filename              # Calculate Mean Length Utterance
+    claap numutts filename          # Utterance Count
+    claap wpu filename              # List the Number of Words in each Utterance
 ```
 #### Frequency Distributions
 ```bash
-    claap mostfreq filename x   # List the x Most Frequent Words
-    claap leastfreq filename x  # List the x Least Frequent Words
-    claap plotfreq filename x   # Draw and Display a Frequency Graph
+    claap mostfreq filename x       # List the x Most Frequent Words
+    claap leastfreq filename x      # List the x Least Frequent Words
+    claap plotfreq filename x       # Draw and Display a Frequency Graph
 ```
 #### Disfluencies
 ```bash
-    claap disfluencies filename # Calculate various Disfluency Counts
-    claap dpu filename          # List the Number of Disfluencies in each Utterance
+    claap disfluencies filename     # Calculate various Disfluency Counts
+    claap dpu filename              # List the Number of Disfluencies in each Utterance
 ```
 #### Parse Trees
 ```bash
-    claap parsetrees filename   # List Parse-Tree Strings for each Utterance
-    claap maxdepth filename     # Calculate Max Tree Depth
-    claap drawtrees filename    # Draw Parse Trees
+    claap parsetrees filename       # List Parse-Tree Strings for each Utterance
+    claap maxdepth filename         # Calculate Max Tree Depth
+    claap drawtrees filename        # Draw Parse Trees
 ```
 
 - - - -
 ## Annotation Functionality \& Usage
 #### Speaker Markers
 ```bash
-    claap ism filename          # Insert Speaker Markers
-    claap rsm filename          # Remove Speaker Markers
+    claap ism filename *outfile     # Insert Speaker Markers
+    claap rsm filename *outfile     # Remove Speaker Markers
 ```
 #### Quarteroni Dialog-Acts
 ```bash
-    claap iqm filename          # Insert Dialog-Acts
-    claap rqm filename          # Remove Dialog-Acts
+    claap iqm filename *outfile     # Insert Dialog-Acts
+    claap rqm filename *outfile     # Remove Dialog-Acts
+```
+#### Utterance Boundaries
+```bash
+    claap iub filename *outfile     # Insert Utterance Boundaries
+    claap rub filename *outfile     # Remove Utterance Boundaries
 ```
 
 - - - -
