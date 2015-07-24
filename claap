@@ -21,7 +21,8 @@ commands = {'--usage':      print_usage_instructions,       '--version':    vers
             'idensity':     calc_idea_density,              '--help':       print_help,
             'yngve':        get_yngve_score,                'frazier':      get_frazier_score,
             'ism':          insert_speaker_markers,         'iqm':          insert_quarteroni_markers,
-            'rsm':          remove_speaker_markers,         'rqm':          remove_quarteroni_markers}
+            'rsm':          remove_speaker_markers,         'rqm':          remove_quarteroni_markers,
+            'iub':          insert_utterance_boundaries,    'rub':          remove_utterance_boundaries}
 
 
 def main():

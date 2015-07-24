@@ -37,7 +37,8 @@ command_info = {'alu':          'Get Average Utterance Length',         'disflue
                 'idensity':     'Get Idea Density',                     'cdensity':     'Get Content Density',
                 'yngve':        'Get Yngve Score',                      'frazier':      'Get Frazier Score',
                 'ism':          'Insert Speaker Markers',               'iqm':          'Insert Dialog Act Markers',
-                'rsm':          'Remove Speaker Markers',               'rqm':          'Remove Dialog Act Markers'}
+                'rsm':          'Remove Speaker Markers',               'rqm':          'Remove Dialog Act Markers',
+                'iub':          'Insert Utterance Boundaries',          'rub':          'Remove Utterance Boundaries'}
 
 command_args = {'alu':          '\t\tfilename\t--', 'disfluencies':     '\tfilename\t--',
                 'dpu':          '\t\tfilename\t--', 'drawtrees':        '\tfilename\t--',
@@ -57,8 +58,9 @@ command_args = {'alu':          '\t\tfilename\t--', 'disfluencies':     '\tfilen
                 '--multi':      '\t\t--\t\t--',     'cfr':              '\t\tfilename\t--',
                 'idensity':     '\tfilename\t--',   'cdensity':         '\tfilename\t--',
                 'yngve':        '\t\tfilename\t--', 'frazier':          '\t\tfilename\t--',
-                'ism':          '\t\tfilename\t--', 'iqm':              '\t\tfilename\t--',
-                'rsm':          '\t\tfilename\t--', 'rqm':              '\t\tfilename\t--'}
+                'ism':          '\t\tfilename\t*output', 'iqm':              '\t\tfilename\t*output',
+                'rsm':          '\t\tfilename\t*output', 'rqm':              '\t\tfilename\t*output',
+                'iub':          '\t\tfilename\t*output', 'rub':              '\t\tfilename\t*output'}
 
 dialog_act_dict = {1:       'Info-Request',             2:      'Action-Request',
                    3:       'Yes-Answer',               4:      'No-Answer',
