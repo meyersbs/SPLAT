@@ -69,13 +69,22 @@ def insert_quarteroni_markers(text_file, out_file=None):
     annotated_file = open('annotated_file.txt', 'w')
     with open(text_file) as f:
         for line in f:
-            print 'Please select a dialog act for: ' + colored(line, 'green')
-            print dialog_acts
-            marker = raw_input()
-            while marker not in numbers or int(marker) not in dialog_act_dict.keys():
+            yes = True
+            annotation = '('
+            while yes:
+                print 'Please select a dialog act for: ' + colored(line, 'green' + '') + 'Or enter \'0\' to continue...'
+                print dialog_acts
+                marker = raw_input()
+                if int(marker) == 0:
+                    annotation = annotation[:-2] + ')\n'
+                    yes = False
+                    break
+                while marker not in numbers or int(marker) not in dialog_act_dict.keys():
                     marker = raw_input()
 
-            annotated_file.write(line.strip('\n') + ' (' + dialog_act_dict[int(marker)] + ')\n')
+                annotation += dialog_act_dict[int(marker)] + ', '
+
+            annotated_file.write(line.strip('\n') + annotation)
 
     annotated_file.close()
 
@@ -99,7 +108,7 @@ def remove_quarteroni_markers(text_file, out_file=None):
     with open(text_file) as f:
         for line in f:
             line = re.sub(r'\(.*\)', '', line)
-            stripped_file.write(line)
+            stripped_file.write(line.rstrip(' '))
 
     stripped_file.close()
 
