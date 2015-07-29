@@ -1,4 +1,4 @@
-claap_tests.py
+
 output.txt
 asd_data/**/*
 test_data/**/*
@@ -8,5 +8,4 @@ reference_data/**/*
 .idea/**/*
 graham_neubig.py
 install
-
-annotation sceme.txt
+claap_src/claap_tests.py
