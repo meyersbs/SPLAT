@@ -1,5 +1,6 @@
 import unittest
-from claap_functions import *
+
+from claap_src.claap_functions import *
 
 
 class TestBasics(unittest.TestCase):

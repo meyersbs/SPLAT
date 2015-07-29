@@ -5,21 +5,23 @@ from nltk.probability import FreqDist
 from nltk.tokenize import RegexpTokenizer
 from nltk.tree import *
 from termcolor import *
-from claap_global_vars import *
+from claap_src.claap_global_vars import *
 import collections
 import nltk
 import re
 import subprocess
+
+
 ########################################################################################################################
 
 
 ##### ANNOTATION FUNCTIONS #############################################################################################
 # Interactively insert Speaker Markers into a given text_file.
-def insert_speaker_markers(text_file, out_file=None):
+def insert_speaker_markers(text_file, out_file = None):
     annotated_file = open('annotated_file.txt', 'w')
     with open(text_file) as f:
         for line in f:
-            print 'Please enter a speaker marker for: ' + colored(line, 'green')
+            print ('Please enter a speaker marker for: ' + colored(line, 'green'))
             marker = raw_input()
 
             annotated_file.write(marker + ': ' + line)
@@ -41,7 +43,7 @@ def insert_speaker_markers(text_file, out_file=None):
 
 
 # Remove all Speaker Markers from a given text_file.
-def remove_speaker_markers(text_file, out_file=None):
+def remove_speaker_markers(text_file, out_file = None):
     stripped_file = open('stripped_file.txt', 'w')
     with open(text_file) as f:
         for line in f:
@@ -65,24 +67,63 @@ def remove_speaker_markers(text_file, out_file=None):
 
 
 # Interactively insert Dialog-Act Markers into a given text_file.
-def insert_quarteroni_markers(text_file, out_file=None):
+def insert_quarteroni_markers(text_file, out_file = None):
     annotated_file = open('annotated_file.txt', 'w')
     with open(text_file) as f:
         for line in f:
             yes = True
             annotation = '('
             while yes:
-                print 'Please select a dialog act for: ' + colored(line, 'green' + '') + 'Or enter \'0\' to continue...'
-                print dialog_acts
+                print (
+                'Please select a dialog act for: ' + colored(line, 'green' + '') + 'Or enter \'0\' to continue...')
+                print (q_dialog_acts)
                 marker = raw_input()
                 if int(marker) == 0:
                     annotation = annotation[:-2] + ')\n'
                     yes = False
                     break
-                while marker not in numbers or int(marker) not in dialog_act_dict.keys():
+                while marker not in q_numbers or int(marker) not in q_dialog_act_dict.keys():
                     marker = raw_input()
 
-                annotation += dialog_act_dict[int(marker)] + ', '
+                annotation += q_dialog_act_dict[int(marker)] + ', '
+
+            annotated_file.write(line.strip('\n') + annotation)
+
+    annotated_file.close()
+
+    if out_file is None:
+        this_file = open(text_file, 'w')
+    else:
+        this_file = open(out_file, 'w')
+
+    with open(annotated_file.name) as f:
+        for line in f:
+            this_file.write(line)
+
+    this_file.close()
+    os.remove(annotated_file.name)
+    return ''
+
+
+# Interactively insert Meyers Dialog-Act Markers into a given text_file.
+def insert_meyers_markers(text_file, out_file = None):
+    annotated_file = open('annotated_file.txt', 'w')
+    with open(text_file) as f:
+        for line in f:
+            yes = True
+            annotation = ' ('
+            while yes:
+                print ('Please select a dialog act for: ' + colored(line, 'green' + '') + 'Or enter \'0\' to continue...')
+                print (m_dialog_acts)
+                marker = raw_input()
+                if int(marker) == 0:
+                    annotation = annotation[:-2] + ')\n'
+                    yes = False
+                    break
+                while marker not in m_numbers or int(marker) not in m_dialog_act_dict.keys():
+                    marker = raw_input()
+
+                annotation += m_dialog_act_dict[int(marker)] + ', '
 
             annotated_file.write(line.strip('\n') + annotation)
 
@@ -103,7 +144,7 @@ def insert_quarteroni_markers(text_file, out_file=None):
 
 
 # Remove all Speaker Markers from a given text_file.
-def remove_quarteroni_markers(text_file, out_file=None):
+def remove_quarteroni_markers(text_file, out_file = None):
     stripped_file = open('stripped_file.txt', 'w')
     with open(text_file) as f:
         for line in f:
@@ -127,21 +168,30 @@ def remove_quarteroni_markers(text_file, out_file=None):
 
 
 # Insert newline characters to denote utterance boundaries.
-def insert_utterance_boundaries(text_file, out_file=None):
-    if out_file is None:    annotated_file = open('annotated_file.txt', 'w')
-    else:                   annotated_file = open(out_file, 'w')
+def insert_utterance_boundaries(text_file, out_file = None):
+    if out_file is None:
+        annotated_file = open('annotated_file.txt', 'w')
+    else:
+        annotated_file = open(out_file, 'w')
     new_list = []
     with open(text_file) as f:
         for line in f:
             list_words = str.split(line)
             for word in list_words:
-                if re.search(r'\{SL\}', word):      new_list = new_list
-                elif re.search(r'\{NS\}', word):    new_list = new_list
-                elif re.search(r'\{BR\}', word):    new_list = new_list
-                elif re.search(r'\{LS\}', word):    new_list = new_list
-                elif re.search(r'\{LG\}', word):    new_list = new_list
-                elif re.search(r'\{CG\}', word):    new_list = new_list
-                else:                               new_list.append(word.strip(' \n'))
+                if re.search(r'\{SL\}', word):
+                    new_list = new_list
+                elif re.search(r'\{NS\}', word):
+                    new_list = new_list
+                elif re.search(r'\{BR\}', word):
+                    new_list = new_list
+                elif re.search(r'\{LS\}', word):
+                    new_list = new_list
+                elif re.search(r'\{LG\}', word):
+                    new_list = new_list
+                elif re.search(r'\{CG\}', word):
+                    new_list = new_list
+                else:
+                    new_list.append(word.strip(' \n'))
 
     curr_line = ''
     found_and = False
@@ -180,7 +230,7 @@ def insert_utterance_boundaries(text_file, out_file=None):
             found_so = True
             curr_line += (new_word + ' ')
         elif found_so and (re.search(r"I'LL", new_word) or re.search(r"I'M", new_word)
-                                                        or re.search(r"^I$", new_word)):
+                           or re.search(r"^I$", new_word)):
             curr_line = curr_line[:-3]
             annotated_file.write(curr_line)
             curr_line = ('\n' + "SO " + new_word + ' ')
@@ -237,9 +287,11 @@ def insert_utterance_boundaries(text_file, out_file=None):
 
 
 # Remove all newline characters from the given text_file.
-def remove_utterance_boundaries(text_file, out_file=None):
-    if out_file is None:    stripped_file = open('stripped_file.txt', 'w')
-    else:                   stripped_file = open(out_file, 'w')
+def remove_utterance_boundaries(text_file, out_file = None):
+    if out_file is None:
+        stripped_file = open('stripped_file.txt', 'w')
+    else:
+        stripped_file = open(out_file, 'w')
 
     with open(text_file) as f:
         for line in f:
@@ -257,6 +309,7 @@ def remove_utterance_boundaries(text_file, out_file=None):
     this_file.close()
     os.remove(stripped_file.name)
     return ''
+
 
 ########################################################################################################################
 
@@ -289,7 +342,7 @@ def normalize_text(text_file):
 
 # Strip annotation from a file and return a new filename.
 def strip_annotation(text_file):
-    stripped_file = open('stripped_file.txt', 'w')
+    stripped_file = open('/usr/bin/claap_tmp/stripped_file.txt', 'w')
     with open(text_file) as f:
         for line in f:
             line = re.sub(r'.:\s', '', line)
@@ -299,6 +352,8 @@ def strip_annotation(text_file):
     stripped_file.close()
 
     return stripped_file.name
+
+
 ########################################################################################################################
 
 
@@ -306,6 +361,7 @@ def strip_annotation(text_file):
 # Save each utterance (line) into an array, stripping annotation.
 def get_utterances(text_file):
     utterances = []
+    new_line = ''
     with open(text_file) as curr_file:
         for line in curr_file:
             if line[0] == '(':
@@ -347,6 +403,8 @@ def get_avg_utterance_length(text_file):
 
     avg = float(num_words) / count
     return round(avg, 4)
+
+
 ########################################################################################################################
 
 
@@ -356,11 +414,16 @@ def get_freq_dist(text_file):
     all_words = get_tokens(text_file)
     new_words = []
     for token in all_words:
-        if re.match(r'^F', token):      new_words = new_words
-        elif re.match(r'^S', token):    new_words = new_words
-        elif re.match(r'^T', token):    new_words = new_words
-        elif re.match(r'{SL}', token):  new_words = new_words
-        else:                           new_words.append(token)
+        if re.match(r'^F', token):
+            new_words = new_words
+        elif re.match(r'^S', token):
+            new_words = new_words
+        elif re.match(r'^T', token):
+            new_words = new_words
+        elif re.match(r'\{SL\}', token):
+            new_words = new_words
+        else:
+            new_words.append(token)
 
     freq_dist = FreqDist(new_words)
 
@@ -371,8 +434,10 @@ def get_freq_dist(text_file):
 def plot_freq_dist(text_file, x = None):
     freq_dist = get_freq_dist(text_file)
 
-    if x is None:   freq_dist.plot()
-    else:           freq_dist.plot(int(x))
+    if x is None:
+        freq_dist.plot()
+    else:
+        freq_dist.plot(int(x))
 
     return ''
 
@@ -381,8 +446,10 @@ def plot_freq_dist(text_file, x = None):
 def get_most_frequent(text_file, x = None):
     freq_dist = get_freq_dist(text_file)
 
-    if x is None:   return freq_dist.most_common()
-    else:           return freq_dist.most_common(int(x))
+    if x is None:
+        return freq_dist.most_common()
+    else:
+        return freq_dist.most_common(int(x))
 
 
 # Display the top x least frequent tokens.
@@ -401,6 +468,8 @@ def get_least_frequent(text_file, x = None):
                 count += 1
 
     return freq_dist
+
+
 ########################################################################################################################
 
 
@@ -481,6 +550,8 @@ def get_words_per_utterance(text_file):
         count += 1
 
     return output
+
+
 ########################################################################################################################
 
 
@@ -499,8 +570,10 @@ def get_pos_counts(text_file):
 
     pos_counts = {}
     for (k, v) in pos.items():
-        if v in pos_counts.keys():  pos_counts[v] += 1
-        else:                       pos_counts.update({v: 1})
+        if v in pos_counts.keys():
+            pos_counts[v] += 1
+        else:
+            pos_counts.update({v: 1})
 
     return pos_counts
 
@@ -528,7 +601,6 @@ def calc_idea_density(text_file):
     pos = dict(tag_pos(text_file))
     word_count = get_word_count(text_file)
     proposition_count = 0
-    proposition_list
     for (k, v) in pos.items():
         if v in proposition_list: proposition_count += 1
 
@@ -585,6 +657,8 @@ def get_content_function_ratio(text_file):
     ratio = float(len(content)) / float(len(function))
 
     return round(ratio, 4)
+
+
 ########################################################################################################################
 
 
@@ -592,9 +666,9 @@ def get_content_function_ratio(text_file):
 # Use the Berkeley Parser to obtain parse trees for each sentence in a text file.
 def get_parse_trees(text_file):
     clean_file = strip_annotation(text_file)
-    parse_trees = []
-    parse_trees.append(subprocess.check_output(['java', '-jar', 'BerkeleyParser-1.7.jar', '-gr', 'eng_sm6.gr',
-                                                '-inputFile', clean_file], shell = False).strip('\n'))
+    parse_trees = [subprocess.check_output(['java', '-jar', 'BerkeleyParser-1.7.jar', '-gr',
+                                            'eng_sm6.gr', '-inputFile', clean_file],
+                                           cwd = '/usr/bin/claap_src', shell = False).strip('\n')]
     os.remove(clean_file)
     return parse_trees
 
@@ -631,8 +705,6 @@ def draw_trees(text_file):
 # Takes in a properly formatted Berkeley Parse Tree and calculates max depth.
 def get_max_depths(text_file):
     count = 0
-    curr_depth = 0
-    max_depth = 0
     depths = {}
     lines = []
     with open(text_file) as f:
@@ -646,9 +718,12 @@ def get_max_depths(text_file):
         for sentence in item.split('\n'):
             for word in sentence.split():
                 for char in word:
-                    if char == '(':     curr_depth += 1
-                    elif char == ')':   curr_depth -= 1
-                    else:               curr_depth = curr_depth
+                    if char == '(':
+                        curr_depth += 1
+                    elif char == ')':
+                        curr_depth -= 1
+                    else:
+                        curr_depth = curr_depth
 
                     if curr_depth > max_depth: max_depth = curr_depth
 
@@ -666,6 +741,8 @@ def print_max_depths(text_file):
         output += ('\n' + str(depths[key]) + ',' + key)
 
     return output
+
+
 ########################################################################################################################
 
 
@@ -678,7 +755,8 @@ def print_max_depths(text_file):
 
 # Calculate word score.
 def get_word_score(tree):
-    if type(tree) == str: return 1
+    if type(tree) == str:
+        return 1
     else:
         count = 0
         for child in tree: count += get_word_score(child)
@@ -687,30 +765,37 @@ def get_word_score(tree):
 
 # Determine if it is a sentence.
 def is_sentence(value):
-    if len(value) > 0 and value[0] == "S":  return True
-    else:                                   return False
+    if len(value) > 0 and value[0] == "S":
+        return True
+    else:
+        return False
 
 
 # Calculate the Yngve Score for a given text_file.
 def calc_yngve_score(tree, parent):
-    if type(tree) == str: return parent
+    if type(tree) == str:
+        return parent
     else:
         count = 0
-        for i, child in enumerate(reversed(tree)): count += calc_yngve_score(child, parent+i)
+        for i, child in enumerate(reversed(tree)): count += calc_yngve_score(child, parent + i)
         return count
 
 
 # Calculate the Frazier Score for a given text_file.
 def calc_frazier_score(tree, parent, parent_label):
-    if type(tree) == str: return parent - 1
+    my_lab = ''
+    if type(tree) == str:
+        return parent - 1
     else:
         count = 0
         for i, child in enumerate(tree):
             score = 0
             if i == 0:
                 my_lab = tree.label()
-                if is_sentence(my_lab): score = (0 if is_sentence(parent_label) else parent + 1.5)
-                elif my_lab != "" and my_lab != "ROOT" and my_lab != "TOP": score = parent + 1
+                if is_sentence(my_lab):
+                    score = (0 if is_sentence(parent_label) else parent + 1.5)
+                elif my_lab != "" and my_lab != "ROOT" and my_lab != "TOP":
+                    score = parent + 1
             count += calc_frazier_score(child, score, my_lab)
         return count
 
@@ -749,6 +834,8 @@ def get_frazier_score(text_file):
 
     average_frazier_score = float(total_frazier_score) / sentences
     return average_frazier_score
+
+
 ########################################################################################################################
 
 
@@ -767,11 +854,16 @@ def count_disfluencies(text_file):
     tokens = get_tokens(text_file)
     last_item = ''
     for item in tokens:
-        if item == 'um':    um_count += 1
-        elif item == 'uh':  uh_count += 1
-        elif item == 'ah':  ah_count += 1
-        elif item == 'er':  er_count += 1
-        elif item == 'hm':  hm_count += 1
+        if item == 'um':
+            um_count += 1
+        elif item == 'uh':
+            uh_count += 1
+        elif item == 'ah':
+            ah_count += 1
+        elif item == 'er':
+            er_count += 1
+        elif item == 'hm':
+            hm_count += 1
 
         if last_item == item:   rep_count += 1
         if item != '{SL}':      last_item = item
@@ -827,6 +919,8 @@ def get_disfluencies_per_utterance(text_file):
         count += 1
 
     return output
+
+
 ########################################################################################################################
 
 
@@ -848,24 +942,25 @@ def get_stats(text_file):
     output += '\nDisfluency-Word Ratio: ' + str(float(total_disfluencies) / get_word_count(text_file))
 
     return output
+
+
 ########################################################################################################################
 
 
 ##### JUST PRINTING FUNCTIONS ##########################################################################################
 # Print the Command List to stdout.
 def display_command_list():
-    print 'command\t\targ1\t\targ2\tdescription\t\t\t\t'
+    print ('command\t\targ1\t\targ2\tdescription\t\t\t\t')
     for item in collections.OrderedDict(sorted(command_info.items())):
-        print colored(item, 'green')\
-              + colored(command_args[item], 'blue')\
-              + colored('\t' + command_info[item], 'yellow')
-    print '\n\t\t\t\t' + colored('*', 'red') + colored('\tDenotes an Optional Argument', 'yellow')
+        print (colored(item, 'green') + colored(command_args[item], 'blue')
+               + colored('\t' + command_info[item], 'yellow'))
+    print ('\n\t\t\t\t' + colored('*', 'red') + colored('\tDenotes an Optional Argument', 'yellow'))
     return ''
 
 
 # Print the Usage Instructions to stdout.
 def print_usage_instructions():
-    usage =  '\nInvalid command. For a list of available commands, use ' + colored('--commands', 'green') + '.'
+    usage = '\nInvalid command. For a list of available commands, use ' + colored('--commands', 'green') + '.'
     usage += '\nCommands look like this: ' + colored('claap', 'red') + ' ' + colored('COMMAND', 'green') + ' ' \
              + colored('*', 'red') + colored('arg1', 'blue') + ' ' + colored('*', 'red') + colored('arg2', 'blue') \
              + ' ' + colored('filename', 'yellow')
@@ -932,8 +1027,8 @@ def version_info():
 
 # Print help info.
 def print_help(command = None):
-    output = '\n' + colored('command', 'green')\
-             + colored('\t\targ1\t\targ2', 'blue')\
+    output = '\n' + colored('command', 'green') \
+             + colored('\t\targ1\t\targ2', 'blue') \
              + colored('\tdescription', 'yellow')
     if command is None:
         output += '\n' + colored('--commands', 'green') + colored('\t\t\t\t' + command_info['--commands'], 'yellow')
@@ -941,8 +1036,9 @@ def print_help(command = None):
         output += '\n' + colored('--usage', 'green') + colored('\t\t\t\t\t' + command_info['--usage'], 'yellow')
         output += '\n' + colored('--version', 'green') + colored('\t\t\t\t' + command_info['--version'], 'yellow')
     elif command in command_info.keys():
-        output += '\n' + colored(command, 'green')\
-                  + colored(command_args[command], 'blue')\
+        output += '\n' + colored(command, 'green') \
+                  + colored(command_args[command], 'blue') \
                   + colored('\t' + command_info[command], 'yellow')
     return output
+
 ########################################################################################################################

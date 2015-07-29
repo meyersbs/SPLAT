@@ -1,7 +1,8 @@
 #!/usr/bin/python
 
-from claap_functions import *
 import sys
+
+from claap_src.claap_functions import *
 
 commands = {'--usage':      print_usage_instructions,       '--version':    version_info,
             '--info':       info,                           '--commands':   display_command_list,
@@ -22,7 +23,9 @@ commands = {'--usage':      print_usage_instructions,       '--version':    vers
             'yngve':        get_yngve_score,                'frazier':      get_frazier_score,
             'ism':          insert_speaker_markers,         'iqm':          insert_quarteroni_markers,
             'rsm':          remove_speaker_markers,         'rqm':          remove_quarteroni_markers,
-            'iub':          insert_utterance_boundaries,    'rub':          remove_utterance_boundaries}
+            'iub':          insert_utterance_boundaries,    'rub':          remove_utterance_boundaries,
+            'imm':          insert_meyers_markers,          'rmm':          remove_quarteroni_markers,
+            'maxdepth':     print_max_depths}
 
 
 def main():

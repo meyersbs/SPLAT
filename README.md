@@ -13,15 +13,23 @@ CLAAP is designed to help you annotate text files and it is assumed that most in
 
 - - - -
 ## System Requirements
-Currently, CLAAP has only been tested on 64-bit Ubuntu 15.04 with Python 2.7.9. 
+Currently, CLAAP has only been tested on 64-bit Ubuntu 15.04 with Python 2.7.9 and Python 3.4.3.
 
 - - - -
 ## Installation
 Ensure that Python is installed on your machine.
 
 Run the following in a command line.
-``` bash    
+``` bash
+    cd /path/to/dir/CLAAP
+    bash setup
     bash install
+```
+
+To uninstall run the following in a command line.
+```bash
+    cd /path/to/dir/CLAAP
+    bash uninstall
 ```
 
 - - - -
@@ -89,6 +97,12 @@ Run the following in a command line.
     claap iqm filename *outfile     # Insert Dialog-Acts
     claap rqm filename *outfile     # Remove Dialog-Acts
 ```
+#### Meyers Dialog-Acts
+```bash
+    claap imm filename *outfile     # Insert Meyers Dialog-Acts
+    claap rmm filename *outfile     # Remove Meyers Dialog-Acts
+```
+
 #### Utterance Boundaries
 ```bash
     claap iub filename *outfile     # Insert Utterance Boundaries

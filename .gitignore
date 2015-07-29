@@ -7,6 +7,6 @@ reference_data/**/*
 *.pyc
 .idea/**/*
 graham_neubig.py
-push-to-system.sh
+install
 
 annotation sceme.txt
