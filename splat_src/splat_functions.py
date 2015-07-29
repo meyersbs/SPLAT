@@ -5,7 +5,7 @@ from nltk.probability import FreqDist
 from nltk.tokenize import RegexpTokenizer
 from nltk.tree import *
 from termcolor import *
-from claap_src.claap_global_vars import *
+from splat_src.splat_global_vars import *
 import collections
 import nltk
 import re
@@ -342,7 +342,7 @@ def normalize_text(text_file):
 
 # Strip annotation from a file and return a new filename.
 def strip_annotation(text_file):
-    stripped_file = open('/usr/bin/claap_tmp/stripped_file.txt', 'w')
+    stripped_file = open('/usr/bin/splat_tmp/stripped_file.txt', 'w')
     with open(text_file) as f:
         for line in f:
             line = re.sub(r'.:\s', '', line)
@@ -668,7 +668,7 @@ def get_parse_trees(text_file):
     clean_file = strip_annotation(text_file)
     parse_trees = [subprocess.check_output(['java', '-jar', 'BerkeleyParser-1.7.jar', '-gr',
                                             'eng_sm6.gr', '-inputFile', clean_file],
-                                           cwd = '/usr/bin/claap_src', shell = False).strip('\n')]
+                                           cwd = '/usr/bin/splat_src', shell = False).strip('\n')]
     os.remove(clean_file)
     return parse_trees
 
@@ -961,7 +961,7 @@ def display_command_list():
 # Print the Usage Instructions to stdout.
 def print_usage_instructions():
     usage = '\nInvalid command. For a list of available commands, use ' + colored('--commands', 'green') + '.'
-    usage += '\nCommands look like this: ' + colored('claap', 'red') + ' ' + colored('COMMAND', 'green') + ' ' \
+    usage += '\nCommands look like this: ' + colored('splat', 'red') + ' ' + colored('COMMAND', 'green') + ' ' \
              + colored('*', 'red') + colored('arg1', 'blue') + ' ' + colored('*', 'red') + colored('arg2', 'blue') \
              + ' ' + colored('filename', 'yellow')
     usage += '\n' + colored('*', 'red') + ' denotes an optional argument.'

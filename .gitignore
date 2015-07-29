@@ -7,5 +7,4 @@ reference_data/**/*
 *.pyc
 .idea/**/*
 graham_neubig.py
-install
-claap_src/claap_tests.py
+splat_src/splat_tests.py

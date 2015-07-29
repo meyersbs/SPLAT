@@ -1,6 +1,8 @@
 #!/bin/sh
-sudo rm /usr/bin/claap
-sudo rm /usr/bin/claap_src/*
-sudo rmdir /usr/bin/claap_src
-sudo rm /usr/bin/claap_tmp/*
-sudo rmdir /usr/bin/claap_tmp
+sudo rm /usr/bin/splat
+sudo rm /usr/bin/splat_src/__pycache__/*
+sudo rmdir /usr/bin/splat_src/__pycache__
+sudo rm /usr/bin/splat_src/*
+sudo rmdir /usr/bin/splat_src
+sudo rm /usr/bin/splat_tmp/*
+sudo rmdir /usr/bin/splat_tmp

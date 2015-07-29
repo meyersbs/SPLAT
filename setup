@@ -81,7 +81,7 @@ if [ "$(uname)" == "Darwin" ]; then
 	else
 		echo 'Unable to determine if matplotlib is installed...'
 	fi
-	echo 'Unfortunately, Mac OS is not currently supported by CLAAP.'
+	echo 'Unfortunately, Mac OS is not currently supported by SPLAT.'
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 	echo 'Detected Linux Operating System...'
 	sudo apt-get update
@@ -129,10 +129,10 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 	else
 		echo 'Unable to determine if matplotlib is installed...'
 	fi
-	echo 'Successfully Installed CLAAP Dependencies!'
+	echo 'Successfully Installed SPLAT Dependencies!'
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
 	echo 'Detected Windows Operating System...'
-	echo 'Unfortunately, MS Windows is not currently supported by CLAAP.'
+	echo 'Unfortunately, MS Windows is not currently supported by SPLAT.'
 else
 	echo 'Unable to detect Operating System.'
 fi

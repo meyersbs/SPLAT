@@ -2,7 +2,7 @@
 
 import sys
 
-from claap_src.claap_functions import *
+from splat_src.splat_functions import *
 
 commands = {'--usage':      print_usage_instructions,       '--version':    version_info,
             '--info':       info,                           '--commands':   display_command_list,
