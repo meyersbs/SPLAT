@@ -25,7 +25,7 @@ commands = {'--usage':      print_usage_instructions,       '--version':    vers
             'rsm':          remove_speaker_markers,         'rqm':          remove_quarteroni_markers,
             'iub':          insert_utterance_boundaries,    'rub':          remove_utterance_boundaries,
             'imm':          insert_meyers_markers,          'rmm':          remove_quarteroni_markers,
-            'maxdepth':     print_max_depths}
+            'maxdepth':     print_max_depths,               'mmstats':      get_meyers_metrics}
 
 
 def main():

@@ -1,10 +1,13 @@
-
+### Specific Files
 output.txt
+graham_neubig.py
+splat_src/splat_tests.py
+### Directories
 asd_data/**/*
 test_data/**/*
 reference_data/**/*
+documentation/**/*
+.idea/**/*
+### File Types
 *~
 *.pyc
-.idea/**/*
-graham_neubig.py
-splat_src/splat_tests.py

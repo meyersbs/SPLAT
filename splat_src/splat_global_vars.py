@@ -39,7 +39,8 @@ command_info = {'alu':          'Get Average Utterance Length',         'disflue
                 'ism':          'Insert Speaker Markers',               'iqm':          'Insert Dialog Act Markers',
                 'rsm':          'Remove Speaker Markers',               'rqm':          'Remove Dialog Act Markers',
                 'iub':          'Insert Utterance Boundaries',          'rub':          'Remove Utterance Boundaries',
-                'imm':          'Insert Meyers Dialog Acts',            'rmm':          'Remove Meyers Dialog Acts'}
+                'imm':          'Insert Meyers Dialog Acts',            'rmm':          'Remove Meyers Dialog Acts',
+                'mmstats':      'Get Meyers Dialog Act Statistics'}
 
 command_args = {'alu':          '\t\tfilename\t--',      'disfluencies':     '\tfilename\t--',
                 'dpu':          '\t\tfilename\t--',      'drawtrees':        '\tfilename\t--',
@@ -62,7 +63,8 @@ command_args = {'alu':          '\t\tfilename\t--',      'disfluencies':     '\t
                 'ism':          '\t\tfilename\t*output', 'iqm':              '\t\tfilename\t*output',
                 'rsm':          '\t\tfilename\t*output', 'rqm':              '\t\tfilename\t*output',
                 'iub':          '\t\tfilename\t*output', 'rub':              '\t\tfilename\t*output',
-                'imm':          '\t\tfilename\t*output', 'rmm':              '\t\tfilename\t*output'}
+                'imm':          '\t\tfilename\t*output', 'rmm':              '\t\tfilename\t*output',
+                'mmstats':      '\t\tfilename\t--'}
 
 q_dialog_act_dict = {1:       'Info-Request',             2:      'Action-Request',
                      3:       'Yes-Answer',               4:      'No-Answer',
