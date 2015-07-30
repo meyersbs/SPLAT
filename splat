@@ -22,16 +22,16 @@ commands = {'--usage':      print_usage_instructions,       '--version':    vers
             'idensity':     calc_idea_density,              '--help':       print_help,
             'yngve':        get_yngve_score,                'frazier':      get_frazier_score,
             'ism':          insert_speaker_markers,         'iqm':          insert_quarteroni_markers,
-            'rsm':          remove_speaker_markers,         'rqm':          remove_quarteroni_markers,
+            'rsm':          remove_speaker_markers,         'rqm':          remove_dialog_acts,
             'iub':          insert_utterance_boundaries,    'rub':          remove_utterance_boundaries,
-            'imm':          insert_meyers_markers,          'rmm':          remove_quarteroni_markers,
+            'imm':          insert_meyers_markers,          'rmm':          remove_dialog_acts,
             'maxdepth':     print_max_depths,               'mmstats':      get_meyers_metrics}
 
 
 def main():
     # RUN MULTI COMMAND
     if sys.argv[1] == '--multi' and sys.argv[2] in commands.keys():
-        for i in range(3, len(sys.argv)):                       print(commands[sys.argv[2]](sys.argv[i]))
+        for i in range(3, len(sys.argv)): print(commands[sys.argv[2]](sys.argv[i]))
     elif len(sys.argv) == 2 and sys.argv[1] in commands.keys(): print(commands[sys.argv[1]]())
     elif len(sys.argv) == 3 and sys.argv[1] in commands.keys(): print(commands[sys.argv[1]](sys.argv[2]))
     elif len(sys.argv) == 4 and sys.argv[1] in commands.keys(): print(commands[sys.argv[1]](sys.argv[2], sys.argv[3]))

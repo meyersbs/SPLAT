@@ -14,7 +14,19 @@ import subprocess
 
 
 ##### ANNOTATION FUNCTIONS #############################################################################################
-# Interactively insert Speaker Markers into a given text_file.
+'''
+### @FUNCT_NAME: insert_speaker_markers
+### @FUNCT_DESC: Interactively insert speaker indicators into the given text.
+###
+### @PARAM_NAME: text_file			@PARAM_NAME: out_file
+### @PARAM_DFLT:					@PARAM_DFLT: None
+### @PARAM_TYPE: String				@PARAM_TYPE: String
+### @PARAM_DESC: Input file name.	@PARAM_DESC: Output file name.
+###
+### @RETRN_NAME: ''
+### @RETRN_TYPE: String
+### @RETRN_DESC: Not used; Function has no terminal output.
+'''
 def insert_speaker_markers(text_file, out_file = None):
 	annotated_file = open('annotated_file.txt', 'w')
 	with open(text_file) as f:
@@ -39,7 +51,20 @@ def insert_speaker_markers(text_file, out_file = None):
 	os.remove(annotated_file.name)
 	return ''
 
-# Remove all Speaker Markers from a given text_file.
+
+'''
+### @FUNCT_NAME: remove_speaker_markers
+### @FUNCT_DESC: Removes all speaker indicators from the given text.
+###
+### @PARAM_NAME: text_file			@PARAM_NAME: out_file
+### @PARAM_DFLT:					@PARAM_DFLT: None
+### @PARAM_TYPE: String				@PARAM_TYPE: String
+### @PARAM_DESC: Input file name.	@PARAM_DESC: Output file name.
+###
+### @RETRN_NAME: ''
+### @RETRN_TYPE: String
+### @RETRN_DESC: Not used; Function has no terminal output.
+'''
 def remove_speaker_markers(text_file, out_file = None):
 	stripped_file = open('stripped_file.txt', 'w')
 	with open(text_file) as f:
@@ -62,7 +87,20 @@ def remove_speaker_markers(text_file, out_file = None):
 	os.remove(stripped_file.name)
 	return ''
 
-# Interactively insert Dialog-Act Markers into a given text_file.
+
+'''
+### @FUNCT_NAME: insert_quarteroni_markers
+### @FUNCT_DESC: Interactively insert Quarteroni et al.'s Dialog Acts into the given text.
+###
+### @PARAM_NAME: text_file			@PARAM_NAME: out_file
+### @PARAM_DFLT:					@PARAM_DFLT: None
+### @PARAM_TYPE: String				@PARAM_TYPE: String
+### @PARAM_DESC: Input file name.	@PARAM_DESC: Output file name.
+###
+### @RETRN_NAME: ''
+### @RETRN_TYPE: String
+### @RETRN_DESC: Not used; Function has no terminal output.
+'''
 def insert_quarteroni_markers(text_file, out_file = None):
 	annotated_file = open('annotated_file.txt', 'w')
 	with open(text_file) as f:
@@ -99,7 +137,19 @@ def insert_quarteroni_markers(text_file, out_file = None):
 	os.remove(annotated_file.name)
 	return ''
 
-# Interactively insert Meyers Dialog-Act Markers into a given text_file.
+'''
+### @FUNCT_NAME: insert_meyers_markers
+### @FUNCT_DESC: Interactively insert Meyers' Dialog Acts into the given text.
+###
+### @PARAM_NAME: text_file			@PARAM_NAME: out_file
+### @PARAM_DFLT:					@PARAM_DFLT: None
+### @PARAM_TYPE: String				@PARAM_TYPE: String
+### @PARAM_DESC: Input file name.	@PARAM_DESC: Output file name.
+###
+### @RETRN_NAME: ''
+### @RETRN_TYPE: String
+### @RETRN_DESC: Not used; Function has no terminal output.
+'''
 def insert_meyers_markers(text_file, out_file = None):
 	annotated_file = open('annotated_file.txt', 'w')
 	with open(text_file) as f:
@@ -136,8 +186,21 @@ def insert_meyers_markers(text_file, out_file = None):
 	os.remove(annotated_file.name)
 	return ''
 
-# Remove all Speaker Markers from a given text_file.
-def remove_quarteroni_markers(text_file, out_file = None):
+
+'''
+### @FUNCT_NAME: remove_dialog_acts
+### @FUNCT_DESC: Remove all Dialog-Act annotation from the given text.
+###
+### @PARAM_NAME: text_file			@PARAM_NAME: out_file
+### @PARAM_DFLT:					@PARAM_DFLT: None
+### @PARAM_TYPE: String				@PARAM_TYPE: String
+### @PARAM_DESC: Input file name.	@PARAM_DESC: Output file name.
+###
+### @RETRN_NAME: ''
+### @RETRN_TYPE: String
+### @RETRN_DESC: Not used; Function has no terminal output.
+'''
+def remove_dialog_acts(text_file, out_file = None):
 	stripped_file = open('stripped_file.txt', 'w')
 	with open(text_file) as f:
 		for line in f:
@@ -159,7 +222,19 @@ def remove_quarteroni_markers(text_file, out_file = None):
 	os.remove(stripped_file.name)
 	return ''
 
-# Insert newline characters to denote utterance boundaries.
+'''
+### @FUNCT_NAME: insert_utterance_boundaries
+### @FUNCT_DESC: Automatically insert utterance boundaries (new lines) into the given text.
+###
+### @PARAM_NAME: text_file			@PARAM_NAME: out_file
+### @PARAM_DFLT:					@PARAM_DFLT: None
+### @PARAM_TYPE: String				@PARAM_TYPE: String
+### @PARAM_DESC: Input file name.	@PARAM_DESC: Output file name.
+###
+### @RETRN_NAME: ''
+### @RETRN_TYPE: String
+### @RETRN_DESC: Not used; Function has no terminal output.
+'''
 def insert_utterance_boundaries(text_file, out_file = None):
 	if out_file is None:
 		annotated_file = open('annotated_file.txt', 'w')
@@ -276,7 +351,19 @@ def insert_utterance_boundaries(text_file, out_file = None):
 	os.remove(annotated_file.name)
 	return ''
 
-# Remove all newline characters from the given text_file.
+'''
+### @FUNCT_NAME: remove_utterance_boundaries
+### @FUNCT_DESC: Remove all utterance boundaries from the given text.
+###
+### @PARAM_NAME: text_file			@PARAM_NAME: out_file
+### @PARAM_DFLT:					@PARAM_DFLT: None
+### @PARAM_TYPE: String				@PARAM_TYPE: String
+### @PARAM_DESC: Input file name.	@PARAM_DESC: Output file name.
+###
+### @RETRN_NAME: ''
+### @RETRN_TYPE: String
+### @RETRN_DESC: Not used; Function has no terminal output.
+'''
 def remove_utterance_boundaries(text_file, out_file = None):
 	if out_file is None:
 		stripped_file = open('stripped_file.txt', 'w')
@@ -313,7 +400,10 @@ def get_meyers_markers(text_file):
 	with open(text_file) as f:
 		for line in f:
 			split_line = line.split('(')
-			pre_markers = split_line[1].strip(')\n')
+			if len(split_line) >= 2:
+				pre_markers = split_line[1].strip(')\n')
+			else:
+				pass
 			for item in pre_markers.split(', '):
 				if item in m_dialog_act_dict.values():
 					m_stats[item][0] += 1
@@ -328,7 +418,6 @@ def get_meyers_markers(text_file):
 
 	return m_stats
 
-#
 def get_meyers_metrics(text_file):
 	m_stats = get_meyers_markers(text_file)
 	ordered_keys = sorted(m_stats.keys())
@@ -337,8 +426,10 @@ def get_meyers_metrics(text_file):
 		if m_stats[item][0] != 0:
 			#output += colored(item, 'green') + ' Count: ' + str(m_stats[item][0]) + '\n'
 			output += 'Average Words per Utterance with ' + colored(item, 'green') + ' marker: ' + str(float(m_stats[item][1])/m_stats[item][0]) + '\n'
-			output += (str(round(float(m_stats[item][0])/get_num_utterances(text_file)*100, 2))
-					  + '% of utterances are ' + colored(item, 'green') + '\n')
+			output += (str(round(float(m_stats[item][0])/get_num_utterances(text_file)*100, 2)) + '% of utterances are ' + colored(item, 'green') + '\n')
+		else:
+			output += 'Average Words per Utterance with ' + colored(item, 'green') + ' marker: ' + str(0.00) + '\n'
+			output += (str(0.00) + '% of utterances are ' + colored(item, 'green') + '\n')
 
 	return output
 
@@ -373,9 +464,10 @@ def strip_annotation(text_file):
 	stripped_file = open('/usr/bin/splat_tmp/stripped_file.txt', 'w')
 	with open(text_file) as f:
 		for line in f:
-			line = re.sub(r'.:\s', '', line)
-			line = re.sub(r'\(.*\)', '', line)
-			stripped_file.write(line.replace('.', '').replace(',', '').replace('!', '').replace('?', ''))
+			new_line = re.sub(r'.:\s', '', line)
+			new_new_line = re.sub(r'\(.*\)\$', '', new_line)
+			new_new_new_line = new_new_line.replace('.', '').replace(',', '').replace('!', '').replace('?', '')
+			stripped_file.write(new_new_new_line)
 
 	stripped_file.close()
 
@@ -670,8 +762,10 @@ def get_content_function_ratio(text_file):
 # Use the Berkeley Parser to obtain parse trees for each sentence in a text file.
 def get_parse_trees(text_file):
 	clean_file = strip_annotation(text_file)
-	parse_trees = [subprocess.check_output(['java', '-jar', 'BerkeleyParser-1.7.jar', '-gr', 'eng_sm6.gr', '-inputFile',
-											clean_file], cwd = '/usr/bin/splat_src', shell = False).strip('\n')]
+	parse_trees = []
+	parse_trees.append(subprocess.check_output(['java', '-jar', 'BerkeleyParser-1.7.jar', '-gr', 'eng_sm6.gr',
+												'-inputFile', clean_file], cwd = '/usr/bin/splat_src',
+											    shell = False).strip('\n'))
 	os.remove(clean_file)
 	return parse_trees
 
@@ -696,6 +790,7 @@ def print_formatted_trees(text_file):
 def draw_trees(text_file):
 	form_trees = get_formatted_trees(text_file)
 	for tree_string in form_trees:
+		#print tree_string
 		sentence = Tree.fromstring(tree_string)
 		sentence.draw()
 
@@ -752,13 +847,14 @@ def print_max_depths(text_file):
 
 # Calculate word score.
 def get_word_score(tree):
+	#global word_score
 	if type(tree) == str:
 		return 1
 	else:
-		count = 0
+		score = 0
 		for child in tree:
-			count += get_word_score(child)
-		return count
+			score += get_word_score(child)
+		return score
 
 # Determine if it is a sentence.
 def is_sentence(value):
@@ -800,13 +896,16 @@ def get_yngve_score(text_file):
 	total_yngve_score = 0
 	trees = get_formatted_trees(text_file)
 	for tree_line in trees:
+		#print 'Tree line: ' + tree_line
 		if tree_line.strip() == "":
 			continue
 		tree = Tree.fromstring(tree_line)
 		words = get_word_score(tree)
+		#print tree
+		#print words
 		sentences += 1
 		raw_ygnve_score = calc_yngve_score(tree, 0)
-		mean_yngve_score = float(raw_ygnve_score) / words
+		mean_yngve_score = float(raw_ygnve_score) / float(words)
 		total_yngve_score += mean_yngve_score
 
 	average_yngve_score = float(total_yngve_score) / sentences

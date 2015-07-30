@@ -17,6 +17,7 @@ proposition_list = ['CC', 'CD', 'DT', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ', '
 pause_count = 0
 break_count = 0
 total_disfluencies = 0
+word_score = 0
 
 command_info = {'alu':          'Get Average Utterance Length',         'disfluencies': 'Get Total Disfluency Count',
                 'dpu':          'List Disfluency Count per Utterance',  'drawtrees':    'Draw Parse Trees',
