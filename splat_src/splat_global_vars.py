@@ -1,23 +1,39 @@
 #!/usr/bin/python
 
+########################################################################################################################
+##### INFORMATION ######################################################################################################
+### @PROJECT_NAME:		SPLAT: Speech Processing and Linguistic Annotation Tool										 ###
+### @VERSION_NUMBER:																								 ###
+### @PROJECT_SITE:		github.com/meyersbs/SPLAT																     ###
+### @AUTHOR_NAME:		Benjamin S. Meyers																			 ###
+### @CONTACT_EMAIL:		bsm9339@rit.edu																				 ###
+### @LICENSE_TYPE:																									 ###
+########################################################################################################################
+########################################################################################################################
+
+##### IMPORTS ##########################################################################################################
 from nltk.corpus import stopwords
+########################################################################################################################
 
 ##### GLOBAL VARIABLES #################################################################################################
 versions = ['Version 1.00\t06-24-15\t04:24 PM UTC',
             'Version 0.10\t06-16-15\t11:29 AM UTC',
             'Version 0.00\t06-15-15\t03:55 PM UTC']
+
 stopwords = stopwords.words('english')  # List of Function Words
+
 disfluency_list = ['um', 'uh', 'ah', 'er', 'hm']
+nasal_list = ['hm', 'um']
+non_nasal_list = ['uh', 'ah', 'er']
+
 open_class_list = ['NN', 'NNS', 'NNP', 'NNPS', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ', 'JJ', 'JJR', 'JJS', 'RB',
                    'RBR', 'RBS', 'FW']
 ignore_list = ['LS', 'SYM', 'UH', 'LBR', 'RBR', '-LBR-', '-RBR-', '$', '``', '"', '\'\'', '(', ')', '()', '( )',
                '\,', '\-\-', '\.', '\:', 'SBAR', 'SBARQ']
 proposition_list = ['CC', 'CD', 'DT', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ', 'JJ', 'JJR', 'JJS', 'RB', 'RBR',
                     'RBS', 'IN', 'CC', 'PDT', 'POS', 'PP$', 'PRP$', 'TO', 'WDT', 'WP', 'WPS', 'WRB']
-pause_count = 0
-break_count = 0
-total_disfluencies = 0
-word_score = 0
+
+pause_count, break_count, total_disfluencies, word_score = 0, 0, 0, 0
 
 command_info = {'alu':          'Get Average Utterance Length',         'disfluencies': 'Get Total Disfluency Count',
                 'dpu':          'List Disfluency Count per Utterance',  'drawtrees':    'Draw Parse Trees',
@@ -27,7 +43,6 @@ command_info = {'alu':          'Get Average Utterance Length',         'disflue
                 'mostfreq':     'List Most Frequent Words',             'normalize':    'Display Normalized Text',
                 'numutts':      'Get Number of Utterances',             'parsetrees':   'Get Parse Tree Strings',
                 'plotfreq':     'Graph Frequency Distribution',         'pos':          'Tag Parts of Speech',
-                'poscounts':    'List Counts for Each POS',             'stats':        'List Various Statistics',
                 'tokens':       'List All Tokens (words)',              'ttr':          'Get Type-Token Ratio',
                 'types':        'List All Types (unique words)',        'utterances':   'List All Utterances',
                 'uwc':          'Get Number of Tokens',                 'wc':           'Get Total Word Count',
@@ -41,7 +56,7 @@ command_info = {'alu':          'Get Average Utterance Length',         'disflue
                 'rsm':          'Remove Speaker Markers',               'rqm':          'Remove Dialog Act Markers',
                 'iub':          'Insert Utterance Boundaries',          'rub':          'Remove Utterance Boundaries',
                 'imm':          'Insert Meyers Dialog Acts',            'rmm':          'Remove Meyers Dialog Acts',
-                'mmstats':      'Get Meyers Dialog Act Statistics'}
+                'mmstats':      'Get Meyers Dialog Act Statistics',     'poscounts':    'List Counts for Each POS'}
 
 command_args = {'alu':          '\t\tfilename\t--',      'disfluencies':     '\tfilename\t--',
                 'dpu':          '\t\tfilename\t--',      'drawtrees':        '\tfilename\t--',
@@ -51,7 +66,6 @@ command_args = {'alu':          '\t\tfilename\t--',      'disfluencies':     '\t
                 'mostfreq':     '\tfilename\t*int',      'normalize':        '\tfilename\t--',
                 'numutts':      '\t\tfilename\t--',      'parsetrees':       '\tfilename\t--',
                 'plotfreq':     '\tfilename\t*int',      'pos':              '\t\tfilename\t--',
-                'poscounts':    '\tfilename\t--',        'stats':            '\t\tfilename\t--',
                 'tokens':       '\t\tfilename\t--',      'ttr':              '\t\tfilename\t--',
                 'types':        '\t\tfilename\t--',      'utterances':       '\tfilename\t--',
                 'uwc':          '\t\tfilename\t--',      'wc':               '\t\tfilename\t--',
@@ -65,7 +79,7 @@ command_args = {'alu':          '\t\tfilename\t--',      'disfluencies':     '\t
                 'rsm':          '\t\tfilename\t*output', 'rqm':              '\t\tfilename\t*output',
                 'iub':          '\t\tfilename\t*output', 'rub':              '\t\tfilename\t*output',
                 'imm':          '\t\tfilename\t*output', 'rmm':              '\t\tfilename\t*output',
-                'mmstats':      '\t\tfilename\t--'}
+                'mmstats':      '\t\tfilename\t--',      'poscounts':        '\tfilename\t--'}
 
 q_dialog_act_dict = {1:       'Info-Request',             2:      'Action-Request',
                      3:       'Yes-Answer',               4:      'No-Answer',
@@ -80,7 +94,7 @@ m_dialog_act_dict = {1:       'Info-Request',             2:      'Action-Reques
                      3:       'Action-Suggest',           4:      'Answer-Yes',
                      5:       'Answer-No',                6:      'Answer-Neutral',
                      7:       'Apology',                  8:      'Thanks',
-                     9:       'Clarification-Request',    10:     'Acknowledgement',
+                     9:       'Clarification-Request',    10:     'Acknowledgment',
                      11:      'Filler',                   12:     'Inform',
                      13:      'Other'}
 
@@ -100,6 +114,5 @@ m_dialog_acts += '10\t' + m_dialog_act_dict[10] + '\t11\t' + m_dialog_act_dict[1
 m_dialog_acts += '13\t' + m_dialog_act_dict[13] + '\n'
 
 q_numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16']
-
 m_numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13']
 ########################################################################################################################

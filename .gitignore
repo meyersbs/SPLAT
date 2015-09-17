@@ -1,6 +1,6 @@
 ### Specific Files
 output.txt
-graham_neubig.py
+reference_data/graham_neubig.py
 splat_src/splat_tests.py
 ### Directories
 asd_data/**/*
@@ -11,3 +11,6 @@ documentation/**/*
 ### File Types
 *~
 *.pyc
+
+transfer_time.py
+transfer_time.py.save
