@@ -19,7 +19,7 @@ from nltk.tokenize import RegexpTokenizer
 from nltk.tree import *
 try: from termcolor import *	# The unittest package doesn't like termcolor
 except ImportError: pass
-from splat_global_vars import *
+from splat_src.splat_global_vars import *
 import collections, re, subprocess, sys, nltk
 ########################################################################################################################
 
@@ -272,11 +272,11 @@ def remove_utterance_boundaries(input_file, out_file=None):
 def count_meyers_markers(input_file):
 	""" Count the frequency for each Meyers Dialog Act. """
 	pre_markers = ''
-	m_stats = {'Info-Request':		[0,0], 'Action-Request':	[0,0], 'Action-Suggest':			[0,0],
-			   'Answer-Yes':		[0,0], 'Answer-No':			[0,0], 'Answer-Neutral':			[0,0],
-			   'Apology':			[0,0], 'Thanks':			[0,0], 'Clarification-Request':		[0,0],
-			   'Acknowledgment':	[0,0], 'Filler':			[0,0], 'Inform':					[0,0],
-			   'Other':				[0,0], 'Multiple':			[0,0]}
+	m_stats = {'Info-Request':		[0,0,0], 'Action-Request':	[0,0,0], 'Action-Suggest':			[0,0,0],
+			   'Answer-Yes':		[0,0,0], 'Answer-No':		[0,0,0], 'Answer-Neutral':			[0,0,0],
+			   'Apology':			[0,0,0], 'Thanks':			[0,0,0], 'Clarification-Request':	[0,0,0],
+			   'Acknowledgment':	[0,0,0], 'Filler':			[0,0,0], 'Inform':					[0,0,0],
+			   'Other':				[0,0,0], 'Multiple':		[0,0,0]}
 	with open(input_file) as f:
 		for line in f:
 			split_line = line.split('(')
@@ -316,6 +316,55 @@ def get_meyers_metrics(input_file):
 			#output += str(0) + '\n'
 
 	return output
+
+def get_avg_dis_per_act(input_file): #Dis Count, Act Count
+	""" Calculate the average disfluencies per utterance for each dialog act. """
+	pre_markers = ''
+	dialog_dis = {'Acknowledgment': [0,0,[]], 'Action-Request':			[0,0,[]], 'Action-Suggest': 	[0,0,[]],
+				  'Answer-Neutral': [0,0,[]], 'Answer-No':				[0,0,[]], 'Answer-Yes':			[0,0,[]],
+				  'Apology':		[0,0,[]], 'Clarification-Request': 	[0,0,[]], 'Filler':				[0,0,[]],
+				  'Info-Request':	[0,0,[]], 'Inform':					[0,0,[]], 'Other':				[0,0,[]],
+				  'Thanks':			[0,0,[]]}
+	with open(input_file) as f:
+		for line in f:
+			split_line = line.split('(')
+			if len(split_line) >= 2:
+				pre_markers = split_line[1].strip(')\n')
+			else:
+				pass
+
+			if pre_markers.__contains__(','):
+				for item in pre_markers.split(', '):
+					dialog_dis[item][1]+=1
+					dialog_dis[item][2].append(re.sub(r'.*:\s', '', split_line[0]))
+					for word in re.sub(r'.*:\s', '', split_line[0]).split():
+						if word.lower() in disfluency_list or word == '{SL}':
+							dialog_dis[item][0] += 1
+			elif pre_markers in m_dialog_act_dict.values():
+				for item in pre_markers.split():
+					dialog_dis[item][1]+=1
+					dialog_dis[item][2].append(re.sub(r'.*:\s', '', split_line[0]))
+					for word in re.sub(r'.*:\s', '', split_line[0]).split():
+						if word.lower() in disfluency_list or word == '{SL}':
+							dialog_dis[item][0] += 1
+
+	for key in sorted(dialog_dis.keys()):
+		print(key)
+		for line in dialog_dis[key][2]:
+			print(str(len(line)))
+			count = 0
+			for word in line.split():
+				if word.lower() in disfluency_list or word == '{SL}':
+					count+=1
+
+			#print(str(count))
+		try:
+			print('END')
+			#print(float(dialog_dis[key][0]) / float(dialog_dis[key][1]))
+		except ZeroDivisionError:
+			pass
+
+	return ''
 ########################################################################################################################
 
 ##### NORMALIZATION FUNCTIONS ##########################################################################################
@@ -614,7 +663,8 @@ def draw_trees(input_file):
 	""" Draws pictures of each parse-tree-string using Matplotlib. """
 	form_trees = get_formatted_trees(input_file)
 	for tree_string in form_trees:
-		sentence = Tree.fromstring(tree_string)
+		print(tree_string)
+		sentence = Tree.parse(tree_string)
 		sentence.draw()
 
 	return ''
@@ -701,7 +751,7 @@ def calc_frazier_score(tree, parent, parent_label):
 		for i, child in enumerate(tree):
 			score = 0
 			if i == 0:
-				my_lab = tree.label()
+				my_lab = tree.node
 				if is_sentence(my_lab):
 					score = (0 if is_sentence(parent_label) else parent + 1.5)
 				elif my_lab != "" and my_lab != "ROOT" and my_lab != "TOP":
@@ -715,14 +765,14 @@ def get_yngve_score(input_file):
 	for tree_line in get_formatted_trees(input_file):
 		if tree_line.strip() == "":
 			continue
-		tree = Tree.fromstring(tree_line)
+		tree = Tree.parse(tree_line)
 		sentences += 1
 		raw_yngve_score = calc_yngve_score(tree, 0)
 		try:
 			mean_yngve_score = float(raw_yngve_score) / float(get_word_score(tree))
 			total_yngve_score += mean_yngve_score
 		except ZeroDivisionError:
-			print('WARNING: ZeroDisvisionError for the tree: ' + str(tree), file=sys.stderr)
+			print('WARNING: ZeroDivisionError for the tree: ' + str(tree), file=sys.stderr)
 			pass
 
 	return float(total_yngve_score) / sentences
@@ -733,7 +783,7 @@ def get_frazier_score(input_file):
 	for tree_line in get_formatted_trees(input_file):
 		if tree_line.strip() == "":
 			continue
-		tree = Tree.fromstring(tree_line)
+		tree = Tree.parse(tree_line)
 		sentences += 1
 		raw_frazier_score = calc_frazier_score(tree, 0, "")
 		try:

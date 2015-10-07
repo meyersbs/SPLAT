@@ -1,7 +1,7 @@
 ### Specific Files
 output.txt
 reference_data/graham_neubig.py
-splat_src/splat_tests.py
+splat_tests.py
 ### Directories
 asd_data/**/*
 test_data/**/*

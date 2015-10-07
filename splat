@@ -38,7 +38,7 @@ commands = {'--usage':      print_usage_instructions,       '--version':    vers
 			'rqm':          remove_dialog_acts,				'iub':          insert_utterance_boundaries,
 			'rub':          remove_utterance_boundaries,	'imm':          insert_meyers_markers,
 			'rmm':          remove_dialog_acts,				'maxdepth':     print_max_depths,
-			'mmstats':      get_meyers_metrics,				'temp':         strip_annotation}
+			'mmstats':      get_meyers_metrics,				'temp':         get_avg_dis_per_act}
 ########################################################################################################################
 
 
