@@ -26,12 +26,9 @@ disfluency_list = ['um', 'uh', 'ah', 'er', 'hm']
 nasal_list = ['hm', 'um']
 non_nasal_list = ['uh', 'ah', 'er']
 
-open_class_list = ['NN', 'NNS', 'NNP', 'NNPS', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ', 'JJ', 'JJR', 'JJS', 'RB',
-                   'RBR', 'RBS', 'FW']
-ignore_list = ['LS', 'SYM', 'UH', 'LBR', 'RBR', '-LBR-', '-RBR-', '$', '``', '"', '\'\'', '(', ')', '()', '( )',
-               '\,', '\-\-', '\.', '\:', 'SBAR', 'SBARQ']
-proposition_list = ['CC', 'CD', 'DT', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ', 'JJ', 'JJR', 'JJS', 'RB', 'RBR',
-                    'RBS', 'IN', 'CC', 'PDT', 'POS', 'PP$', 'PRP$', 'TO', 'WDT', 'WP', 'WPS', 'WRB']
+open_class_list = ['NN', 'NNS', 'NNP', 'NNPS', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ', 'JJ', 'JJR', 'JJS', 'RB', 'RBR', 'RBS', 'FW']
+ignore_list = ['LS', 'SYM', 'UH', 'LBR', 'RBR', '-LBR-', '-RBR-', '$', '``', '"', '\'\'', '(', ')', '()', '( )', '\,', '\-\-', '\.', '\:', 'SBAR', 'SBARQ']
+proposition_list = ['CC', 'CD', 'DT', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ', 'JJ', 'JJR', 'JJS', 'RB', 'RBR', 'RBS', 'IN', 'CC', 'PDT', 'POS', 'PP$', 'PRP$', 'TO', 'WDT', 'WP', 'WPS', 'WRB']
 
 pause_count, break_count, total_disfluencies, word_score = 0, 0, 0, 0
 
@@ -56,7 +53,10 @@ command_info = {'alu':          'Get Average Utterance Length',         'disflue
                 'rsm':          'Remove Speaker Markers',               'rqm':          'Remove Dialog Act Markers',
                 'iub':          'Insert Utterance Boundaries',          'rub':          'Remove Utterance Boundaries',
                 'imm':          'Insert Meyers Dialog Acts',            'rmm':          'Remove Meyers Dialog Acts',
-                'mmstats':      'Get Meyers Dialog Act Statistics',     'poscounts':    'List Counts for Each POS'}
+                'mmstats':      'Get Meyers Dialog Act Statistics',     'poscounts':    'List Counts for Each POS',
+                'unigrams':     'Get Unigrams',							'bigrams':		'Get Bigrams',
+				'trigrams':		'Get Trigrams',							'ngrams':		'Get N-Grams. Defaults to Bigrams',
+				'actstats':		'List WC and DC per Dialog Act'}
 
 command_args = {'alu':          '\t\tfilename\t--',      'disfluencies':     '\tfilename\t--',
                 'dpu':          '\t\tfilename\t--',      'drawtrees':        '\tfilename\t--',
@@ -79,7 +79,10 @@ command_args = {'alu':          '\t\tfilename\t--',      'disfluencies':     '\t
                 'rsm':          '\t\tfilename\t*output', 'rqm':              '\t\tfilename\t*output',
                 'iub':          '\t\tfilename\t*output', 'rub':              '\t\tfilename\t*output',
                 'imm':          '\t\tfilename\t*output', 'rmm':              '\t\tfilename\t*output',
-                'mmstats':      '\t\tfilename\t--',      'poscounts':        '\tfilename\t--'}
+                'mmstats':      '\t\tfilename\t--',      'poscounts':        '\tfilename\t--',
+                'unigrams':     '\tfilename\t--',	 	 'bigrams':			 '\t\tfilename\t--',
+				'trigrams':		'\tfilename\t--',		 'ngrams':			 '\t\tfilename\t*int',
+				'actstats':		'\tfilename\t--'}
 
 q_dialog_act_dict = {1:       'Info-Request',             2:      'Action-Request',
                      3:       'Yes-Answer',               4:      'No-Answer',

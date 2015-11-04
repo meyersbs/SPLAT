@@ -17,6 +17,7 @@ from __future__ import print_function
 from nltk.probability import FreqDist
 from nltk.tokenize import RegexpTokenizer
 from nltk.tree import *
+from nltk.util import ngrams
 try: from termcolor import *	# The unittest package doesn't like termcolor
 except ImportError: pass
 from splat_src.splat_global_vars import *
@@ -317,8 +318,8 @@ def get_meyers_metrics(input_file):
 
 	return output
 
-def get_avg_dis_per_act(input_file): #Dis Count, Act Count
-	""" Calculate the average disfluencies per utterance for each dialog act. """
+def get_wc_ds_per_act(input_file): #Dis Count, Act Count
+	""" List word count and disfluency count per utterance for each dialog act. """
 	pre_markers = ''
 	dialog_dis = {'Acknowledgment': [0,0,[]], 'Action-Request':			[0,0,[]], 'Action-Suggest': 	[0,0,[]],
 				  'Answer-Neutral': [0,0,[]], 'Answer-No':				[0,0,[]], 'Answer-Yes':			[0,0,[]],
@@ -350,16 +351,17 @@ def get_avg_dis_per_act(input_file): #Dis Count, Act Count
 
 	for key in sorted(dialog_dis.keys()):
 		print(key)
+		print('Word Count\tDisfluency Count')
 		for line in dialog_dis[key][2]:
-			print(str(len(line)))
+			#print(str(len(line)))
 			count = 0
 			for word in line.split():
 				if word.lower() in disfluency_list or word == '{SL}':
 					count+=1
 
-			#print(str(count))
+			print(str(len(line)) + '\t\t' + str(count))
 		try:
-			print('END')
+			print('')
 			#print(float(dialog_dis[key][0]) / float(dialog_dis[key][1]))
 		except ZeroDivisionError:
 			pass
@@ -631,6 +633,53 @@ def get_content_function_ratio(input_file):
 	return round(ratio, 4)
 ########################################################################################################################
 
+##### LANGUAGE MODEL FEATURES ##########################################################################################
+def get_unigrams(input_file):
+	""" Get all unigrams. """
+	utterances = get_utterances(input_file)
+	text = []
+	for utterance in utterances:
+		for word in utterance.split():
+			text.append(re.sub(r'[\.,!\?:;]', "", word.lower()))
+	print(text)
+	return ngrams(text, 1)
+
+def get_bigrams(input_file):
+	""" Get all bigrams. """
+	utterances = get_utterances(input_file)
+	text = []
+	for utterance in utterances:
+		for word in utterance.split():
+			text.append(re.sub(r'[\.,!\?:;]', "", word.lower()))
+	print(text)
+	return ngrams(text, 2)
+
+def get_trigrams(input_file):
+	""" Get all trigrams. """
+	utterances = get_utterances(input_file)
+	text = []
+	for utterance in utterances:
+		for word in utterance.split():
+			text.append(re.sub(r'[\.,!\?:;]', "", word.lower()))
+	print(text)
+	return ngrams(text, 3)
+
+def get_ngrams(input_file, n=2):
+	""" Get all ngrams of a given size. Defaults to bigrams. """
+	try:
+		n = int(n)
+	except ValueError:
+		n=2
+	utterances = get_utterances(input_file)
+	text = []
+	for utterance in utterances:
+		for word in utterance.split():
+			text.append(re.sub(r'[\.,!\?:;]', "", word.lower()))
+	print(text)
+	return ngrams(text, n)
+
+########################################################################################################################
+
 ##### BERKELEY PARSER FEATURES #########################################################################################
 def get_parse_trees(input_file):
 	""" Use the Berkeley Parser to obtain parse-tree-strings for each line in the input_file. """
@@ -763,6 +812,7 @@ def get_yngve_score(input_file):
 	""" Average all of the yngve scores for the given input_file. """
 	sentences, total_yngve_score = 0, 0
 	for tree_line in get_formatted_trees(input_file):
+		print(tree_line)
 		if tree_line.strip() == "":
 			continue
 		tree = Tree.parse(tree_line)
@@ -844,7 +894,7 @@ def get_disfluencies_per_utterance(input_file):
 	count = 1
 	output, last_item = '', ''
 	for line in get_utterances(input_file):
-		dis_count, nasal_count, non_nasal_count, other_count, word_count = 0, 0, 0, 0, 0
+		dis_count, nasal_count, non_nasal_count, other_count, word_count, um_count, uh_count = 0, 0, 0, 0, 0, 0, 0
 		for item in line.split():
 			word_count += 1
 			if item == '{SL}':
@@ -852,13 +902,21 @@ def get_disfluencies_per_utterance(input_file):
 				other_count += 1
 			elif __normalize_word(item) in nasal_list:
 				nasal_count += 1
-				dis_count += 1
+				#dis_count += 1
 				if __normalize_word(item) != 'um' or __normalize_word(item) != 'uh':
 					dis_count += 1
+				if __normalize_word(item) == 'um':
+					um_count += 1
+				if __normalize_word(item) == 'uh':
+					uh_count += 1
 			elif __normalize_word(item) in non_nasal_list:
 				non_nasal_count += 1
 				if __normalize_word(item) != 'um' or __normalize_word(item) != 'uh':
 					dis_count += 1
+				if __normalize_word(item) == 'um':
+					um_count += 1
+				if __normalize_word(item) == 'uh':
+					uh_count += 1
 			elif re.match(r'^.*-$', item):
 				other_count += 1
 				dis_count += 1
@@ -871,7 +929,7 @@ def get_disfluencies_per_utterance(input_file):
 			if item != '{SL}':
 				last_item = item
 
-		output += ('\n' + str(float(dis_count))) #+ ',' + str(float(non_nasal_count)/word_count))
+		output += ('\n' + str(float(uh_count))) #+ ',' + str(float(non_nasal_count)/word_count))
 		count += 1
 
 	return output

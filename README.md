@@ -1,5 +1,5 @@
 # SPLAT
-## Speech Processing \& Language Annotation Tool
+## Speech Processing \& Linguistic Annotation Tool
 
 - - - -
 ## Contact Information
@@ -83,6 +83,19 @@ To uninstall run the following in a command line.
     splat parsetrees filename       # List Parse-Tree Strings for each Utterance
     splat maxdepth filename         # Calculate Max Tree Depth
     splat drawtrees filename        # Draw Parse Trees
+```
+
+#### N-Grams
+```bash
+    splat unigrams filename         # List all Unigrams
+    splat bigrams filename          # List all Bigrams
+    splat trigrams filename         # List all Trigrams
+    splat ngrams filename n         # List all n-grams
+```
+
+#### Dialog Acts
+```bash
+    splat actstats filename         # List Word/Disfluency counts per Utterance per Act
 ```
 
 - - - -
