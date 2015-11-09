@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+from model.NGramminator import NGramminator
+
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
 ### @PROJECT_NAME:		SPLAT: Speech Processing and Linguistic Annotation Tool										 ###
@@ -10,17 +12,11 @@
 ### @LICENSE_TYPE:																									 ###
 ########################################################################################################################
 ########################################################################################################################
-
-class NGramminator:
+class RawNGramminator(NGramminator):
 	"""
-	An NGramminator provides the functionality to generate ngrams for a given text sequence.
+	A RawNGramminator provides the functionality to generate ngrams for a given text sequence.
+	No text normalization occurs.
 	"""
-	def __init__(self):
-		"""
-		Creates an NGramminator object.
-		"""
-		pass
-
 	def ngrams(self, text, n):
 		"""
 		Generates a list of ngrams of size n.
@@ -31,34 +27,17 @@ class NGramminator:
 		:return:a list of ngrams of size n
 		:rtype:list
 		"""
-		pass
+		if type(text) == str:
+			text = text.split()
+		elif type(text) == list:
+			text = text
+		else:
+			raise ValueError
 
-	def unigrams(self, text):
-		"""
-		Generates a list of unigrams.
-		:param text:the text selection to ngramminate
-		:type text:str
-		:return:a list of unigrams
-		:rtype:list
-		"""
-		return self.ngrams(text, 1)
-
-	def bigrams(self, text):
-		"""
-		Generates a list of bigrams.
-		:param text:the text selection to ngramminate
-		:type text:str
-		:return:a list of bigrams
-		:rtype:list
-		"""
-		return self.ngrams(text, 2)
-
-	def trigrams(self, text):
-		"""
-		Generates a list of trigrams.
-		:param text:the text selection to ngramminate
-		:type text:str
-		:return:a list of trigrams
-		:rtype:list
-		"""
-		return self.ngrams(text, 3)
+		ngram_list = []
+		for i in range(len(text)-n+1):
+			ngram = []
+			for j in range(0,n):
+				ngram.append(text[i+j])
+			ngram_list.append(tuple(ngram))
+		return ngram_list

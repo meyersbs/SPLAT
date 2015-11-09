@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from base import Token
+from base.Token import Token
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
@@ -17,14 +17,14 @@ class Sent(object):
 	"""
 	A Sentence object is essentially a list of Token objects.
 	"""
-	tokens = []
+	__tokens = []
 	def __init__(self, sentence):
 		if type(sentence) == str:
 			for token in sentence.split():
-				self.tokens.append(Token(token))
+				self.__tokens.append(Token(token))
 		elif type(sentence) == list:
 			for token in sentence:
-				self.tokens.append(Token(token))
+				self.__tokens.append(Token(token))
 		else:
 			raise ValueError("sentence must be of type str or list")
 
@@ -33,21 +33,24 @@ class Sent(object):
 		:return:the string representation of the Sentence object
 		:rtype:str
 		"""
-		return " ".join(self.tokens)
+		return " ".join(self.__tokens)
 
 	def words(self):
 		"""
 		:return:a list of Token objects
 		:rtype:list
 		"""
-		return self.tokens
+		words = []
+		for token in self.__tokens:
+			words.append(token.text())
+		return words
 
 	def wordcount(self):
-		return len(self.tokens)
+		return len(self.__tokens)
 
 	def string(self):
 		"""
 		:return:the string representation of the Sentence object
 		:rtype:str
 		"""
-		return " ".join(self.tokens)
+		return " ".join(self.__tokens)

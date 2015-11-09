@@ -15,7 +15,7 @@ class Token(object):
 	"""
 	A Token object is simply a string.
 	"""
-	text = ""
+	__text = ""
 	def __init__(self, text):
 		"""
 		Creates a Token object from a given word.
@@ -25,7 +25,7 @@ class Token(object):
 		:rtype:
 		"""
 		if type(text) == str:
-			self.text = text
+			self.__text = text
 		else:
 			raise ValueError("text must be of type str")
 
@@ -34,11 +34,11 @@ class Token(object):
 		:return:the string representation of the Token object
 		:rtype:str
 		"""
-		return self.text
+		return self.__text
 
 	def text(self):
 		"""
 		:return:the string representation of the Token object
 		:rtype:str
 		"""
-		return self.text
+		return self.__text
