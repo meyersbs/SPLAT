@@ -1,6 +1,9 @@
 #!/usr/bin/python
 
 from model.FullNGramminator import FullNGramminator
+from tokenize.RawTokenizer import RawTokenizer
+from tokenize.CleanTokenizer import CleanTokenizer
+import base.Util as Util
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
@@ -29,40 +32,19 @@ class TextBubble:
 	__sentcount = 0
 	__ttr = 0.0
 	__ngramminator = FullNGramminator()
+	__cleantokenizer = CleanTokenizer()
+	__rawtokenizer = RawTokenizer()
 	def __init__(self, text, ngramminator=FullNGramminator()):
 		if type(text) == str:
 			self.__bubble = text
-			temp_sents = []
-			temp_rawtokens = []
-			for sentence in text.split("\n"):
-				if sentence != "" and sentence != "\n":
-					temp_sents.append(sentence)
-					for word in sentence.split(" "):
-						temp_rawtokens.append(word)
-			self.__sentences = temp_sents
+			self.__sentences = Util.sentenize(text)
 			self.__sentcount = len(self.__sentences)
-			self.__rawtokens = temp_rawtokens
-			clean_tokens = []
-			for token in self.__rawtokens:
-				clean_tokens.append(token.lower().strip(".").strip(",").strip("!").strip("?"))
-			self.__tokens = clean_tokens
-
-			temp_types = {}
-			for word in self.__rawtokens:
-				if word not in temp_types.keys():
-					temp_types[word] = 1
-				else:
-					temp_types[word] += 1
-			self.__rawtypes = sorted(temp_types.items())
-			temp_types = {}
-			for word in self.__tokens:
-				if word not in temp_types.keys():
-					temp_types[word] = 1
-				else:
-					temp_types[word] += 1
-			self.__types = sorted(temp_types.items())
-			self.__wordcount = len(self.__rawtokens)
-			self.__unique_wordcount = len(self.__types)
+			self.__rawtokens = self.__rawtokenizer.tokenize(text)
+			self.__tokens = self.__cleantokenizer.tokenize(text)
+			self.__rawtypes = Util.typify(self.__rawtokens)
+			self.__types = Util.typify(self.__tokens)
+			self.__wordcount = Util.wordcount(self.__rawtokens)
+			self.__unique_wordcount = Util.wordcount(self.__types)
 			self.__ngramminator = ngramminator
 			self.__ttr = round(float((self.__unique_wordcount / self.__wordcount) * 100), 4)
 		else:
