@@ -1,8 +1,6 @@
 #!/usr/bin/python
 
-from base.Sent import Sent
 from model.FullNGramminator import FullNGramminator
-import re
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
@@ -23,24 +21,50 @@ class TextBubble:
 	__bubble = ""
 	__sentences = []
 	__rawtokens = []
+	__tokens = []
+	__rawtypes = {}
 	__types = {}
+	__wordcount = 0
+	__unique_wordcount = 0
+	__sentcount = 0
+	__ttr = 0.0
 	__ngramminator = FullNGramminator()
 	def __init__(self, text, ngramminator=FullNGramminator()):
 		if type(text) == str:
 			self.__bubble = text
+			temp_sents = []
+			temp_rawtokens = []
 			for sentence in text.split("\n"):
 				if sentence != "" and sentence != "\n":
-					self.__sentences.append(sentence)
-					for word in sentence.split():
-						self.__rawtokens.append(word)
+					temp_sents.append(sentence)
+					for word in sentence.split(" "):
+						temp_rawtokens.append(word)
+			self.__sentences = temp_sents
+			self.__sentcount = len(self.__sentences)
+			self.__rawtokens = temp_rawtokens
+			clean_tokens = []
+			for token in self.__rawtokens:
+				clean_tokens.append(token.lower().strip(".").strip(",").strip("!").strip("?"))
+			self.__tokens = clean_tokens
+
 			temp_types = {}
 			for word in self.__rawtokens:
 				if word not in temp_types.keys():
 					temp_types[word] = 1
 				else:
 					temp_types[word] += 1
-			self.__types = temp_types
+			self.__rawtypes = sorted(temp_types.items())
+			temp_types = {}
+			for word in self.__tokens:
+				if word not in temp_types.keys():
+					temp_types[word] = 1
+				else:
+					temp_types[word] += 1
+			self.__types = sorted(temp_types.items())
+			self.__wordcount = len(self.__rawtokens)
+			self.__unique_wordcount = len(self.__types)
 			self.__ngramminator = ngramminator
+			self.__ttr = round(float((self.__unique_wordcount / self.__wordcount) * 100), 4)
 		else:
 			raise ValueError("textbubble must be of type str")
 
@@ -58,7 +82,7 @@ class TextBubble:
 		"""
 		return self.__sentences
 
-	def raw_tokens(self):
+	def rawtokens(self):
 		"""
 		A list of tokens that have not been normalized.
 		:return:a list of tokens
@@ -72,10 +96,14 @@ class TextBubble:
 		:return:a list of tokens
 		:rtype:list
 		"""
-		clean_tokens = []
-		for token in self.__rawtokens:
-			clean_tokens.append(token.lower().strip(".").strip(",").strip("!").strip("?"))
-		return clean_tokens
+		return self.__tokens
+
+	def rawtypes(self):
+		"""
+		:return:a list of types
+		:rtype:list
+		"""
+		return self.__rawtypes
 
 	def types(self):
 		"""
@@ -89,28 +117,28 @@ class TextBubble:
 		:return:the total wordcount of the TextBubble
 		:rtype:int
 		"""
-		return len(self.__rawtokens)
+		return self.__wordcount
 
 	def unique_wordcount(self):
 		"""
 		:return:the number of types in the TextBubble
 		:rtype:int
 		"""
-		return len(self.__types.keys())
+		return self.__unique_wordcount
 
 	def sentcount(self):
 		"""
 		:return:the number of sentences in the TextBubble
 		:rtype:int
 		"""
-		return len(self.__sentences)
+		return self.__sentcount
 
 	def type_token_ratio(self):
 		"""
 		:return:the type-token ratio of the TextBubble
 		:rtype:float
 		"""
-		return round((float((self.unique_wordcount / self.wordcount) * 100), 4))
+		return self.__ttr
 
 	def unigrams(self):
 		"""
@@ -150,14 +178,16 @@ class TextBubble:
 		output += "===== Sentences:\n"
 		count = 0
 		for sentence in self.__sentences:
-			output += "[" + str(count) + "] " + sentence.string + "\n"
+			output += "[" + str(count) + "] " + str(sentence) + "\n"
 			count += 1
-		output += "Sentence Count: " + str(self.sentcount) + "\n"
+		output += "Sentence Count: " + str(self.__sentcount) + "\n"
 		output += "===== Tokens:\n"
-		output += self.tokens + "\n"
-		output += "Word Count: " + str(self.wordcount) + "\n"
+		output += str(self.__tokens) + "\n"
+		output += "Word Count: " + str(self.__wordcount) + "\n"
 		output += "===== Types:\n"
-		output += self.__types + "\n"
-		output += "Unique Word Count: " + str(self.unique_wordcount) + "\n"
+		output += str(self.__types) + "\n"
+		output += "Unique Word Count: " + str(self.__unique_wordcount) + "\n"
 		output += "===== Type-Token Ratio:\n"
-		output += str(self.type_token_ratio) + "\n"
+		output += str(self.__ttr) + "\n"
+
+		return output

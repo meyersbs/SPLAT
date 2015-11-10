@@ -4,7 +4,6 @@ reference_data/graham_neubig.py
 splat_tests.py
 ### Directories
 asd_data/**/*
-/test.py
 test_data/**/*
 reference_data/**/*
 documentation/**/*
