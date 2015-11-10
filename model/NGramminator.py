@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+from abc import abstractmethod
+
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
 ### @PROJECT_NAME:		SPLAT: Speech Processing and Linguistic Annotation Tool										 ###
@@ -21,6 +23,7 @@ class NGramminator:
 		"""
 		pass
 
+	@abstractmethod
 	def ngrams(self, text, n):
 		"""
 		Generates a list of ngrams of size n.
@@ -31,8 +34,9 @@ class NGramminator:
 		:return:a list of ngrams of size n
 		:rtype:list
 		"""
-		pass
+		raise NotImplementedError
 
+	@abstractmethod
 	def unigrams(self, text):
 		"""
 		Generates a list of unigrams.
@@ -43,6 +47,7 @@ class NGramminator:
 		"""
 		return self.ngrams(text, 1)
 
+	@abstractmethod
 	def bigrams(self, text):
 		"""
 		Generates a list of bigrams.
@@ -53,6 +58,7 @@ class NGramminator:
 		"""
 		return self.ngrams(text, 2)
 
+	@abstractmethod
 	def trigrams(self, text):
 		"""
 		Generates a list of trigrams.
