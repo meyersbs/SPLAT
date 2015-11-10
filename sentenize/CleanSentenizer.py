@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
+from sentenize.Sentenizer import Sentenizer
 import re
-import os.path
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
@@ -14,27 +14,18 @@ import os.path
 ########################################################################################################################
 ########################################################################################################################
 
-def typify(tokens):
+class CleanSentenizer(Sentenizer):
 	"""
-	Returns a dictionary of unique types with their frequencies.
-	:param tokens:a list of tokens
-	:type tokens:list
-	:return:a dictionary of unique types with their frequencies.
-	:rtype:dict
+	A CleanSentenizer provides the functionality to generate a list of sentences from a text input with newlines
+	removed.
 	"""
-	temp_types = {}
-	for word in tokens:
-		if word not in temp_types.keys():
-			temp_types[word] = 1
-		else:
-			temp_types[word] += 1
+	def sentenize(self, text):
+		sentences = Sentenizer.sentenize(self, text)
 
-	return sorted(temp_types.items())
+		temp = []
+		for sent in sentences:
+			temp.append(re.sub(r"\n", "", sent))
 
-def wordcount(text):
-	if type(text) == str:
-		return len(text.split(" "))
-	elif type(text) == list:
-		return len(text)
-	else:
-		raise ValueError("Text to count words for must be of type str or of type list.")
+		sentences = temp
+
+		return sentences

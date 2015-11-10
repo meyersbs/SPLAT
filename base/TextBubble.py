@@ -3,6 +3,7 @@
 from model.FullNGramminator import FullNGramminator
 from tokenize.RawTokenizer import RawTokenizer
 from tokenize.CleanTokenizer import CleanTokenizer
+from sentenize.CleanSentenizer import CleanSentenizer
 import base.Util as Util
 
 ########################################################################################################################
@@ -34,10 +35,11 @@ class TextBubble:
 	__ngramminator = FullNGramminator()
 	__cleantokenizer = CleanTokenizer()
 	__rawtokenizer = RawTokenizer()
+	__sentenizer = CleanSentenizer()
 	def __init__(self, text, ngramminator=FullNGramminator()):
 		if type(text) == str:
 			self.__bubble = text
-			self.__sentences = Util.sentenize(text)
+			self.__sentences = self.__sentenizer.sentenize(text)
 			self.__sentcount = len(self.__sentences)
 			self.__rawtokens = self.__rawtokenizer.tokenize(text)
 			self.__tokens = self.__cleantokenizer.tokenize(text)

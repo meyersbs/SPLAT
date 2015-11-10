@@ -147,47 +147,47 @@ class TestBasics(unittest.TestCase):
 		expected += "80.9524\n"
 		self.assertEqual(output, expected)
 
-	def test_Util_tokenize(self):
-		# Test String
-		text = self.whitman
-		output = tokenize(text)
-		raw_tokens = output[0]
-		clean_tokens = output[1]
-		expected_raw = ['I', 'celebrate', 'myself,', 'And', 'what', 'I', 'assume', 'you', 'shall', 'assume,', 'For', 'every', 'atom', 'belonging', 'to', 'me', 'as', 'good', 'belongs', 'to', 'you.']
-		expected_clean = ['i', 'celebrate', 'myself', 'and', 'what', 'i', 'assume', 'you', 'shall', 'assume', 'for', 'every', 'atom', 'belonging', 'to', 'me', 'as', 'good', 'belongs', 'to', 'you']
-		self.assertEqual(raw_tokens, expected_raw)
-		self.assertEqual(clean_tokens, expected_clean)
+	# def test_Util_tokenize(self):
+	# 	# Test String
+	# 	text = self.whitman
+	# 	output = tokenize(text)
+	# 	raw_tokens = output[0]
+	# 	clean_tokens = output[1]
+	# 	expected_raw = ['I', 'celebrate', 'myself,', 'And', 'what', 'I', 'assume', 'you', 'shall', 'assume,', 'For', 'every', 'atom', 'belonging', 'to', 'me', 'as', 'good', 'belongs', 'to', 'you.']
+	# 	expected_clean = ['i', 'celebrate', 'myself', 'and', 'what', 'i', 'assume', 'you', 'shall', 'assume', 'for', 'every', 'atom', 'belonging', 'to', 'me', 'as', 'good', 'belongs', 'to', 'you']
+	# 	self.assertEqual(raw_tokens, expected_raw)
+	# 	self.assertEqual(clean_tokens, expected_clean)
+	#
+	# 	# Test List
+	# 	text = [self.whitman, self.whitman, self.whitman]
+	# 	output = tokenize(text)[0]
+	# 	expected = ['I', 'celebrate', 'myself,', 'And', 'what', 'I', 'assume', 'you', 'shall', 'assume,', 'For', 'every', 'atom', 'belonging', 'to', 'me', 'as', 'good', 'belongs', 'to', 'you.', 'I', 'celebrate', 'myself,', 'And', 'what', 'I', 'assume', 'you', 'shall', 'assume,', 'For', 'every', 'atom', 'belonging', 'to', 'me', 'as', 'good', 'belongs', 'to', 'you.', 'I', 'celebrate', 'myself,', 'And', 'what', 'I', 'assume', 'you', 'shall', 'assume,', 'For', 'every', 'atom', 'belonging', 'to', 'me', 'as', 'good', 'belongs', 'to', 'you.']
+	# 	self.assertEqual(output, expected)
+	#
+	# 	# Test File
+	# 	text_file = "test_data/whitman_test.txt"
+	# 	output = tokenize(text_file)[0]
+	# 	expected = ['I', 'celebrate', 'myself,', 'And', 'what', 'I', 'assume', 'you', 'shall', 'assume,', 'For', 'every', 'atom', 'belonging', 'to', 'me', 'as', 'good', 'belongs', 'to', 'you.']
+	# 	self.assertEqual(output, expected)
 
-		# Test List
-		text = [self.whitman, self.whitman, self.whitman]
-		output = tokenize(text)[0]
-		expected = ['I', 'celebrate', 'myself,', 'And', 'what', 'I', 'assume', 'you', 'shall', 'assume,', 'For', 'every', 'atom', 'belonging', 'to', 'me', 'as', 'good', 'belongs', 'to', 'you.', 'I', 'celebrate', 'myself,', 'And', 'what', 'I', 'assume', 'you', 'shall', 'assume,', 'For', 'every', 'atom', 'belonging', 'to', 'me', 'as', 'good', 'belongs', 'to', 'you.', 'I', 'celebrate', 'myself,', 'And', 'what', 'I', 'assume', 'you', 'shall', 'assume,', 'For', 'every', 'atom', 'belonging', 'to', 'me', 'as', 'good', 'belongs', 'to', 'you.']
-		self.assertEqual(output, expected)
-
-		# Test File
-		text_file = "test_data/whitman_test.txt"
-		output = tokenize(text_file)[0]
-		expected = ['I', 'celebrate', 'myself,', 'And', 'what', 'I', 'assume', 'you', 'shall', 'assume,', 'For', 'every', 'atom', 'belonging', 'to', 'me', 'as', 'good', 'belongs', 'to', 'you.']
-		self.assertEqual(output, expected)
-
-	def test_Util_sentenize(self):
-		# Test String
-		text = (self.whitman + " ")*3
-		output = sentenize(text)
-		expected = ['I celebrate myself, And what I assume you shall assume, For every atom belonging to me as good belongs to you.', 'I celebrate myself, And what I assume you shall assume, For every atom belonging to me as good belongs to you.', 'I celebrate myself, And what I assume you shall assume, For every atom belonging to me as good belongs to you.']
-		self.assertEqual(output, expected)
-
-		# Test List
-		text = [self.whitman, self.whitman, self.whitman]
-		output = sentenize(text)
-		expected = ['I celebrate myself, And what I assume you shall assume, For every atom belonging to me as good belongs to you.', 'I celebrate myself, And what I assume you shall assume, For every atom belonging to me as good belongs to you.', 'I celebrate myself, And what I assume you shall assume, For every atom belonging to me as good belongs to you.']
-		self.assertEqual(output, expected)
-
-		# Test File
-		text_file = "test_data/lorem_sample.txt"
-		output = sentenize(text_file)
-		expected = ['Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'Maecenas semper nisl fermentum auctor facilisis.', 'Pellentes que vehicula pharetra leo, ornare vehicula neque cursus id.', 'Maecenas commodo sapien sed purus mollis condimentum.', 'Nulla ultricies sapien nec urna consectetur, non vulputate elit faucibus.', 'Nulla in luctus arcu.', 'Nunc sit amet accumsan purus.', 'Donec lectus nulla, aliquet et dui in, ullamcorper tincidunt nibh.', 'Duis iaculis mi risus.', 'Phasellus id volutpat ex, a imperdiet diam.', 'Maecenas eu tellus a dui ultricies placerat.', 'Pellentesque magna nibh, vulputate et elit eget, tristique facilisis tellus.', 'Aliquam quis neque tortor.', 'Phasellus vitae elit ut ante consequat varius.']
-		self.assertEqual(output, expected)
+	# def test_Util_sentenize(self):
+	# 	# Test String
+	# 	text = (self.whitman + " ")*3
+	# 	output = sentenize(text)
+	# 	expected = ['I celebrate myself, And what I assume you shall assume, For every atom belonging to me as good belongs to you.', 'I celebrate myself, And what I assume you shall assume, For every atom belonging to me as good belongs to you.', 'I celebrate myself, And what I assume you shall assume, For every atom belonging to me as good belongs to you.']
+	# 	self.assertEqual(output, expected)
+	#
+	# 	# Test List
+	# 	text = [self.whitman, self.whitman, self.whitman]
+	# 	output = sentenize(text)
+	# 	expected = ['I celebrate myself, And what I assume you shall assume, For every atom belonging to me as good belongs to you.', 'I celebrate myself, And what I assume you shall assume, For every atom belonging to me as good belongs to you.', 'I celebrate myself, And what I assume you shall assume, For every atom belonging to me as good belongs to you.']
+	# 	self.assertEqual(output, expected)
+	#
+	# 	# Test File
+	# 	text_file = "test_data/lorem_sample.txt"
+	# 	output = sentenize(text_file)
+	# 	expected = ['Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'Maecenas semper nisl fermentum auctor facilisis.', 'Pellentes que vehicula pharetra leo, ornare vehicula neque cursus id.', 'Maecenas commodo sapien sed purus mollis condimentum.', 'Nulla ultricies sapien nec urna consectetur, non vulputate elit faucibus.', 'Nulla in luctus arcu.', 'Nunc sit amet accumsan purus.', 'Donec lectus nulla, aliquet et dui in, ullamcorper tincidunt nibh.', 'Duis iaculis mi risus.', 'Phasellus id volutpat ex, a imperdiet diam.', 'Maecenas eu tellus a dui ultricies placerat.', 'Pellentesque magna nibh, vulputate et elit eget, tristique facilisis tellus.', 'Aliquam quis neque tortor.', 'Phasellus vitae elit ut ante consequat varius.']
+	# 	self.assertEqual(output, expected)
 
 
 if __name__ == '__main__':
