@@ -1,10 +1,13 @@
 #!/usr/bin/python
 
 from model.FullNGramminator import FullNGramminator
-from tokenize.RawTokenizer import RawTokenizer
-from tokenize.CleanTokenizer import CleanTokenizer
-from sentenize.CleanSentenizer import CleanSentenizer
+from tokenizers.RawTokenizer import RawTokenizer
+from tokenizers.CleanTokenizer import CleanTokenizer
+from sentenizers.CleanSentenizer import CleanSentenizer
+from tag.POSTagger import POSTagger
+from parse.TreeStringGenerator import TreeStringGenerator
 import base.Util as Util
+import os.path
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
@@ -22,35 +25,59 @@ class TextBubble:
 	A TextBubble is a bubble of text. It can be a single word, a paragraph, or even a whole novel!
 	The TextBubble object makes it super simple to extract features from a selection of text.
 	"""
+	# Word Count, Unique Word Count, Sentence Count, Utterance Count
+	__wordcount, __unique_wordcount, __sentcount, __uttcount = 0, 0, 0, 0
+	# Content-Function Ratio, Average Utterance Length, Type-Token Ratio
+	__cfr, __alu, __ttr = 0.0, 0.0, 0.0
+	# Sentences, Utterances, Raw Tokens, Tokens, Tokens with POS Tags
+	__sentences, __utterances, __rawtokens, __tokens, __pos = [], [], [], [], []
+	# Content Words, Function Words, Unique Content Words, Unique Function Words
+	__c_words, __f_words, __uc_words, __uf_words = [], [], [], []
+	# Raw Types, Types
+	__rawtypes, __types = {}, {}
 	__bubble = ""
-	__sentences = []
-	__rawtokens = []
-	__tokens = []
-	__rawtypes = {}
-	__types = {}
-	__wordcount = 0
-	__unique_wordcount = 0
-	__sentcount = 0
-	__ttr = 0.0
 	__ngramminator = FullNGramminator()
 	__cleantokenizer = CleanTokenizer()
 	__rawtokenizer = RawTokenizer()
 	__sentenizer = CleanSentenizer()
-	def __init__(self, text, ngramminator=FullNGramminator()):
-		if type(text) == str:
+	__postagger = POSTagger()
+	__treestring_gen = TreeStringGenerator()
+	__treestrings = []
+	def __init__(self, text, ngramminator=FullNGramminator(), postagger=POSTagger()):
+		if os.path.exists(text):
+			temp_text = ""
+			for line in open(text, 'r'):
+				self.__utterances.append(line.strip())
+				temp_text += line.strip() + " "
+			self.__bubble = temp_text
+		elif type(text) == str:
 			self.__bubble = text
-			self.__sentences = self.__sentenizer.sentenize(text)
-			self.__sentcount = len(self.__sentences)
-			self.__rawtokens = self.__rawtokenizer.tokenize(text)
-			self.__tokens = self.__cleantokenizer.tokenize(text)
-			self.__rawtypes = Util.typify(self.__rawtokens)
-			self.__types = Util.typify(self.__tokens)
-			self.__wordcount = Util.wordcount(self.__rawtokens)
-			self.__unique_wordcount = Util.wordcount(self.__types)
-			self.__ngramminator = ngramminator
-			self.__ttr = Util.type_token_ratio(self.__types, self.__tokens)
+			for line in text.split("\n"):
+				self.__utterances.append(line.strip())
 		else:
 			raise ValueError("textbubble must be of type str")
+
+		self.__uttcount = len(self.__utterances)
+		self.__sentences = self.__sentenizer.sentenize(self.__bubble)
+		self.__sentcount = len(self.__sentences)
+		self.__rawtokens = self.__rawtokenizer.tokenize(self.__bubble)
+		self.__tokens = self.__cleantokenizer.tokenize(self.__bubble)
+		self.__rawtypes = Util.typify(self.__rawtokens)
+		self.__types = Util.typify(self.__tokens)
+		self.__wordcount = Util.wordcount(self.__rawtokens)
+		self.__unique_wordcount = Util.wordcount(self.__types)
+		self.__ngramminator = ngramminator
+		self.__postagger = postagger
+		self.__ttr = Util.type_token_ratio(self.__types, self.__tokens)
+		self.__pos = self.__postagger.tag(self.__bubble)
+		self.__alu = round(float(self.__wordcount) / float(self.__uttcount), 4)
+		self.__c_words = Util.get_content_words(self.__tokens)
+		self.__f_words = Util.get_function_words(self.__tokens)
+		self.__uc_words = Util.get_unique_content_words(self.__types)
+		self.__uf_words = Util.get_unique_function_words(self.__types)
+		self.__cfr = Util.get_content_function_ratio(self.__tokens)
+		self.__treestring_gen = TreeStringGenerator()
+		self.__treestrings = self.__treestring_gen.get_parse_trees(self.__sentences)
 
 	def bubble(self):
 		"""
@@ -65,6 +92,13 @@ class TextBubble:
 		:rtype:list
 		"""
 		return self.__sentences
+
+	def utts(self):
+		"""
+		:return:a list of utterances
+		:rtype:list
+		"""
+		return self.__utterances
 
 	def rawtokens(self):
 		"""
@@ -117,6 +151,13 @@ class TextBubble:
 		"""
 		return self.__sentcount
 
+	def uttcount(self):
+		"""
+		:return:the number of utterances in the TextBubble
+		:rtype:int
+		"""
+		return self.__uttcount
+
 	def type_token_ratio(self):
 		"""
 		:return:the type-token ratio of the TextBubble
@@ -151,6 +192,35 @@ class TextBubble:
 		:rtype:list of tuples
 		"""
 		return self.__ngramminator.ngrams(self.__bubble, n)
+
+	def pos(self):
+		"""
+		:return:a list of tuples(word, tag)
+		:rtype:list of tuples
+		"""
+		return self.__pos
+
+	def average_utterance_length(self):
+		#TODO
+		return self.__alu
+
+	def content_function_ratio(self):
+		return self.__cfr
+
+	def content_words(self):
+		return self.__c_words
+
+	def function_words(self):
+		return self.__f_words
+
+	def unique_content_words(self):
+		return self.__uc_words
+
+	def unique_function_words(self):
+		return self.__uf_words
+
+	def treestrings(self):
+		return self.__treestrings
 
 	def splat(self):
 		"""

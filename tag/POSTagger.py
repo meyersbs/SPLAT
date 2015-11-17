@@ -2,7 +2,7 @@
 
 from tag.Tagger import Tagger
 from corpus.Util import EOWL, Google20K, Brown
-from tokenize.PunctTokenizer import PunctTokenizer
+from tokenizers.PunctTokenizer import PunctTokenizer
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################

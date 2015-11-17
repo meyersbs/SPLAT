@@ -6,7 +6,7 @@ from model.CaseNGramminator import CaseNGramminator
 from model.FullNGramminator import FullNGramminator
 from base.TextBubble import TextBubble
 from tag.POSTagger import POSTagger
-from tokenize.PunctTokenizer import PunctTokenizer
+from tokenizers.PunctTokenizer import PunctTokenizer
 from base.Util import *
 
 class TestBasics(unittest.TestCase):
@@ -164,6 +164,12 @@ class TestBasics(unittest.TestCase):
 		output = self.p_tokenizer.tokenize(self.whitman)
 		expected = ['i', 'celebrate', 'myself', ',', 'and', 'what', 'i', 'assume', 'you', 'shall', 'assume', ',', 'for', 'every', 'atom', 'belonging', 'to', 'me', 'as', 'good', 'belongs', 'to', 'you', '.']
 		self.assertEqual(output, expected)
+
+	def test_TextBubble_treestrings(self):
+		output = self.test_bubble_1.treestrings()
+		expected = ['( (S (NP (PRP I)) (VP (VBP celebrate) (NP (NN myself,)) (SBAR (CC And) (WP what) (S (NP (PRP I)) (VP (VBP assume) (SBAR (S (NP (PRP you)) (VP (MD shall) (VP (VB assume,) (PP (IN For) (NP (NP (DT every) (NN atom)) (VP (VBG belonging) (PP (TO to) (NP (PRP me)))))) (SBAR (IN as) (S (NP (JJ good)) (VP (VBZ belongs) (S (VP (TO to) (VP (VB you.)))))))))))))))) )']
+		self.assertEqual(output, expected)
+
 
 	# def test_Util_tokenize(self):
 	# 	# Test String
