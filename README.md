@@ -1,6 +1,13 @@
 # SPLAT
 ## Speech Processing \& Linguistic Annotation Tool
 
+## NOTICE
+SPLAT is currently undergoing a massive renovation to provide the following:
+* higher efficiency
+* ability to be imported as a python package
+* cleaner command-line-interface
+* minimal (hopefully none) dependency on outside libraries
+
 - - - -
 ## Contact Information
 &nbsp;&nbsp;&nbsp;&nbsp;Benjamin S. Meyers < <bsm9339@rit.edu> >
