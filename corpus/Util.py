@@ -1,5 +1,9 @@
 #!/usr/bin/python
 
+import sys, os
+if sys.version_info <= (2, 7):	import cPickle as pkl
+else:							import pickle as pkl
+
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
 ### @PROJECT_NAME:		SPLAT: Speech Processing and Linguistic Annotation Tool										 ###
@@ -11,30 +15,9 @@
 ########################################################################################################################
 ########################################################################################################################
 
-def typify(tokens):
-	"""
-	Returns a dictionary of unique types with their frequencies.
-	:param tokens:a list of tokens
-	:type tokens:list
-	:return:a dictionary of unique types with their frequencies.
-	:rtype:dict
-	"""
-	temp_types = {}
-	for word in tokens:
-		if word not in temp_types.keys():
-			temp_types[word] = 1
-		else:
-			temp_types[word] += 1
-
-	return sorted(temp_types.items())
-
-def wordcount(text):
-	if type(text) == str:
-		return len(text.split(" "))
-	elif type(text) == list:
-		return len(text)
-	else:
-		raise ValueError("Text to count words for must be of type str or of type list.")
-
-def type_token_ratio(types, tokens):
-	return round(float(len(types)) / float(len(tokens)) * 100, 4)
+# Each key is a word from the google-20000-english.txt file. Each key maps to a list containing
+curr_dir = os.path.dirname(__file__)
+Google20K = pkl.load(open(curr_dir + '/google-20000-corpus.pkl', 'rb'))
+EOWL = pkl.load(open(curr_dir + '/eowl-corpus.pkl', 'rb'))
+Brown = pkl.load(open(curr_dir + '/brown-corpus.pkl', 'rb'))
+Gutenberg = pkl.load(open(curr_dir + '/gutenberg-corpus.pkl', 'rb'))

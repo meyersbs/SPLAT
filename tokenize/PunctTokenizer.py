@@ -1,5 +1,8 @@
 #!/usr/bin/python
 
+from tokenize.Tokenizer import Tokenizer
+import re
+
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
 ### @PROJECT_NAME:		SPLAT: Speech Processing and Linguistic Annotation Tool										 ###
@@ -11,30 +14,21 @@
 ########################################################################################################################
 ########################################################################################################################
 
-def typify(tokens):
+class PunctTokenizer(Tokenizer):
 	"""
-	Returns a dictionary of unique types with their frequencies.
-	:param tokens:a list of tokens
-	:type tokens:list
-	:return:a dictionary of unique types with their frequencies.
-	:rtype:dict
+	A PuncTokenizer provides the ability to tokenize a text input, including punctuation as separate tokens.
 	"""
-	temp_types = {}
-	for word in tokens:
-		if word not in temp_types.keys():
-			temp_types[word] = 1
-		else:
-			temp_types[word] += 1
+	def tokenize(self, text):
+		punc_tokens = []
+		raw_tokens = Tokenizer.tokenize(self, text)
+		
+		temp = []
+		for token in raw_tokens:
+			temp_tokens = re.findall(r"[\w']+|[\.,!?;:]", token)
+			for temp_token in temp_tokens:
+				if token != "" and token != " " and token != ' ' and token != '':
+					temp.append(temp_token.lower())
 
-	return sorted(temp_types.items())
-
-def wordcount(text):
-	if type(text) == str:
-		return len(text.split(" "))
-	elif type(text) == list:
-		return len(text)
-	else:
-		raise ValueError("Text to count words for must be of type str or of type list.")
-
-def type_token_ratio(types, tokens):
-	return round(float(len(types)) / float(len(tokens)) * 100, 4)
+		punc_tokens = temp
+		
+		return punc_tokens

@@ -11,30 +11,30 @@
 ########################################################################################################################
 ########################################################################################################################
 
-def typify(tokens):
-	"""
-	Returns a dictionary of unique types with their frequencies.
-	:param tokens:a list of tokens
-	:type tokens:list
-	:return:a dictionary of unique types with their frequencies.
-	:rtype:dict
-	"""
-	temp_types = {}
-	for word in tokens:
-		if word not in temp_types.keys():
-			temp_types[word] = 1
-		else:
-			temp_types[word] += 1
+class Tagger:
+	__tag_dict = {}
+	def __init__(self, tag_dict):
+		"""
+		Creates a Tagger object.
+		"""
+		raise NotImplementedError
 
-	return sorted(temp_types.items())
+	def tag(self, text):
+		"""
+		Return a list of tuples where each pair is a word and its TAG
+		:param text:a string of text to be tagged
+		:type text:str
+		:return:a list of tuples where each pair is a word and its TAG
+		:rtype:list of tuples
+		"""
+		raise NotImplementedError
 
-def wordcount(text):
-	if type(text) == str:
-		return len(text.split(" "))
-	elif type(text) == list:
-		return len(text)
-	else:
-		raise ValueError("Text to count words for must be of type str or of type list.")
-
-def type_token_ratio(types, tokens):
-	return round(float(len(types)) / float(len(tokens)) * 100, 4)
+	def untag(self, tagged_list):
+		"""
+		Return a string of untagged text
+		:param tagged_list:a list of tuples where each pair is a word and TAG
+		:type tagged_list:list of tuples
+		:return:a string of text
+		:rtype:str
+		"""
+		raise NotImplementedError

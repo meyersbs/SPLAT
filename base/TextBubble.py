@@ -48,7 +48,7 @@ class TextBubble:
 			self.__wordcount = Util.wordcount(self.__rawtokens)
 			self.__unique_wordcount = Util.wordcount(self.__types)
 			self.__ngramminator = ngramminator
-			self.__ttr = round(float((self.__unique_wordcount / self.__wordcount) * 100), 4)
+			self.__ttr = Util.type_token_ratio(self.__types, self.__tokens)
 		else:
 			raise ValueError("textbubble must be of type str")
 

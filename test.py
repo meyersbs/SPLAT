@@ -1,10 +1,12 @@
 import unittest
-#from nltk.corpus import brown
+
 from model.RawNGramminator import RawNGramminator
 from model.PunctNGramminator import PunctNGramminator
 from model.CaseNGramminator import CaseNGramminator
 from model.FullNGramminator import FullNGramminator
 from base.TextBubble import TextBubble
+from tag.POSTagger import POSTagger
+from tokenize.PunctTokenizer import PunctTokenizer
 from base.Util import *
 
 class TestBasics(unittest.TestCase):
@@ -16,6 +18,8 @@ class TestBasics(unittest.TestCase):
 	full_ngram = FullNGramminator()
 	test_bubble_1 = TextBubble(whitman)
 	test_bubble_2 = TextBubble(frankenstein, full_ngram)
+	pos_tagger = POSTagger()
+	p_tokenizer = PunctTokenizer()
 
 	def test_RawNGramminator(self):
 		output = self.raw_ngram.ngrams(self.whitman, 2)
@@ -145,6 +149,20 @@ class TestBasics(unittest.TestCase):
 		expected += "Unique Word Count: 17\n"
 		expected += "===== Type-Token Ratio:\n"
 		expected += "80.9524\n"
+		self.assertEqual(output, expected)
+
+	def test_POSTagger_tag(self):
+		output = self.pos_tagger.tag(self.whitman.lower())
+		expected = [('i', u'PRP'), ('celebrate', u'VB'), ('myself', u'PRP'), (',', u','), ('and', u'CC'), ('what', u'WP'), ('i', u'PRP'), ('assume', u'VB'), ('you', u'PRP'), ('shall', u'MD'), ('assume', u'VB'), (',', u','), ('for', u'IN'), ('every', u'DT'), ('atom', u'NN'), ('belonging', u'VBG'), ('to', u'TO'), ('me', u'PRP'), ('as', u'IN'), ('good', u'JJ'), ('belongs', u'NNS'), ('to', u'TO'), ('you', u'PRP'), ('.', u'.')]
+		self.assertEqual(output, expected)
+		output = self.pos_tagger.tag(self.whitman.split(" "))
+		expected = [('i', u'PRP'), ('celebrate', u'VB'), ('myself', u'PRP'), (',', u','), ('and', u'CC'), ('what', u'WP'), ('i', u'PRP'), ('assume', u'VB'), ('you', u'PRP'), ('shall', u'MD'), ('assume', u'VB'), (',', u','), ('for', u'IN'), ('every', u'DT'), ('atom', u'NN'), ('belonging', u'VBG'), ('to', u'TO'), ('me', u'PRP'), ('as', u'IN'), ('good', u'JJ'), ('belongs', u'NNS'), ('to', u'TO'), ('you', u'PRP'), ('.', u'.')]
+
+		self.assertEqual(output, expected)
+
+	def test_PunctTokenizer(self):
+		output = self.p_tokenizer.tokenize(self.whitman)
+		expected = ['i', 'celebrate', 'myself', ',', 'and', 'what', 'i', 'assume', 'you', 'shall', 'assume', ',', 'for', 'every', 'atom', 'belonging', 'to', 'me', 'as', 'good', 'belongs', 'to', 'you', '.']
 		self.assertEqual(output, expected)
 
 	# def test_Util_tokenize(self):

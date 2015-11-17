@@ -626,8 +626,8 @@ def get_content_function_ratio(input_file):
 	content = get_content_words(input_file)
 	function = get_function_words(input_file)
 
-	print(len(content))
-	print(len(function))
+	#print(len(content))
+	#print(len(function))
 	ratio = float(len(content)) / float(len(function))
 
 	return round(ratio, 4)
@@ -745,7 +745,12 @@ def get_max_depths(input_file):
 			depths[lines[count]] = max_depth
 			count += 1
 
-	return depths
+	max_depth = 0
+	for val in depths.values():
+		if val > max_depth:
+			max_depth = val
+
+	return max_depth
 
 def print_max_depths(input_file):
 	"""  Display the max depths for each parse tree from the input_file. """
@@ -812,7 +817,7 @@ def get_yngve_score(input_file):
 	""" Average all of the yngve scores for the given input_file. """
 	sentences, total_yngve_score = 0, 0
 	for tree_line in get_formatted_trees(input_file):
-		print(tree_line)
+		#print(tree_line)
 		if tree_line.strip() == "":
 			continue
 		tree = Tree.parse(tree_line)

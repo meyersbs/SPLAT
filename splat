@@ -37,7 +37,7 @@ commands = {'--usage':      print_usage_instructions,       '--version':    vers
 			'iqm':          insert_quarteroni_markers,		'rsm':          remove_speaker_markers,
 			'rqm':          remove_dialog_acts,				'iub':          insert_utterance_boundaries,
 			'rub':          remove_utterance_boundaries,	'imm':          insert_meyers_markers,
-			'rmm':          remove_dialog_acts,				'maxdepth':     print_max_depths,
+			'rmm':          remove_dialog_acts,				'maxdepth':     get_max_depths,
 			'mmstats':      get_meyers_metrics,				'actstats':     get_wc_ds_per_act,
 			'unigrams':		get_unigrams,					'bigrams':		get_bigrams,
 			'trigrams':		get_trigrams,					'ngrams':		get_ngrams}
