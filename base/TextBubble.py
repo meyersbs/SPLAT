@@ -46,14 +46,18 @@ class TextBubble:
 	def __init__(self, text, ngramminator=FullNGramminator(), postagger=POSTagger()):
 		if os.path.exists(text):
 			temp_text = ""
+			temp_utts = []
 			for line in open(text, 'r'):
-				self.__utterances.append(line.strip())
+				temp_utts.append(line.strip())
 				temp_text += line.strip() + " "
 			self.__bubble = temp_text
+			self.__utterances = temp_utts
 		elif type(text) == str:
 			self.__bubble = text
+			temp_utts = []
 			for line in text.split("\n"):
-				self.__utterances.append(line.strip())
+				temp_utts.append(line.strip())
+			self.__utterances = temp_utts
 		else:
 			raise ValueError("textbubble must be of type str")
 
@@ -221,6 +225,20 @@ class TextBubble:
 
 	def treestrings(self):
 		return self.__treestrings
+
+	def drawtrees(self):
+		Util.draw_trees(self.__treestrings)
+		return ''
+
+	def words_per_utterance(self):
+		for item in self.__utterances:
+			print(len(item.split(" ")))
+		return ''
+
+	def words_per_sentence(self):
+		for item in self.__sentences:
+			print(len(item.split(" ")))
+		return ''
 
 	def splat(self):
 		"""

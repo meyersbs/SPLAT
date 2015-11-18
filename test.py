@@ -9,42 +9,14 @@ from tag.POSTagger import POSTagger
 from tokenizers.PunctTokenizer import PunctTokenizer
 from base.Util import *
 
-class TestBasics(unittest.TestCase):
+class TestTextBubble(unittest.TestCase):
 	whitman = "I celebrate myself, And what I assume you shall assume, For every atom belonging to me as good belongs to you."
 	frankenstein = "You will rejoice to hear that no disaster has accompanied the commencement of an enterprise which you have regarded with such evil forebodings."
-	raw_ngram = RawNGramminator()
-	punct_ngram = PunctNGramminator()
-	case_ngram = CaseNGramminator()
 	full_ngram = FullNGramminator()
 	test_bubble_1 = TextBubble(whitman)
 	test_bubble_2 = TextBubble(frankenstein, full_ngram)
 	pos_tagger = POSTagger()
 	p_tokenizer = PunctTokenizer()
-
-	def test_RawNGramminator(self):
-		output = self.raw_ngram.ngrams(self.whitman, 2)
-		expected = [('I', 'celebrate'), ('celebrate', 'myself,'), ('myself,', 'And'), ('And', 'what'), ('what', 'I'), ('I', 'assume'), ('assume', 'you'), ('you', 'shall'), ('shall', 'assume,'), ('assume,', 'For'), ('For', 'every'), ('every', 'atom'), ('atom', 'belonging'), ('belonging', 'to'), ('to', 'me'), ('me', 'as'), ('as', 'good'), ('good', 'belongs'), ('belongs', 'to'), ('to', 'you.')]
-		self.assertEqual(output, expected)
-		self.assertNotEqual(output, self.raw_ngram.ngrams(self.frankenstein, 2))
-
-	def test_PunctNGramminator(self):
-		output = self.punct_ngram.ngrams(self.whitman, 2)
-		expected = [('I', 'celebrate'), ('celebrate', 'myself'), ('myself', 'And'), ('And', 'what'), ('what', 'I'), ('I', 'assume'), ('assume', 'you'), ('you', 'shall'), ('shall', 'assume'), ('assume', 'For'), ('For', 'every'), ('every', 'atom'), ('atom', 'belonging'), ('belonging', 'to'), ('to', 'me'), ('me', 'as'), ('as', 'good'), ('good', 'belongs'), ('belongs', 'to'), ('to', 'you')]
-		self.assertEqual(output, expected)
-		self.assertNotEqual(output, self.punct_ngram.ngrams(self.frankenstein, 2))
-
-	def test_CaseNGramminator(self):
-		output = self.case_ngram.ngrams(self.whitman, 2)
-		expected = [('i', 'celebrate'), ('celebrate', 'myself,'), ('myself,', 'and'), ('and', 'what'), ('what', 'i'), ('i', 'assume'), ('assume', 'you'), ('you', 'shall'), ('shall', 'assume,'), ('assume,', 'for'), ('for', 'every'), ('every', 'atom'), ('atom', 'belonging'), ('belonging', 'to'), ('to', 'me'), ('me', 'as'), ('as', 'good'), ('good', 'belongs'), ('belongs', 'to'), ('to', 'you.')]
-		self.assertEqual(output, expected)
-		self.assertNotEqual(output, self.case_ngram.ngrams(self.frankenstein, 2))
-
-	def test_FullNGramminator(self):
-		output = self.full_ngram.ngrams(self.whitman, 2)
-		expected = [('i', 'celebrate'), ('celebrate', 'myself'), ('myself', 'and'), ('and', 'what'), ('what', 'i'), ('i', 'assume'), ('assume', 'you'), ('you', 'shall'), ('shall', 'assume'), ('assume', 'for'), ('for', 'every'), ('every', 'atom'), ('atom', 'belonging'), ('belonging', 'to'), ('to', 'me'), ('me', 'as'), ('as', 'good'), ('good', 'belongs'), ('belongs', 'to'), ('to', 'you')]
-		self.assertEqual(output, expected)
-		self.assertNotEqual(output, self.full_ngram.ngrams(self.frankenstein, 2))
-
 	def test_TextBubble_rawtokens(self):
 		output = self.test_bubble_1.rawtokens()
 		expected = ['I', 'celebrate', 'myself,', 'And', 'what', 'I', 'assume', 'you', 'shall', 'assume,', 'For', 'every', 'atom', 'belonging', 'to', 'me', 'as', 'good', 'belongs', 'to', 'you.']
@@ -134,6 +106,27 @@ class TestBasics(unittest.TestCase):
 		self.assertEqual(output, expected)
 		self.assertNotEqual(output, unexpected)
 
+	def test_TextBubble_treestrings(self):
+		output = self.test_bubble_1.treestrings()
+		expected = ['( (S (NP (PRP I)) (VP (VBP celebrate) (NP (NN myself,)) (SBAR (CC And) (WP what) (S (NP (PRP I)) (VP (VBP assume) (SBAR (S (NP (PRP you)) (VP (MD shall) (VP (VB assume,) (PP (IN For) (NP (NP (DT every) (NN atom)) (VP (VBG belonging) (PP (TO to) (NP (PRP me)))))) (SBAR (IN as) (S (NP (JJ good)) (VP (VBZ belongs) (S (VP (TO to) (VP (VB you.)))))))))))))))) )']
+		self.assertEqual(output, expected)
+
+	def test_TextBubble_content_words(self):
+		output = self.test_bubble_1.content_words()
+		expected = ['celebrate', 'assume', 'shall', 'assume', 'every', 'atom', 'belonging', 'good', 'belongs']
+		self.assertEqual(output, expected)
+		output = self.test_bubble_1.unique_content_words()
+		expected = ['assume', 'atom', 'belonging', 'belongs', 'celebrate', 'every', 'good', 'shall']
+		self.assertEqual(output, expected)
+
+	def test_TextBubble_function_words(self):
+		output = self.test_bubble_1.function_words()
+		expected = ['i', 'myself', 'and', 'what', 'i', 'you', 'for', 'to', 'me', 'as', 'to', 'you']
+		self.assertEqual(output, expected)
+		output = self.test_bubble_1.unique_function_words()
+		expected = ['and', 'as', 'for', 'i', 'me', 'myself', 'to', 'what', 'you']
+		self.assertEqual(output, expected)
+
 	def test_TextBubble_splat(self):
 		output = self.test_bubble_1.splat()
 		expected = "===== Bubble:\n"
@@ -151,6 +144,42 @@ class TestBasics(unittest.TestCase):
 		expected += "80.9524\n"
 		self.assertEqual(output, expected)
 
+class TestBasics(unittest.TestCase):
+	whitman = "I celebrate myself, And what I assume you shall assume, For every atom belonging to me as good belongs to you."
+	frankenstein = "You will rejoice to hear that no disaster has accompanied the commencement of an enterprise which you have regarded with such evil forebodings."
+	raw_ngram = RawNGramminator()
+	punct_ngram = PunctNGramminator()
+	case_ngram = CaseNGramminator()
+	full_ngram = FullNGramminator()
+	test_bubble_1 = TextBubble(whitman)
+	test_bubble_2 = TextBubble(frankenstein, full_ngram)
+	pos_tagger = POSTagger()
+	p_tokenizer = PunctTokenizer()
+
+	def test_RawNGramminator(self):
+		output = self.raw_ngram.ngrams(self.whitman, 2)
+		expected = [('I', 'celebrate'), ('celebrate', 'myself,'), ('myself,', 'And'), ('And', 'what'), ('what', 'I'), ('I', 'assume'), ('assume', 'you'), ('you', 'shall'), ('shall', 'assume,'), ('assume,', 'For'), ('For', 'every'), ('every', 'atom'), ('atom', 'belonging'), ('belonging', 'to'), ('to', 'me'), ('me', 'as'), ('as', 'good'), ('good', 'belongs'), ('belongs', 'to'), ('to', 'you.')]
+		self.assertEqual(output, expected)
+		self.assertNotEqual(output, self.raw_ngram.ngrams(self.frankenstein, 2))
+
+	def test_PunctNGramminator(self):
+		output = self.punct_ngram.ngrams(self.whitman, 2)
+		expected = [('I', 'celebrate'), ('celebrate', 'myself'), ('myself', 'And'), ('And', 'what'), ('what', 'I'), ('I', 'assume'), ('assume', 'you'), ('you', 'shall'), ('shall', 'assume'), ('assume', 'For'), ('For', 'every'), ('every', 'atom'), ('atom', 'belonging'), ('belonging', 'to'), ('to', 'me'), ('me', 'as'), ('as', 'good'), ('good', 'belongs'), ('belongs', 'to'), ('to', 'you')]
+		self.assertEqual(output, expected)
+		self.assertNotEqual(output, self.punct_ngram.ngrams(self.frankenstein, 2))
+
+	def test_CaseNGramminator(self):
+		output = self.case_ngram.ngrams(self.whitman, 2)
+		expected = [('i', 'celebrate'), ('celebrate', 'myself,'), ('myself,', 'and'), ('and', 'what'), ('what', 'i'), ('i', 'assume'), ('assume', 'you'), ('you', 'shall'), ('shall', 'assume,'), ('assume,', 'for'), ('for', 'every'), ('every', 'atom'), ('atom', 'belonging'), ('belonging', 'to'), ('to', 'me'), ('me', 'as'), ('as', 'good'), ('good', 'belongs'), ('belongs', 'to'), ('to', 'you.')]
+		self.assertEqual(output, expected)
+		self.assertNotEqual(output, self.case_ngram.ngrams(self.frankenstein, 2))
+
+	def test_FullNGramminator(self):
+		output = self.full_ngram.ngrams(self.whitman, 2)
+		expected = [('i', 'celebrate'), ('celebrate', 'myself'), ('myself', 'and'), ('and', 'what'), ('what', 'i'), ('i', 'assume'), ('assume', 'you'), ('you', 'shall'), ('shall', 'assume'), ('assume', 'for'), ('for', 'every'), ('every', 'atom'), ('atom', 'belonging'), ('belonging', 'to'), ('to', 'me'), ('me', 'as'), ('as', 'good'), ('good', 'belongs'), ('belongs', 'to'), ('to', 'you')]
+		self.assertEqual(output, expected)
+		self.assertNotEqual(output, self.full_ngram.ngrams(self.frankenstein, 2))
+
 	def test_POSTagger_tag(self):
 		output = self.pos_tagger.tag(self.whitman.lower())
 		expected = [('i', u'PRP'), ('celebrate', u'VB'), ('myself', u'PRP'), (',', u','), ('and', u'CC'), ('what', u'WP'), ('i', u'PRP'), ('assume', u'VB'), ('you', u'PRP'), ('shall', u'MD'), ('assume', u'VB'), (',', u','), ('for', u'IN'), ('every', u'DT'), ('atom', u'NN'), ('belonging', u'VBG'), ('to', u'TO'), ('me', u'PRP'), ('as', u'IN'), ('good', u'JJ'), ('belongs', u'NNS'), ('to', u'TO'), ('you', u'PRP'), ('.', u'.')]
@@ -163,11 +192,6 @@ class TestBasics(unittest.TestCase):
 	def test_PunctTokenizer(self):
 		output = self.p_tokenizer.tokenize(self.whitman)
 		expected = ['i', 'celebrate', 'myself', ',', 'and', 'what', 'i', 'assume', 'you', 'shall', 'assume', ',', 'for', 'every', 'atom', 'belonging', 'to', 'me', 'as', 'good', 'belongs', 'to', 'you', '.']
-		self.assertEqual(output, expected)
-
-	def test_TextBubble_treestrings(self):
-		output = self.test_bubble_1.treestrings()
-		expected = ['( (S (NP (PRP I)) (VP (VBP celebrate) (NP (NN myself,)) (SBAR (CC And) (WP what) (S (NP (PRP I)) (VP (VBP assume) (SBAR (S (NP (PRP you)) (VP (MD shall) (VP (VB assume,) (PP (IN For) (NP (NP (DT every) (NN atom)) (VP (VBG belonging) (PP (TO to) (NP (PRP me)))))) (SBAR (IN as) (S (NP (JJ good)) (VP (VBZ belongs) (S (VP (TO to) (VP (VB you.)))))))))))))))) )']
 		self.assertEqual(output, expected)
 
 

@@ -42,7 +42,7 @@ def insert_speaker_markers(input_file, out_file=None):
 	with open(input_file) as f:
 		for line in f:
 			print('Please enter a speaker marker for: ' + colored(line, 'green'))
-			marker = raw_input()
+			marker = input()
 			annotated_file.write(marker + ': ' + line)
 
 	annotated_file.close()
@@ -83,13 +83,13 @@ def insert_quarteroni_markers(input_file, out_file=None):
 			while looping:
 				print ('Please select a dialog act for: ' + colored(line, 'green' + '') + 'Or enter \'0\' to continue...')
 				print (q_dialog_acts)
-				marker = raw_input()
+				marker = input()
 				if int(marker) == 0:
 					annotation = annotation[:-2] + ')\n'
 					looping = False
 					break
 				while marker not in q_numbers or int(marker) not in q_dialog_act_dict.keys():
-					marker = raw_input()
+					marker = input()
 
 				annotation += q_dialog_act_dict[int(marker)] + ', '
 
@@ -115,14 +115,14 @@ def insert_meyers_markers(input_file, out_file=None):
 			while looping:
 				print ('Please select a dialog act for: ' + colored(line, 'green' + '') + 'Or enter \'0\' to continue...')
 				print (m_dialog_acts)
-				marker = raw_input()
+				marker = input()
 				if int(marker) == 0:
 					annotation = annotation[:-2] + ')\n'
 					looping = False
 					break
 
 				while marker not in m_numbers or int(marker) not in m_dialog_act_dict.keys():
-					marker = raw_input()
+					marker = input()
 
 				annotation += m_dialog_act_dict[int(marker)] + ', '
 

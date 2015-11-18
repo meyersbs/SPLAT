@@ -1,6 +1,7 @@
 # SPLAT
 ## Speech Processing \& Linguistic Annotation Tool
 
+- - - -
 ## NOTICE
 SPLAT is currently undergoing a massive renovation to provide the following:
 * higher efficiency
@@ -20,7 +21,9 @@ SPLAT is designed to help you annotate text files and it is assumed that most in
 
 - - - -
 ## System Requirements
-Currently, SPLAT has only been tested on 64-bit Ubuntu 15.04 with Python 2.7.9 and Python 3.4.3.
+SPLAT is being developed and tested on 64-bit Ubuntu 15.10 with Python 3.4.3. Minimum requirements include:
+* Python 3.4 or Later
+* NLTK 3.1 or Later
 
 - - - -
 ## Installation
