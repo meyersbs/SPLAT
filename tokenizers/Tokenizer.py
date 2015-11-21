@@ -1,4 +1,5 @@
 #!/usr/bin/python
+from abc import abstractmethod
 
 import os.path
 
@@ -71,6 +72,7 @@ class Tokenizer:
 
 		return tokens
 
+	@abstractmethod
 	def tokenize(self, text):
 		raw_tokens = []
 		if type(text) == str:

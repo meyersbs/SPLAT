@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
-from tag.Tagger import Tagger
-from corpus.Util import EOWL, Google20K, Brown
+from corpus.Util import Brown
 from tokenizers.PunctTokenizer import PunctTokenizer
 
 ########################################################################################################################
@@ -15,7 +14,7 @@ from tokenizers.PunctTokenizer import PunctTokenizer
 ########################################################################################################################
 ########################################################################################################################
 
-class POSTagger(Tagger):
+class POSTagger:
 	"""
 	A POSTagger tokenizes the given input with punctuation as separate tokens, and then does a dictionary lookup to
 	determine the part-of-speech for each token.

@@ -1,13 +1,17 @@
 #!/usr/bin/python
 
+##### PYTHON IMPORTS ###################################################################################################
+import os.path
+
+##### SPLAT IMPORTS ####################################################################################################
 from model.FullNGramminator import FullNGramminator
-from tokenizers.RawTokenizer import RawTokenizer
-from tokenizers.CleanTokenizer import CleanTokenizer
+from parse.TreeStringParser import TreeStringParser
 from sentenizers.CleanSentenizer import CleanSentenizer
 from tag.POSTagger import POSTagger
-from parse.TreeStringGenerator import TreeStringGenerator
+from tokenizers.RawTokenizer import RawTokenizer
+from tokenizers.CleanTokenizer import CleanTokenizer
 import base.Util as Util
-import os.path
+import complexity.Util as cUtil
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
@@ -25,25 +29,23 @@ class TextBubble:
 	A TextBubble is a bubble of text. It can be a single word, a paragraph, or even a whole novel!
 	The TextBubble object makes it super simple to extract features from a selection of text.
 	"""
-	# Word Count, Unique Word Count, Sentence Count, Utterance Count
-	__wordcount, __unique_wordcount, __sentcount, __uttcount = 0, 0, 0, 0
-	# Content-Function Ratio, Average Utterance Length, Type-Token Ratio
-	__cfr, __alu, __ttr = 0.0, 0.0, 0.0
-	# Sentences, Utterances, Raw Tokens, Tokens, Tokens with POS Tags
-	__sentences, __utterances, __rawtokens, __tokens, __pos = [], [], [], [], []
-	# Content Words, Function Words, Unique Content Words, Unique Function Words
+	__wordcount, __unique_wordcount, __sentcount, __uttcount, __maxdepth = 0, 0, 0, 0, 0
+	__cfr, __alu, __ttr, __als, __cdensity, __idensity, __yngve_score, __frazier_score = 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+	__sentences, __utterances, __rawtokens, __tokens, __pos, __treestrings = [], [], [], [], [], []
 	__c_words, __f_words, __uc_words, __uf_words = [], [], [], []
-	# Raw Types, Types
-	__rawtypes, __types = {}, {}
+	__rawtypes, __types, __poscounts, __dpu, __dps, __disfluencies = {}, {}, {}, {}, {}, {}
 	__bubble = ""
 	__ngramminator = FullNGramminator()
 	__cleantokenizer = CleanTokenizer()
 	__rawtokenizer = RawTokenizer()
 	__sentenizer = CleanSentenizer()
 	__postagger = POSTagger()
-	__treestring_gen = TreeStringGenerator()
-	__treestrings = []
-	def __init__(self, text, ngramminator=FullNGramminator(), postagger=POSTagger()):
+	__treestring_gen = TreeStringParser()
+	__freq_dist = None
+	def __init__(self, text, ngramminator=FullNGramminator(), postagger= POSTagger()):
+		"""
+		Creates a TextBubble Object.
+		"""
 		if os.path.exists(text):
 			temp_text = ""
 			temp_utts = []
@@ -63,6 +65,8 @@ class TextBubble:
 
 		self.__uttcount = len(self.__utterances)
 		self.__sentences = self.__sentenizer.sentenize(self.__bubble)
+		if self.__sentences == []:
+			self.__sentences = self.__utterances
 		self.__sentcount = len(self.__sentences)
 		self.__rawtokens = self.__rawtokenizer.tokenize(self.__bubble)
 		self.__tokens = self.__cleantokenizer.tokenize(self.__bubble)
@@ -75,169 +79,240 @@ class TextBubble:
 		self.__ttr = Util.type_token_ratio(self.__types, self.__tokens)
 		self.__pos = self.__postagger.tag(self.__bubble)
 		self.__alu = round(float(self.__wordcount) / float(self.__uttcount), 4)
+		self.__als = round(float(self.__wordcount) / float(self.__sentcount), 4) if self.__sentcount != 0 else 0.0
 		self.__c_words = Util.get_content_words(self.__tokens)
 		self.__f_words = Util.get_function_words(self.__tokens)
 		self.__uc_words = Util.get_unique_content_words(self.__types)
 		self.__uf_words = Util.get_unique_function_words(self.__types)
 		self.__cfr = Util.get_content_function_ratio(self.__tokens)
-		self.__treestring_gen = TreeStringGenerator()
-		self.__treestrings = self.__treestring_gen.get_parse_trees(self.__sentences)
+		self.__treestring_gen = TreeStringParser()
+		self.__treestrings = self.__treestring_gen.get_parse_trees(self.__utterances)
+		self.__maxdepth = Util.get_max_depth(self.__treestrings)
+		self.__cdensity = cUtil.calc_content_density(self.__pos)
+		self.__idensity = cUtil.calc_idea_density(self.__pos)
+		self.__yngve_score = cUtil.get_yngve_score(self.__treestrings)
+		self.__frazier_score = cUtil.get_frazier_score(self.__treestrings)
+		self.__poscounts = Util.get_pos_counts(self.__pos)
+		self.__freq_dist = Util.get_freq_dist(self.__tokens)
+		self.__dpu = Util.count_disfluencies(self.__utterances)
+		self.__dps = Util.count_disfluencies(self.__sentences)
+		self.__disfluencies = Util.total_disfluencies(self.__dpu)
 
 	def bubble(self):
-		"""
-		:return:the raw TextBubble
-		:rtype:str
-		"""
+		""" Returns the raw TextBubble. """
 		return self.__bubble
 
 	def sents(self):
-		"""
-		:return:a list of sentences
-		:rtype:list
-		"""
+		""" Returns a list of all sentences contained within the TextBubble. """
 		return self.__sentences
 
 	def utts(self):
-		"""
-		:return:a list of utterances
-		:rtype:list
-		"""
+		""" Returns a list of all utterances contained within the TextBubble. """
 		return self.__utterances
 
 	def rawtokens(self):
-		"""
-		A list of tokens that have not been normalized.
-		:return:a list of tokens
-		:rtype:list
-		"""
+		""" Returns a list of unnormalized tokens. """
 		return self.__rawtokens
 
 	def tokens(self):
-		"""
-		A list of tokens that have been normalized.
-		:return:a list of tokens
-		:rtype:list
-		"""
+		""" Returns a list of normalized tokens. """
 		return self.__tokens
 
 	def rawtypes(self):
-		"""
-		:return:a list of types
-		:rtype:list
-		"""
+		""" Returns a list of unnormalized types. """
 		return self.__rawtypes
 
 	def types(self):
-		"""
-		:return:a list of types
-		:rtype:list
-		"""
+		""" Returns a list of normalized types. """
 		return self.__types
 
 	def wordcount(self):
-		"""
-		:return:the total wordcount of the TextBubble
-		:rtype:int
-		"""
+		""" Returns the total word (token) count. """
 		return self.__wordcount
 
 	def unique_wordcount(self):
-		"""
-		:return:the number of types in the TextBubble
-		:rtype:int
-		"""
+		""" Returns the unique word (type) count. """
 		return self.__unique_wordcount
 
 	def sentcount(self):
-		"""
-		:return:the number of sentences in the TextBubble
-		:rtype:int
-		"""
+		""" Returns the total sentence count. """
 		return self.__sentcount
 
 	def uttcount(self):
-		"""
-		:return:the number of utterances in the TextBubble
-		:rtype:int
-		"""
+		""" Returns the total utterance count. """
 		return self.__uttcount
 
 	def type_token_ratio(self):
-		"""
-		:return:the type-token ratio of the TextBubble
-		:rtype:float
-		"""
+		""" Returns the ratio of types to tokens. """
 		return self.__ttr
 
 	def unigrams(self):
-		"""
-		:return:a list of unigrams
-		:rtype:list of tuples
-		"""
+		""" Returns a list of unigrams. """
 		return self.__ngramminator.unigrams(self.__bubble)
 
 	def bigrams(self):
-		"""
-		:return:a list of bigrams
-		:rtype:list of tuples
-		"""
+		""" Returns a list of bigrams. """
 		return self.__ngramminator.bigrams(self.__bubble)
 
 	def trigrams(self):
-		"""
-		:return:a list of trigrams
-		:rtype:list of tuples
-		"""
+		""" Returns a list of trigrams. """
 		return self.__ngramminator.trigrams(self.__bubble)
 
 	def ngrams(self, n):
-		"""
-		:return:a list of ngrams of size n
-		:rtype:list of tuples
-		"""
+		""" Returns a list of n-grams. """
 		return self.__ngramminator.ngrams(self.__bubble, n)
 
 	def pos(self):
-		"""
-		:return:a list of tuples(word, tag)
-		:rtype:list of tuples
-		"""
+		""" Returns a list of tuple pairs: (word, POS tag). """
 		return self.__pos
 
 	def average_utterance_length(self):
-		#TODO
+		""" Returns the average utterance length. """
 		return self.__alu
 
+	def average_sentence_length(self):
+		""" Returns the average sentence length. """
+		return self.__als
+
 	def content_function_ratio(self):
+		""" Returns the ratio of content words to function words. """
 		return self.__cfr
 
 	def content_words(self):
+		""" Returns a list of content words. """
 		return self.__c_words
 
 	def function_words(self):
+		""" Returns a list of function words. """
 		return self.__f_words
 
 	def unique_content_words(self):
+		""" Returns a list of unique content words. """
 		return self.__uc_words
 
 	def unique_function_words(self):
+		""" Returns a list of unique function words. """
 		return self.__uf_words
 
 	def treestrings(self):
+		""" Returns a list of parse trees. """
 		return self.__treestrings
 
 	def drawtrees(self):
+		""" Uses matplotlib and nltk to draw syntactic parse trees. """
 		Util.draw_trees(self.__treestrings)
 		return ''
 
 	def words_per_utterance(self):
+		""" Prints the number of words in each utterance. """
 		for item in self.__utterances:
 			print(len(item.split(" ")))
 		return ''
 
 	def words_per_sentence(self):
+		""" Prints the number of words in each sentence. """
 		for item in self.__sentences:
 			print(len(item.split(" ")))
+		return ''
+
+	def content_density(self):
+		"""
+		Returns the Content Density.
+		Content Density is the ratio of open class words to closed class words.
+		"""
+		return self.__cdensity
+
+	def idea_density(self):
+		"""
+		Returns the Idea Density.
+		Idea Density is the ratio of propositions to total word count.
+		"""
+		return self.__idensity
+
+	def yngve_score(self):
+		"""
+		Returns the mean Yngve Score.
+		Yngve score is... http://www.m-mitchell.com/papers/RoarkEtAl-07-SynplexityforMCI.pdf
+		"""
+		return self.__yngve_score
+
+	def frazier_score(self):
+		"""
+		Returns the Frazier Score.
+		Frazier score is... http://www.m-mitchell.com/papers/RoarkEtAl-07-SynplexityforMCI.pdf
+		"""
+		return self.__frazier_score
+
+	def pos_counts(self):
+		""" Returns a dictionary with POS tags as keys and their frequencies as values. """
+		return self.__poscounts
+
+	def max_depth(self):
+		""" Returns the maxdepth of all syntactic parse trees. """
+		return self.__maxdepth
+
+	def get_most_freq(self, x=None):
+		"""
+		Returns the x most frequent words with their frequencies,
+		or all words with their frequencies if x is not specified.
+		"""
+		if x is None:
+			return self.__freq_dist.most_common()
+		elif x > 0:
+			return self.__freq_dist.most_common(x)
+		else:
+			return self.__freq_dist.most_common()
+
+	def get_least_freq(self, x=None):
+		"""
+		Returns the x least frequent words with their frequencies,
+		or all words with their frequencies if x is not specified.
+		"""
+		most_common = self.__freq_dist.most_common()
+		freq_dist = []
+		count = 0
+
+		if x is None:
+			freq_dist = most_common
+		else:
+			for item in reversed(most_common):
+				if count < int(x):
+					freq_dist.append(item)
+					count += 1
+
+		return freq_dist
+
+	def plot_freq(self, x=None):
+		""" Uses matplotlib to graph the frequency distribution. """
+		Util.plot_freq_dist(self.__freq_dist,x)
+		return ''
+
+	def disfluencies_per_utterance(self):
+		""" Displays the number of each type of disfluency per each utterance. """
+		template = "{0:7}{1:7}{2:7}{3:7}{4:7}{5:7}{6:7}{7:7}{8:100}"
+		print(template.format("UM", "UH", "AH", "ER", "HM", "Pauses", "Reps", "Breaks", "Text"))
+		for (k, v) in self.__dpu.items():
+			print(template.format(str(v[0]), str(v[1]), str(v[2]), str(v[3]), str(v[4]), str(v[5]), str(v[6]), str(v[7]), k))
+
+		return ''
+
+	def disfluencies_per_sentence(self):
+		""" Displays the number of each type of disfluency per each sentence. """
+		template = "{0:7}{1:7}{2:7}{3:7}{4:7}{5:7}{6:7}{7:7}{8:100}"
+		print(template.format("UM", "UH", "AH", "ER", "HM", "Pauses", "Reps", "Breaks", "Text"))
+		for (k, v) in self.__dps.items():
+			print(template.format(str(v[0]), str(v[1]), str(v[2]), str(v[3]), str(v[4]), str(v[5]), str(v[6]), str(v[7]), k))
+
+		return ''
+
+	def disfluencies(self):
+		""" Displays the total number of each type of disfluency. """
+		d = self.__disfluencies
+		print("Nasal\tUM\tHM\tNon-Nasal\tUH\tAH\tER\tSilent Pauses\tRepetitions\tBreaks")
+		print(str(d["Nasal"]) + "\t" + str(d["UM"]) + "\t" + str(d["HM"]) + "\t" + str(d["Non-Nasal"]) +
+			  "\t\t" + str(d["UH"]) + "\t" + str(d["AH"]) + "\t" + str(d["ER"]) + "\t" + str(d["Pause"]) +
+			  "\t\t" + str(d["Repetitions"]) + "\t\t" + str(d["Break"]))
+
 		return ''
 
 	def splat(self):

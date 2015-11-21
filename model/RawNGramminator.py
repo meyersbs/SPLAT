@@ -41,3 +41,12 @@ class RawNGramminator(NGramminator):
 				ngram.append(text[i+j])
 			ngram_list.append(tuple(ngram))
 		return ngram_list
+
+	def unigrams(self, text):
+		return self.ngrams(text, 1)
+
+	def bigrams(self, text):
+		return self.ngrams(text, 2)
+
+	def trigrams(self, text):
+		return self.ngrams(text, 3)

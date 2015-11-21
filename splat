@@ -40,7 +40,8 @@ commands = {'--usage':      print_usage_instructions,       '--version':    vers
 			'rmm':          remove_dialog_acts,				'maxdepth':     get_max_depths,
 			'mmstats':      get_meyers_metrics,				'actstats':     get_wc_ds_per_act,
 			'unigrams':		get_unigrams,					'bigrams':		get_bigrams,
-			'trigrams':		get_trigrams,					'ngrams':		get_ngrams}
+			'trigrams':		get_trigrams,					'ngrams':		get_ngrams,
+			"yngve2":		new_yngve}
 ########################################################################################################################
 
 

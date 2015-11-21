@@ -1,8 +1,8 @@
 #!/usr/bin/python
 
-from tokenizers.Tokenizer import Tokenizer
-import os.path
 import re
+
+from tokenizers.Tokenizer import Tokenizer
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################

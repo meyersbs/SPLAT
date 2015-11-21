@@ -1,8 +1,7 @@
 #!/usr/bin/python
 
 import sys, os
-if sys.version_info <= (2, 7):	import cPickle as pkl
-else:							import pickle as pkl
+import pickle
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
@@ -17,8 +16,8 @@ else:							import pickle as pkl
 
 # Each key is a word from the google-20000-english.txt file. Each key maps to a list containing
 curr_dir = os.path.dirname(__file__)
-Google20K = pkl.load(open(curr_dir + '/google-20000-corpus.pkl', 'rb'))
-EOWL = pkl.load(open(curr_dir + '/eowl-corpus.pkl', 'rb'))
-Brown = pkl.load(open(curr_dir + '/brown-corpus.pkl', 'rb'))
-Gutenberg = pkl.load(open(curr_dir + '/gutenberg-corpus.pkl', 'rb'))
-Stopwords = pkl.load(open(curr_dir + '/stopwords-corpus.pkl', 'rb'))
+Google20K = pickle.load(open(curr_dir + '/google-20000-corpus.pkl', 'rb'))
+EOWL = pickle.load(open(curr_dir + '/eowl-corpus.pkl', 'rb'))
+Brown = pickle.load(open(curr_dir + '/brown-corpus.pkl', 'rb'))
+Gutenberg = pickle.load(open(curr_dir + '/gutenberg-corpus.pkl', 'rb'))
+Stopwords = pickle.load(open(curr_dir + '/stopwords-corpus.pkl', 'rb'))

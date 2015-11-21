@@ -1,12 +1,51 @@
+import sys
+import os
+import pickle
 
-import sys, os
-if sys.version_info <= (2, 7):	import cPickle as pkl
-else:							import pickle as pkl
 from base.TextBubble import TextBubble
-from base import Util
 
 my_bubble = None
 commands = {}
+
+def command_message():
+	template = "{0:15}{1:15}{2:15}{3:100}"
+	print(template.format("COMMAND", "ARG1", "ARG2", "DESCRIPTION"))
+	print(template.format("als", "--", "<input_file>", "Display average sentence length."))
+	print(template.format("alu", "--", "<input_file>", "Display average utterance length."))
+	print(template.format("bigrams", "--", "<input_file>", "Display all bigrams."))
+	print(template.format("cdensity", "--", "<input_file>", "Display content density."))
+	print(template.format("cfr", "--", "<input_file>", "Display content-function ratio."))
+	print(template.format("content", "--", "<input_file>", "Display all content words."))
+	print(template.format("disfluencies", "--", "<input_file>", "Display all disfluency counts."))
+	print(template.format("dps", "--", "<input_file>", "Display disfluencies per sentence."))
+	print(template.format("dpu", "--", "<input_file>", "Display disfluencies per utterance."))
+	print(template.format("drawtrees", "--", "<input_file>", "Draw syntactic parse trees."))
+	print(template.format("frazier", "--", "<input_file>", "Display frazier score."))
+	print(template.format("function", "--", "<input_file>", "Display all function words."))
+	print(template.format("idensity", "--", "<input_file>", "Display idea density."))
+	print(template.format("leastfreq", "<x>", "<input_file>", "Display the <x> least frequent words."))
+	print(template.format("maxdepth", "--", "<input_file>", "Display maxdepth of trees."))
+	print(template.format("mostfreq", "<x>", "<input_file>", "Display the <x> most frequent words."))
+	print(template.format("ngrams", "<n>", "<input_file>", "Display all <n>-grams."))
+	print(template.format("plotfreq", "--", "<input_file>", "Plot the <x> most frequent words."))
+	print(template.format("pos", "--", "<input_file>", "Display tokens with POS tags."))
+	print(template.format("poscounts", "--", "<input_file>", "Display counts for each POS tag."))
+	print(template.format("sents", "--", "<input_file>", "Display sentences."))
+	print(template.format("sentcount", "--", "<input_file>", "Display number of sentences."))
+	print(template.format("tokens", "--", "<input_file>", "Display all tokens."))
+	print(template.format("trees", "--", "<input_file>", "Display all parse trees."))
+	print(template.format("trigrams", "--", "<input_file>", "Display all trigrams."))
+	print(template.format("ttr", "--", "<input_file>", "Display type-token ratio."))
+	print(template.format("types", "--", "<input_file>", "Display all types."))
+	print(template.format("ufunction", "--", "<input_file>", "Display all unique function words."))
+	print(template.format("unigrams", "--", "<input_file>", "Display all unigrams."))
+	print(template.format("uttcount", "--", "<input_file>", "Display number of utterances."))
+	print(template.format("utts", "--", "<input_file>", "Display utterances."))
+	print(template.format("uwc", "--", "<input_file>", "Display unique wordcount."))
+	print(template.format("wc", "--", "<input_file>", "Display wordcount."))
+	print(template.format("wps", "--", "<input_file>", "Display words per sentence counts."))
+	print(template.format("wpu", "--", "<input_file>", "Display words per utterance counts."))
+	print(template.format("yngve", "--", "<input_file>", "Display yngve score."))
 
 def usage_message():
 	message = "USAGE: splat <command> <options> <text_source>"
@@ -43,10 +82,10 @@ def run_command(args):
 def load_bubble(args):
 	global my_bubble
 	if os.path.exists(args[-1] + ".pkl"):
-		my_bubble = pkl.load(open(args[-1] + ".pkl", 'rb'))
+		my_bubble = pickle.load(open(args[-1] + ".pkl", 'rb'))
 	else:
 		my_bubble = TextBubble(args[-1])
-		pkl.dump(my_bubble, open(args[-1] + ".pkl", 'wb'), protocol=2)
+		pickle.dump(my_bubble, open(args[-1] + ".pkl", 'wb'), protocol=2)
 
 def setup_commands():
 	global commands
@@ -61,7 +100,14 @@ def setup_commands():
 				"function":my_bubble.function_words,		"ucontent":my_bubble.unique_content_words,
 				"ufunction":my_bubble.unique_function_words,"trees":my_bubble.treestrings,
 				"drawtrees":my_bubble.drawtrees,			"wpu":my_bubble.words_per_utterance,
-				"wps":my_bubble.words_per_sentence,			"utts":my_bubble.utts}
+				"wps":my_bubble.words_per_sentence,			"utts":my_bubble.utts,
+				"cdensity":my_bubble.content_density,		"idensity":my_bubble.idea_density,
+				"yngve":my_bubble.yngve_score,				"frazier":my_bubble.frazier_score,
+				"poscounts":my_bubble.pos_counts,			"maxdepth":my_bubble.max_depth,
+				"mostfreq":my_bubble.get_most_freq,			"leastfreq":my_bubble.get_least_freq,
+				"plotfreq":my_bubble.plot_freq,				"dpu":my_bubble.disfluencies_per_utterance,
+				"dps":my_bubble.disfluencies_per_sentence,	"disfluencies":my_bubble.disfluencies,
+				"als":my_bubble.average_sentence_length}
 
 def main():
 	args = sys.argv
@@ -74,6 +120,8 @@ def main():
 			print(info_message())
 		elif args[1] == "--usage":
 			print(usage_message())
+		elif args[1] == "--commands":
+			command_message()
 	else:
 		load_bubble(args)
 		setup_commands()

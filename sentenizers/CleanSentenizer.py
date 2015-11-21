@@ -1,7 +1,8 @@
 #!/usr/bin/python
 
-from sentenizers.Sentenizer import Sentenizer
 import re
+
+from sentenizers.Sentenizer import Sentenizer
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################

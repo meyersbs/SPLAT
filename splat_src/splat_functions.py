@@ -849,6 +849,29 @@ def get_frazier_score(input_file):
 			pass
 
 	return float(total_frazier_score) / sentences
+
+def new_yngve(treestring):
+	just_pushed = False
+	stack = 0
+	total = 0
+	for char in treestring:
+		if char == "(":
+			just_pushed = True
+			stack += 1
+		elif char == ")":
+			if just_pushed:
+				total += stack
+			just_pushed = False
+			stack -= 1
+
+	return total
+
+def yngve(treestrings):
+	individual_scores = 0
+	for treestring in treestrings:
+		individual_scores += new_yngve(treestring)
+
+	return float(individual_scores) / float(len(treestrings))
 ########################################################################################################################
 ########################################################################################################################
 

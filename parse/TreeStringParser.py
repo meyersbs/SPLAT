@@ -1,6 +1,19 @@
+#!/usr/bin/python
+
 import subprocess, os
 
-class TreeStringGenerator:
+########################################################################################################################
+##### INFORMATION ######################################################################################################
+### @PROJECT_NAME:		SPLAT: Speech Processing and Linguistic Annotation Tool										 ###
+### @VERSION_NUMBER:																								 ###
+### @PROJECT_SITE:		github.com/meyersbs/SPLAT																     ###
+### @AUTHOR_NAME:		Benjamin S. Meyers																			 ###
+### @CONTACT_EMAIL:		bsm9339@rit.edu																				 ###
+### @LICENSE_TYPE:																									 ###
+########################################################################################################################
+########################################################################################################################
+
+class TreeStringParser:
 	curr_dir = os.path.dirname(__file__)
 	__berkeley_path = ""
 	__grammar_path = ""
