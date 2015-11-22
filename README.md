@@ -43,6 +43,15 @@ To uninstall run the following in a command line.
 ```
 
 - - - -
+## General Commands
+```bash
+    splat --commands                # List all available commands
+    splat --help                    # Provide helpful information
+    splat --info                    # Display version and copyright information
+    splat --usage                   # Display basic command line structure
+```
+
+- - - -
 ## Analysis Functionality \& Usage
 #### Types \& Tokens
 ```bash
@@ -58,24 +67,29 @@ To uninstall run the following in a command line.
     splat idensity filename         # Calculate Idea Density
 ```
 #### Yngve \& Frazier Scoring
+(Currently Under Review)
 ```bash
     splat yngve filename            # Calculate Yngve-Score
     splat frazier filename          # Calculate Frazier-Score
 ```
 #### Listing Content \& Function Words
 ```bash
-    splat lfw filename              # List all Function Words
-    splat lcw filename              # List all Content Words
-    splat lufw filename             # Unique Function Words
-    splat lucw filename             # Unique Content Words
+    splat function filename         # List all Function Words
+    splat content filename          # List all Content Words
+    splat ufunction filename        # Unique Function Words
+    splat ucontent filename         # Unique Content Words
     splat cfr filename              # Calculate Content-Function Ratio
 ```
-#### Utterances
+#### Utterances \& Sentences
 ```bash
-    splat utterances filename       # List all Utterances
-    splat alu filename              # Calculate Mean Length Utterance
-    splat numutts filename          # Utterance Count
+    splat utts filename             # List all Utterances
+    splat sents filename            # List all Sentences
+    splat alu filename              # Average Utterance Length
+    splat als filename              # Average Sentence Length
+    splat uttcount filename         # Utterance Count
+    splat sentcount filename        # Sentence Count
     splat wpu filename              # List the Number of Words in each Utterance
+    splat wps filename              # List the number of Words in each Sentence
 ```
 #### Frequency Distributions
 ```bash
@@ -87,10 +101,11 @@ To uninstall run the following in a command line.
 ```bash
     splat disfluencies filename     # Calculate various Disfluency Counts
     splat dpu filename              # List the Number of Disfluencies in each Utterance
+    splat dps filename              # List the Number of Disfluencies in each Sentence
 ```
 #### Parse Trees
 ```bash
-    splat parsetrees filename       # List Parse-Tree Strings for each Utterance
+    splat trees filename            # List Parse-Tree Strings for each Utterance
     splat maxdepth filename         # Calculate Max Tree Depth
     splat drawtrees filename        # Draw Parse Trees
 ```

@@ -7,6 +7,7 @@ from model.FullNGramminator import FullNGramminator
 from base.TextBubble import TextBubble
 from tag.POSTagger import POSTagger
 from tokenizers.PunctTokenizer import PunctTokenizer
+import complexity.Util
 
 class TestTextBubble(unittest.TestCase):
 	whitman = "I celebrate myself, And what I assume you shall assume, For every atom belonging to me as good belongs to you."

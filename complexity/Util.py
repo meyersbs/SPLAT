@@ -4,6 +4,7 @@ import sys
 
 from nltk.tree import Tree
 
+
 from base.Util import open_class_list, ignore_list, proposition_list
 
 ########################################################################################################################
@@ -99,7 +100,7 @@ def get_formatted_trees(treestrings):
 def get_yngve_score(treestrings):
 	""" Average all of the yngve scores for the given input_file. """
 	total_yngve_score = 0
-	for tree_line in get_formatted_trees(treestrings):
+	for tree_line in treestrings:#get_formatted_trees(treestrings):
 		if tree_line.strip() == "":
 			continue
 		tree = Tree.fromstring(tree_line)
@@ -118,7 +119,7 @@ def get_yngve_score(treestrings):
 def get_frazier_score(treestrings):
 	""" Average all of the frazier scores for the given input_file. """
 	sentences, total_frazier_score = 0, 0
-	for tree_line in get_formatted_trees(treestrings):
+	for tree_line in treestrings:#get_formatted_trees(treestrings):
 		if tree_line.strip() == "":
 			continue
 		tree = Tree.fromstring(tree_line)
@@ -135,22 +136,30 @@ def get_frazier_score(treestrings):
 
 	return score
 
-#TODO TEST THIS SHIT
+# The code below is experimental. It's intention is to calculate Yngve and Frazier scores without the overhead of
+# creating NLTK Tree objects and traversing the branches. Instead, it traverses the parenthesis of the treestring.
+
+#TODO TEST THIS
 def new_yngve(treestring):
 	just_pushed = False
 	stack = 0
 	total = 0
-	for char in treestring:
+	child_total = 0
+	tree = "(" + treestring + ")"
+	for char in tree:
 		if char == "(":
 			just_pushed = True
 			stack += 1
 		elif char == ")":
 			if just_pushed:
 				total += stack
+				child_total += 1
 			just_pushed = False
 			stack -= 1
+		else:
+			pass
 
-	return total
+	return float(total) / float(child_total)
 
 def yngve(treestrings):
 	individual_scores = 0

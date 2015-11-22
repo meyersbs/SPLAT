@@ -35,6 +35,7 @@ class TextBubble:
 	__c_words, __f_words, __uc_words, __uf_words = [], [], [], []
 	__rawtypes, __types, __poscounts, __dpu, __dps, __disfluencies = {}, {}, {}, {}, {}, {}
 	__bubble = ""
+	__clean_bubble = ""
 	__ngramminator = FullNGramminator()
 	__cleantokenizer = CleanTokenizer()
 	__rawtokenizer = RawTokenizer()
@@ -42,6 +43,7 @@ class TextBubble:
 	__postagger = POSTagger()
 	__treestring_gen = TreeStringParser()
 	__freq_dist = None
+	__ex_yngve, __ex_frazier = 0.0, 0.0
 	def __init__(self, text, ngramminator=FullNGramminator(), postagger= POSTagger()):
 		"""
 		Creates a TextBubble Object.
@@ -61,7 +63,7 @@ class TextBubble:
 				temp_utts.append(line.strip())
 			self.__utterances = temp_utts
 		else:
-			raise ValueError("textbubble must be of type str")
+			raise ValueError("WARNING: TextBubble must be of type str or file.")
 
 		self.__uttcount = len(self.__utterances)
 		self.__sentences = self.__sentenizer.sentenize(self.__bubble)
@@ -86,12 +88,14 @@ class TextBubble:
 		self.__uf_words = Util.get_unique_function_words(self.__types)
 		self.__cfr = Util.get_content_function_ratio(self.__tokens)
 		self.__treestring_gen = TreeStringParser()
-		self.__treestrings = self.__treestring_gen.get_parse_trees(self.__utterances)
-		self.__maxdepth = Util.get_max_depth(self.__treestrings)
+		self.__treestrings = None
+		self.__maxdepth = None
+		self.__yngve_score = None
+		self.__frazier_score = None
+		self.__ex_yngve = None
+		self.__ex_yngve = None
 		self.__cdensity = cUtil.calc_content_density(self.__pos)
 		self.__idensity = cUtil.calc_idea_density(self.__pos)
-		self.__yngve_score = cUtil.get_yngve_score(self.__treestrings)
-		self.__frazier_score = cUtil.get_frazier_score(self.__treestrings)
 		self.__poscounts = Util.get_pos_counts(self.__pos)
 		self.__freq_dist = Util.get_freq_dist(self.__tokens)
 		self.__dpu = Util.count_disfluencies(self.__utterances)
@@ -196,10 +200,16 @@ class TextBubble:
 
 	def treestrings(self):
 		""" Returns a list of parse trees. """
+		if self.__treestrings is None:
+			self.__treestring_gen = TreeStringParser()
+			self.__treestrings = self.__treestring_gen.get_parse_trees(self.__utterances)
 		return self.__treestrings
 
 	def drawtrees(self):
 		""" Uses matplotlib and nltk to draw syntactic parse trees. """
+		if self.__treestrings is None:
+			self.__treestring_gen = TreeStringParser()
+			self.__treestrings = self.__treestring_gen.get_parse_trees(self.__utterances)
 		Util.draw_trees(self.__treestrings)
 		return ''
 
@@ -229,19 +239,47 @@ class TextBubble:
 		"""
 		return self.__idensity
 
-	def yngve_score(self):
+	def tree_based_yngve_score(self):
 		"""
 		Returns the mean Yngve Score.
 		Yngve score is... http://www.m-mitchell.com/papers/RoarkEtAl-07-SynplexityforMCI.pdf
 		"""
-		return self.__yngve_score
+		#if self.__yngve_score is None:
+		#	self.__yngve_score = cUtil.get_yngve_score(self.__treestrings)
+		#return self.__yngve_score
+		print("WARNING: Yngve Score calculation is under review, and thus not available at this time.")
+		return ''
 
-	def frazier_score(self):
+	def string_based_yngve_score(self):
+		"""
+		Returns the mean Yngve Score.
+		Yngve score is... http://www.m-mitchell.com/papers/RoarkEtAl-07-SynplexityforMCI.pdf
+		"""
+		#if self.__ex_yngve is None:
+		#	self.__ex_yngve = cUtil.yngve(self.__treestrings)
+		print("WARNING: Yngve Score calculation is under review, and thus not available at this time.")
+		return ''
+		#return self.__ex_yngve
+
+	def tree_based_frazier_score(self):
 		"""
 		Returns the Frazier Score.
 		Frazier score is... http://www.m-mitchell.com/papers/RoarkEtAl-07-SynplexityforMCI.pdf
 		"""
-		return self.__frazier_score
+		#if self.__frazier_score is None:
+		#	self.__frazier_score = cUtil.get_frazier_score(self.__treestrings)
+		print("WARNING: Frazier Score calculation is under review, and thus not available at this time.")
+		return ''
+		#return self.__frazier_score
+
+	def string_based_frazier_score(self):
+		"""
+		Returns the Frazier Score.
+		Frazier score is... http://www.m-mitchell.com/papers/RoarkEtAl-07-SynplexityforMCI.pdf
+		"""
+		print("WARNING: Frazier Score calculation is under review, and thus not available at this time.")
+		return ''
+		#return self.__frazier_score
 
 	def pos_counts(self):
 		""" Returns a dictionary with POS tags as keys and their frequencies as values. """
@@ -249,6 +287,11 @@ class TextBubble:
 
 	def max_depth(self):
 		""" Returns the maxdepth of all syntactic parse trees. """
+		if self.__treestrings is None:
+			self.__treestring_gen = TreeStringParser()
+			self.__treestrings = self.__treestring_gen.get_parse_trees(self.__utterances)
+		if self.__maxdepth is None:
+			self.__maxdepth = Util.get_max_depth(self.__treestrings)
 		return self.__maxdepth
 
 	def get_most_freq(self, x=None):

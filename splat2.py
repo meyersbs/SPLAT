@@ -1,6 +1,4 @@
-import sys
-import os
-import pickle
+import sys, os, pickle, subprocess
 
 from base.TextBubble import TextBubble
 
@@ -70,6 +68,22 @@ def info_message():
 	prog_info += "\n#################################################################"
 	return prog_info
 
+def check_dependencies():
+	try:
+		import nltk
+	except ImportError:
+		print("WARNING: The python library NLTK could not be imported. Some functionality may not be available without NLTK.")
+	try:
+		import matplotlib
+	except ImportError:
+		print("WARNING: The python library matplotlib could not be imported. Some functionality may not be available without matplotlib.")
+	#java_status = subprocess.Popen(['java', '-version'], stdout=subprocess.PIPE).communicate()[0].decode("utf-8")
+	#print(java_status)
+	#print(type(java_status))
+	#if os.system("java -version") == "":
+	#	print("WARNING: Java could not be located. Some functionality may not be available without Java.")
+
+
 def run_command(args):
 	command = args[1]
 	if command not in commands.keys():
@@ -81,39 +95,45 @@ def run_command(args):
 
 def load_bubble(args):
 	global my_bubble
-	if os.path.exists(args[-1] + ".pkl"):
-		my_bubble = pickle.load(open(args[-1] + ".pkl", 'rb'))
+	if os.path.exists(args[-1] + ".splat"):
+		my_bubble = pickle.load(open(args[-1] + ".splat", 'rb'))
 	else:
 		my_bubble = TextBubble(args[-1])
-		pickle.dump(my_bubble, open(args[-1] + ".pkl", 'wb'), protocol=2)
+		pickle.dump(my_bubble, open(args[-1] + ".splat", 'wb'), protocol=2)
+
+def save_bubble(args):
+	global my_bubble
+	pickle.dump(my_bubble, open(args[-1] + ".splat", "wb"), protocol=2)
 
 def setup_commands():
 	global commands
-	commands = {"wc":my_bubble.wordcount, 					"uwc":my_bubble.unique_wordcount,
-				"tokens":my_bubble.tokens, 					"types":my_bubble.types,
-				"sents":my_bubble.sents, 					"sentcount":my_bubble.sentcount,
-				"ttr":my_bubble.type_token_ratio,			"ngrams":my_bubble.ngrams,
-				"pos":my_bubble.pos,						"alu":my_bubble.average_utterance_length,
-				"cfr":my_bubble.content_function_ratio,		"uttcount":my_bubble.uttcount,
-				"unigrams":my_bubble.unigrams,				"bigrams":my_bubble.bigrams,
-				"trigrams":my_bubble.trigrams,				"content":my_bubble.content_words,
-				"function":my_bubble.function_words,		"ucontent":my_bubble.unique_content_words,
-				"ufunction":my_bubble.unique_function_words,"trees":my_bubble.treestrings,
-				"drawtrees":my_bubble.drawtrees,			"wpu":my_bubble.words_per_utterance,
-				"wps":my_bubble.words_per_sentence,			"utts":my_bubble.utts,
-				"cdensity":my_bubble.content_density,		"idensity":my_bubble.idea_density,
-				"yngve":my_bubble.yngve_score,				"frazier":my_bubble.frazier_score,
-				"poscounts":my_bubble.pos_counts,			"maxdepth":my_bubble.max_depth,
-				"mostfreq":my_bubble.get_most_freq,			"leastfreq":my_bubble.get_least_freq,
-				"plotfreq":my_bubble.plot_freq,				"dpu":my_bubble.disfluencies_per_utterance,
-				"dps":my_bubble.disfluencies_per_sentence,	"disfluencies":my_bubble.disfluencies,
-				"als":my_bubble.average_sentence_length}
+	commands = {"wc":my_bubble.wordcount, 						"uwc":my_bubble.unique_wordcount,
+				"tokens":my_bubble.tokens, 						"types":my_bubble.types,
+				"sents":my_bubble.sents, 						"sentcount":my_bubble.sentcount,
+				"ttr":my_bubble.type_token_ratio,				"ngrams":my_bubble.ngrams,
+				"pos":my_bubble.pos,							"alu":my_bubble.average_utterance_length,
+				"cfr":my_bubble.content_function_ratio,			"uttcount":my_bubble.uttcount,
+				"unigrams":my_bubble.unigrams,					"bigrams":my_bubble.bigrams,
+				"trigrams":my_bubble.trigrams,					"content":my_bubble.content_words,
+				"function":my_bubble.function_words,			"ucontent":my_bubble.unique_content_words,
+				"ufunction":my_bubble.unique_function_words,	"trees":my_bubble.treestrings,
+				"drawtrees":my_bubble.drawtrees,				"wpu":my_bubble.words_per_utterance,
+				"wps":my_bubble.words_per_sentence,				"utts":my_bubble.utts,
+				"cdensity":my_bubble.content_density,			"idensity":my_bubble.idea_density,
+				"yngve":my_bubble.tree_based_yngve_score,		"frazier":my_bubble.tree_based_frazier_score,
+				"poscounts":my_bubble.pos_counts,				"maxdepth":my_bubble.max_depth,
+				"mostfreq":my_bubble.get_most_freq,				"leastfreq":my_bubble.get_least_freq,
+				"plotfreq":my_bubble.plot_freq,					"dpu":my_bubble.disfluencies_per_utterance,
+				"dps":my_bubble.disfluencies_per_sentence,		"disfluencies":my_bubble.disfluencies,
+				"als":my_bubble.average_sentence_length,		"exyngve":my_bubble.string_based_yngve_score,
+				"exfrazier":my_bubble.string_based_frazier_score}
 
 def main():
 	args = sys.argv
 	if len(args) < 2:
 		sys.exit("WARNING: Invalid input. Try '--help' for more details.")
 	elif len(args) == 2:
+		check_dependencies()
 		if args[1] == "--help":
 			print(help_message())
 		elif args[1] == "--info":
@@ -123,9 +143,11 @@ def main():
 		elif args[1] == "--commands":
 			command_message()
 	else:
+		check_dependencies()
 		load_bubble(args)
 		setup_commands()
 		run_command(args[:-1])
+		save_bubble(args)
 
 if __name__ == "__main__":
 	main()

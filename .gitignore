@@ -10,6 +10,7 @@ documentation/**/*
 .idea/**/*
 ### File Types
 *~
+/test2.py
 *.pyc
 
 transfer_time.py
