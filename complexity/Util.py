@@ -111,7 +111,7 @@ def get_yngve_score(treestrings):
 			mean_yngve_score = float(raw_yngve_score) / float(get_word_score(tree))
 			total_yngve_score += mean_yngve_score
 		except ZeroDivisionError:
-			print('WARNING: ZeroDivisionError for the tree: ' + str(tree), file=sys.stderr)
+			print('WARNING: ZeroDivisionError for the tree: ' + str(tree))
 			pass
 
 	score = float(total_yngve_score) / float(len(treestrings)) if len(treestrings) != 0 else 0
@@ -131,7 +131,7 @@ def get_frazier_score(treestrings):
 			mean_frazier_score = float(raw_frazier_score) / float(get_word_score(tree))
 			total_frazier_score += mean_frazier_score
 		except ZeroDivisionError:
-			print('WARNING: ZeroDisvisionError for the tree: ' + str(tree), file=sys.stderr)
+			print('WARNING: ZeroDisvisionError for the tree: ' + str(tree))
 			pass
 
 	score = float(total_frazier_score) / float(len(treestrings)) if len(treestrings) != 0 else 0
