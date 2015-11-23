@@ -2,14 +2,6 @@
 ## Speech Processing \& Linguistic Annotation Tool
 
 - - - -
-## NOTICE
-SPLAT is currently undergoing a massive renovation to provide the following:
-* higher efficiency
-* ability to be imported as a python package
-* cleaner command-line-interface
-* minimal (hopefully none) dependency on outside libraries
-
-- - - -
 ## Contact Information
 &nbsp;&nbsp;&nbsp;&nbsp;Benjamin S. Meyers < <bsm9339@rit.edu> >
 
@@ -23,23 +15,22 @@ SPLAT is designed to help you annotate text files and it is assumed that most in
 ## System Requirements
 SPLAT is being developed and tested on 64-bit Ubuntu 15.10 with Python 3.4.3. Minimum requirements include:
 * Python 3.4 or Later
-* NLTK 3.1 or Later
+* NLTK 3.1 or Later (for frequency distributions and Tree structures)
+* Java (for the Berkeley Parser)
 
 - - - -
 ## Installation
-Ensure that Python is installed on your machine.
-
-Run the following in a command line.
+1. Ensure that Python is installed on your machine.
+2. Download the install file: [install.sh](/install.sh)
+3. Run the following in a command line:
 ``` bash
-    cd /path/to/dir/SPLAT
-    bash setup
-    bash install
+    chmod +x path/to/install.sh
+    ./path/to/install.sh
 ```
 
 To uninstall run the following in a command line.
 ```bash
-    cd /path/to/dir/SPLAT
-    bash uninstall
+    rm -rf ~/.SPLAT
 ```
 
 - - - -
@@ -49,6 +40,7 @@ To uninstall run the following in a command line.
     splat --help                    # Provide helpful information
     splat --info                    # Display version and copyright information
     splat --usage                   # Display basic command line structure
+    splat bubble filename           # Display the raw text from the file
 ```
 
 - - - -
@@ -61,16 +53,17 @@ To uninstall run the following in a command line.
     splat wc filename               # Word Count (Token Count)
     splat uwc filename              # Unique Word Count (Type Count)
 ```
-#### Content \& Idea Density Calculation
+##### Parts-Of-Speech
+```bash
+    splat pos filename              # List Tokens with their Parts-Of-Speech
+    splat poscounts filename        # List Part-Of-Speech Tags with their Frequencies
+```
+#### Syntactic Complexity
 ```bash
     splat cdensity filename         # Calculate Content-Density
     splat idensity filename         # Calculate Idea Density
-```
-#### Yngve \& Frazier Scoring
-(Currently Under Review)
-```bash
-    splat yngve filename            # Calculate Yngve-Score
-    splat frazier filename          # Calculate Frazier-Score
+    splat yngve filename            # (UNDER REVIEW) Calculate Yngve-Score
+    splat frazier filename          # (UNDER REVIEW) Calculate Frazier-Score
 ```
 #### Listing Content \& Function Words
 ```bash
@@ -100,17 +93,17 @@ To uninstall run the following in a command line.
 #### Disfluencies
 ```bash
     splat disfluencies filename     # Calculate various Disfluency Counts
+    splat dpa filename              # List the Number of Disfluencies per each Dialog Act
     splat dpu filename              # List the Number of Disfluencies in each Utterance
     splat dps filename              # List the Number of Disfluencies in each Sentence
 ```
-#### Parse Trees
+#### Syntactic Parsing
 ```bash
     splat trees filename            # List Parse-Tree Strings for each Utterance
     splat maxdepth filename         # Calculate Max Tree Depth
     splat drawtrees filename        # Draw Parse Trees
 ```
-
-#### N-Grams
+#### Language Modeling
 ```bash
     splat unigrams filename         # List all Unigrams
     splat bigrams filename          # List all Bigrams
@@ -118,37 +111,22 @@ To uninstall run the following in a command line.
     splat ngrams filename n         # List all n-grams
 ```
 
-#### Dialog Acts
-```bash
-    splat actstats filename         # List Word/Disfluency counts per Utterance per Act
-```
-
 - - - -
 ## Annotation Functionality \& Usage
-#### Speaker Markers
 ```bash
-    splat ism filename *outfile     # Insert Speaker Markers
-    splat rsm filename *outfile     # Remove Speaker Markers
-```
-#### Quarteroni Dialog-Acts
-```bash
-    splat iqm filename *outfile     # Insert Dialog-Acts
-    splat rqm filename *outfile     # Remove Dialog-Acts
-```
-#### Meyers Dialog-Acts
-```bash
-    splat imm filename *outfile     # Insert Meyers Dialog-Acts
-    splat rmm filename *outfile     # Remove Meyers Dialog-Acts
-```
-
-#### Utterance Boundaries
-```bash
-    splat iub filename *outfile     # Insert Utterance Boundaries
-    splat rub filename *outfile     # Remove Utterance Boundaries
+    splat annotate filename         # Semi-Automatically annotate the Utterances
 ```
 
 - - - -
 ## Release Notes
+#### Release 3.0
+* SPLAT has been reorganized into packages so that it can either be used as a Python library, or as a command-line tool.
+* The command-line interface has been cleaned up, and hopefully looks better.
+* Dependencies on non-standard libraries have been greatly reduced.
+  * NLTK is a requirement for frequency distributions and Tree structures. This will hopefully change soon.
+  * The Berkeley Parser has been packaged with SPLAT in order for parse trees to be generated. This is likely a permanent dependency. 
+* SPLAT functions have been optimized to increase efficiency and User satisfaction.
+
 #### Release 2.0
 * The Berkeley Parser and NLTK have been integrated with the application.
 * The provided functionality is, for the most part, complete - that is, there isn't much more I plan to add at this time.
@@ -160,16 +138,13 @@ To uninstall run the following in a command line.
 - - - -
 ## Acknowledgments
 I would like to thank Emily Prud'hommeaux and Cissi Ovesdotter-Alm for their guidance during my initial development process. I would also like to thank Bryan Meyers, my brother, letting me bounce ideas off of him, and for giving me wake-up calls when I was doing something in the less-than-intelligent (stupid) way.
-
-&nbsp;&nbsp;&nbsp;&nbsp;Emily Tucker Prud'hommeaux < <emilypx@rit.edu> > < [CLaSP](http://www.rit.edu/clasp/people.html) >
-
-&nbsp;&nbsp;&nbsp;&nbsp;Cissi Ovesdotter-Alm < <coacla@rit.edu> > < [CLaSP](http://www.rit.edu/clasp/people.html) >
-
-&nbsp;&nbsp;&nbsp;&nbsp;Bryan T. Meyers < <bmeyers@datadrake.com> > < [DataDrake](http://www.datadrake.com/) > < 
-[GitHub](https://github.com/DataDrake) >
+* Emily Tucker Prud'hommeaux < <emilypx@rit.edu> > < [CLaSP](http://www.rit.edu/clasp/people.html) >
+* Cissi Ovesdotter-Alm < <coacla@rit.edu> > < [CLaSP](http://www.rit.edu/clasp/people.html) >
+* Bryan T. Meyers < <bmeyers@datadrake.com> > < [DataDrake](http://www.datadrake.com/) > < [GitHub](https://github.com/DataDrake) >
 
 - - - -
 ## Licensing
+See [LICENSE.md](/LICENSE.md).
 The files listed below are part of the [Berkeley Parser](https://github.com/slavpetrov/berkeleyparser):
 * BerkeleyParser-1.7.jar
 * eng_sm6.gr
