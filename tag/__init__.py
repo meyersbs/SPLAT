@@ -10,3 +10,10 @@
 ### @LICENSE_TYPE:																									 ###
 ########################################################################################################################
 ########################################################################################################################
+
+"""
+This package contains the following files:
+	[01] POSTagger.py
+			Provides the functionality to tokenize the given input with punctuation as separate tokens, and then does
+			a dictionary lookup to determine the part-of-speech for each token.
+"""

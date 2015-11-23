@@ -11,7 +11,16 @@
 ########################################################################################################################
 ########################################################################################################################
 
-class FrazierScore:
-	fscore = -999
+class SpeakerIndicatorAnnotator:
 	def __init__(self):
-		raise NotImplementedError()
+		pass
+
+	def annotate(self, text):
+		annotated_text = ""
+		for line in text.split("\n"):
+			if line != "":
+				print('Please enter a speaker marker for:\t' + line)
+				marker = input()
+				annotated_text += marker + ": " + line + "\n"
+
+		return annotated_text

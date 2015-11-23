@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 ##### PYTHON IMPORTS ###################################################################################################
-import os.path
+import os.path, sys
 
 ##### SPLAT IMPORTS ####################################################################################################
 from model.FullNGramminator import FullNGramminator
@@ -10,6 +10,8 @@ from sentenizers.CleanSentenizer import CleanSentenizer
 from tag.POSTagger import POSTagger
 from tokenizers.RawTokenizer import RawTokenizer
 from tokenizers.CleanTokenizer import CleanTokenizer
+from annotation.MeyersDialogActAnnotator import MeyersDialogActAnnotator
+from annotation.SpeakerIndicatorAnnotator import SpeakerIndicatorAnnotator
 import base.Util as Util
 import complexity.Util as cUtil
 
@@ -35,14 +37,15 @@ class TextBubble:
 	__c_words, __f_words, __uc_words, __uf_words = [], [], [], []
 	__rawtypes, __types, __poscounts, __dpu, __dps, __disfluencies = {}, {}, {}, {}, {}, {}
 	__bubble = ""
-	__clean_bubble = ""
+	__annotated_bubble, __freq_dist, __dpa = None, None, None
 	__ngramminator = FullNGramminator()
 	__cleantokenizer = CleanTokenizer()
 	__rawtokenizer = RawTokenizer()
 	__sentenizer = CleanSentenizer()
 	__postagger = POSTagger()
 	__treestring_gen = TreeStringParser()
-	__freq_dist = None
+	__meyers_annotator = MeyersDialogActAnnotator()
+	__speaker_annotator = SpeakerIndicatorAnnotator()
 	__ex_yngve, __ex_frazier = 0.0, 0.0
 	def __init__(self, text, ngramminator=FullNGramminator(), postagger= POSTagger()):
 		"""
@@ -80,7 +83,7 @@ class TextBubble:
 		self.__postagger = postagger
 		self.__ttr = Util.type_token_ratio(self.__types, self.__tokens)
 		self.__pos = self.__postagger.tag(self.__bubble)
-		self.__alu = round(float(self.__wordcount) / float(self.__uttcount), 4)
+		self.__alu = round(float(self.__wordcount) / float(self.__uttcount), 4) if self.__uttcount != 0 else 0.0
 		self.__als = round(float(self.__wordcount) / float(self.__sentcount), 4) if self.__sentcount != 0 else 0.0
 		self.__c_words = Util.get_content_words(self.__tokens)
 		self.__f_words = Util.get_function_words(self.__tokens)
@@ -94,6 +97,8 @@ class TextBubble:
 		self.__frazier_score = None
 		self.__ex_yngve = None
 		self.__ex_yngve = None
+		self.__annotated_bubble = None
+		self.__dpa = None
 		self.__cdensity = cUtil.calc_content_density(self.__pos)
 		self.__idensity = cUtil.calc_idea_density(self.__pos)
 		self.__poscounts = Util.get_pos_counts(self.__pos)
@@ -105,6 +110,32 @@ class TextBubble:
 	def bubble(self):
 		""" Returns the raw TextBubble. """
 		return self.__bubble
+
+	def annotated_bubble(self):
+		""" Returns the annotated TextBubble. """
+		if self.__annotated_bubble is None:
+			self.__meyers_annotator = MeyersDialogActAnnotator()
+			temp_bubble = self.__meyers_annotator.annotate(self.__utterances)
+			self.__speaker_annotator = SpeakerIndicatorAnnotator()
+			self.__annotated_bubble = self.__speaker_annotator.annotate(temp_bubble)
+			return self.__annotated_bubble
+		else:
+			return self.__annotated_bubble
+
+	def disfluencies_per_act(self):
+		"""
+		If the User has not annotated the TextBubble, give a warning message.
+		Otherwise, print out the disfluency statistics per dialog act.
+		"""
+		if self.__annotated_bubble is None:
+			sys.exit("WARNING: No annotations are present. Try 'splat annotate <filename>'.")
+		if self.__dpa is None:
+			self.__dpa = Util.get_disfluencies_per_act(self.__annotated_bubble)
+		template = "{0:7}{1:7}{2:7}{3:7}{4:7}{5:7}{6:7}{7:7}{8:100}"
+		print(template.format("UM", "UH", "AH", "ER", "HM", "Pauses", "Reps", "Breaks", "Dialog Act"))
+		for (k, v) in self.__dpa.items():
+			print(template.format(str(v[0]), str(v[1]), str(v[2]), str(v[3]), str(v[4]), str(v[5]), str(v[6]), str(v[7]), k))
+		return ''
 
 	def sents(self):
 		""" Returns a list of all sentences contained within the TextBubble. """
@@ -244,9 +275,6 @@ class TextBubble:
 		Returns the mean Yngve Score.
 		Yngve score is... http://www.m-mitchell.com/papers/RoarkEtAl-07-SynplexityforMCI.pdf
 		"""
-		#if self.__yngve_score is None:
-		#	self.__yngve_score = cUtil.get_yngve_score(self.__treestrings)
-		#return self.__yngve_score
 		print("WARNING: Yngve Score calculation is under review, and thus not available at this time.")
 		return ''
 
@@ -255,22 +283,16 @@ class TextBubble:
 		Returns the mean Yngve Score.
 		Yngve score is... http://www.m-mitchell.com/papers/RoarkEtAl-07-SynplexityforMCI.pdf
 		"""
-		#if self.__ex_yngve is None:
-		#	self.__ex_yngve = cUtil.yngve(self.__treestrings)
 		print("WARNING: Yngve Score calculation is under review, and thus not available at this time.")
 		return ''
-		#return self.__ex_yngve
 
 	def tree_based_frazier_score(self):
 		"""
 		Returns the Frazier Score.
 		Frazier score is... http://www.m-mitchell.com/papers/RoarkEtAl-07-SynplexityforMCI.pdf
 		"""
-		#if self.__frazier_score is None:
-		#	self.__frazier_score = cUtil.get_frazier_score(self.__treestrings)
 		print("WARNING: Frazier Score calculation is under review, and thus not available at this time.")
 		return ''
-		#return self.__frazier_score
 
 	def string_based_frazier_score(self):
 		"""
@@ -279,7 +301,6 @@ class TextBubble:
 		"""
 		print("WARNING: Frazier Score calculation is under review, and thus not available at this time.")
 		return ''
-		#return self.__frazier_score
 
 	def pos_counts(self):
 		""" Returns a dictionary with POS tags as keys and their frequencies as values. """
@@ -332,19 +353,19 @@ class TextBubble:
 
 	def disfluencies_per_utterance(self):
 		""" Displays the number of each type of disfluency per each utterance. """
-		template = "{0:7}{1:7}{2:7}{3:7}{4:7}{5:7}{6:7}{7:7}{8:100}"
-		print(template.format("UM", "UH", "AH", "ER", "HM", "Pauses", "Reps", "Breaks", "Text"))
+		template = "{0:7}{1:7}{2:7}{3:7}{4:7}{5:7}{6:7}{7:7}{8:7}{9:50}"
+		print(template.format("UM", "UH", "AH", "ER", "HM", "Pauses", "Reps", "Breaks", "Words", "Text"))
 		for (k, v) in self.__dpu.items():
-			print(template.format(str(v[0]), str(v[1]), str(v[2]), str(v[3]), str(v[4]), str(v[5]), str(v[6]), str(v[7]), k))
+			print(template.format(str(v[0]), str(v[1]), str(v[2]), str(v[3]), str(v[4]), str(v[5]), str(v[6]), str(v[7]), str(v[8]), k))
 
 		return ''
 
 	def disfluencies_per_sentence(self):
 		""" Displays the number of each type of disfluency per each sentence. """
-		template = "{0:7}{1:7}{2:7}{3:7}{4:7}{5:7}{6:7}{7:7}{8:100}"
-		print(template.format("UM", "UH", "AH", "ER", "HM", "Pauses", "Reps", "Breaks", "Text"))
+		template = "{0:7}{1:7}{2:7}{3:7}{4:7}{5:7}{6:7}{7:7}{8:7}{9:50}"
+		print(template.format("UM", "UH", "AH", "ER", "HM", "Pauses", "Reps", "Breaks", "Words", "Text"))
 		for (k, v) in self.__dps.items():
-			print(template.format(str(v[0]), str(v[1]), str(v[2]), str(v[3]), str(v[4]), str(v[5]), str(v[6]), str(v[7]), k))
+			print(template.format(str(v[0]), str(v[1]), str(v[2]), str(v[3]), str(v[4]), str(v[5]), str(v[6]), str(v[7]), str(v[8]), k))
 
 		return ''
 

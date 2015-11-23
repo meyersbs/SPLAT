@@ -1,18 +1,15 @@
 ### Specific Files
 output.txt
 reference_data/graham_neubig.py
-splat_tests.py
+/splat_tests.py
+/emily_features.sh
+/test2.py
 ### Directories
 asd_data/**/*
 test_data/**/*
 reference_data/**/*
-documentation/**/*
 .idea/**/*
 ### File Types
 *~
-/test2.py
 *.pyc
 
-transfer_time.py
-transfer_time.py.save
-emily_features.sh

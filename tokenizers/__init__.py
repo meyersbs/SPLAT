@@ -10,3 +10,16 @@
 ### @LICENSE_TYPE:																									 ###
 ########################################################################################################################
 ########################################################################################################################
+
+"""
+This package contains the following files:
+	[01] CleanTokenizer.py
+			Provides the functionality to tokenize a given text input, removing all punctuation before generating
+			tokens.
+	[02] PunctTokenizer.py
+			Provides the functionality to tokenize a given text input, treating punctuation as separate tokens.
+	[03] RawTokenizer.py
+			Provides the functionality to tokenize a given text input with no pre-processing or normalizing.
+	[04] Tokenizer.py
+			An abstract class that is implemented by the other Tokenizers in this directory.
+"""

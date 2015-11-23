@@ -1,20 +1,40 @@
+#!/usr/bin/python
+
+##### PYTHON IMPORTS ###################################################################################################
 import sys, os, pickle, subprocess
 
+##### SPLAT IMPORTS ####################################################################################################
 from base.TextBubble import TextBubble
 
+##### GLOBAL VARIABLES #################################################################################################
 my_bubble = None
 commands = {}
 
+########################################################################################################################
+##### INFORMATION ######################################################################################################
+### @PROJECT_NAME:		SPLAT: Speech Processing and Linguistic Annotation Tool										 ###
+### @VERSION_NUMBER:																								 ###
+### @PROJECT_SITE:		github.com/meyersbs/SPLAT																     ###
+### @AUTHOR_NAME:		Benjamin S. Meyers																			 ###
+### @CONTACT_EMAIL:		bsm9339@rit.edu																				 ###
+### @LICENSE_TYPE:																									 ###
+########################################################################################################################
+########################################################################################################################
+
 def command_message():
+	""" Display all available commands and their descriptions. """
 	template = "{0:15}{1:15}{2:15}{3:100}"
 	print(template.format("COMMAND", "ARG1", "ARG2", "DESCRIPTION"))
 	print(template.format("als", "--", "<input_file>", "Display average sentence length."))
 	print(template.format("alu", "--", "<input_file>", "Display average utterance length."))
+	print(template.format("annotate", "--", "<input_file>", "Display the annotated TextBubble."))
 	print(template.format("bigrams", "--", "<input_file>", "Display all bigrams."))
+	print(template.format("bubble", "--", "<input_file>", "Display the raw TextBubble."))
 	print(template.format("cdensity", "--", "<input_file>", "Display content density."))
 	print(template.format("cfr", "--", "<input_file>", "Display content-function ratio."))
 	print(template.format("content", "--", "<input_file>", "Display all content words."))
 	print(template.format("disfluencies", "--", "<input_file>", "Display all disfluency counts."))
+	print(template.format("dpa", "--", "<input_file>", "Display disfluencies per dialog act."))
 	print(template.format("dps", "--", "<input_file>", "Display disfluencies per sentence."))
 	print(template.format("dpu", "--", "<input_file>", "Display disfluencies per utterance."))
 	print(template.format("drawtrees", "--", "<input_file>", "Draw syntactic parse trees."))
@@ -46,16 +66,19 @@ def command_message():
 	print(template.format("yngve", "--", "<input_file>", "Display yngve score."))
 
 def usage_message():
+	""" Display usage message. """
 	message = "USAGE: splat <command> <options> <text_source>"
 	return message
 
 def help_message():
+	""" Display help message. """
 	message = "USAGE: splat <command> <options> <text_source>\n"
 	message += "\t--commands\tList available commands.\n"
 	message += "\t--info\t\tDisplay licensing information.\n"
 	return message
 
 def info_message():
+	""" Display copyright information. """
 	prog_info = "#################################################################"
 	prog_info += "\n# SPLAT - Speech Processing & Linguistic Annotation Tool \t#"
 	prog_info += "\n# Copyright (C) 2015, Benjamin S. Meyers\t\t\t#"
@@ -69,6 +92,10 @@ def info_message():
 	return prog_info
 
 def check_dependencies():
+	"""
+	SPLAT relies on the modules matplotlib and nltk for certain functionality.
+	It also relies on Java being installed in order for the Berkeley Parser to be used.
+	"""
 	try:
 		import nltk
 	except ImportError:
@@ -77,11 +104,9 @@ def check_dependencies():
 		import matplotlib
 	except ImportError:
 		print("WARNING: The python library matplotlib could not be imported. Some functionality may not be available without matplotlib.")
-	#java_status = subprocess.Popen(['java', '-version'], stdout=subprocess.PIPE).communicate()[0].decode("utf-8")
-	#print(java_status)
-	#print(type(java_status))
-	#if os.system("java -version") == "":
-	#	print("WARNING: Java could not be located. Some functionality may not be available without Java.")
+	java_status = subprocess.call(["which", "java"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+	if java_status != 0:
+		print("WARNING: Java could not be located. Some functionality may not be available without Java.")
 
 
 def run_command(args):
@@ -91,7 +116,10 @@ def run_command(args):
 	if len(args) == 2: # splat <command>
 		print(commands[command]())
 	elif len(args) == 3: # splat <command> <option>
-		print(commands[command](int(args[2])))
+		try:
+			print(commands[command](int(args[2])))
+		except:
+			print("WARNING: Could not run " + str(command) + " with missing arguments.")
 
 def load_bubble(args):
 	global my_bubble
@@ -107,26 +135,27 @@ def save_bubble(args):
 
 def setup_commands():
 	global commands
-	commands = {"wc":my_bubble.wordcount, 						"uwc":my_bubble.unique_wordcount,
-				"tokens":my_bubble.tokens, 						"types":my_bubble.types,
-				"sents":my_bubble.sents, 						"sentcount":my_bubble.sentcount,
-				"ttr":my_bubble.type_token_ratio,				"ngrams":my_bubble.ngrams,
-				"pos":my_bubble.pos,							"alu":my_bubble.average_utterance_length,
-				"cfr":my_bubble.content_function_ratio,			"uttcount":my_bubble.uttcount,
-				"unigrams":my_bubble.unigrams,					"bigrams":my_bubble.bigrams,
-				"trigrams":my_bubble.trigrams,					"content":my_bubble.content_words,
-				"function":my_bubble.function_words,			"ucontent":my_bubble.unique_content_words,
-				"ufunction":my_bubble.unique_function_words,	"trees":my_bubble.treestrings,
-				"drawtrees":my_bubble.drawtrees,				"wpu":my_bubble.words_per_utterance,
-				"wps":my_bubble.words_per_sentence,				"utts":my_bubble.utts,
-				"cdensity":my_bubble.content_density,			"idensity":my_bubble.idea_density,
-				"yngve":my_bubble.tree_based_yngve_score,		"frazier":my_bubble.tree_based_frazier_score,
-				"poscounts":my_bubble.pos_counts,				"maxdepth":my_bubble.max_depth,
-				"mostfreq":my_bubble.get_most_freq,				"leastfreq":my_bubble.get_least_freq,
-				"plotfreq":my_bubble.plot_freq,					"dpu":my_bubble.disfluencies_per_utterance,
-				"dps":my_bubble.disfluencies_per_sentence,		"disfluencies":my_bubble.disfluencies,
-				"als":my_bubble.average_sentence_length,		"exyngve":my_bubble.string_based_yngve_score,
-				"exfrazier":my_bubble.string_based_frazier_score}
+	commands = {"wc":my_bubble.wordcount, 							"uwc":my_bubble.unique_wordcount,
+				"tokens":my_bubble.tokens, 							"types":my_bubble.types,
+				"sents":my_bubble.sents, 							"sentcount":my_bubble.sentcount,
+				"ttr":my_bubble.type_token_ratio,					"ngrams":my_bubble.ngrams,
+				"pos":my_bubble.pos,								"alu":my_bubble.average_utterance_length,
+				"cfr":my_bubble.content_function_ratio,				"uttcount":my_bubble.uttcount,
+				"unigrams":my_bubble.unigrams,						"bigrams":my_bubble.bigrams,
+				"trigrams":my_bubble.trigrams,						"content":my_bubble.content_words,
+				"function":my_bubble.function_words,				"ucontent":my_bubble.unique_content_words,
+				"ufunction":my_bubble.unique_function_words,		"trees":my_bubble.treestrings,
+				"drawtrees":my_bubble.drawtrees,					"wpu":my_bubble.words_per_utterance,
+				"wps":my_bubble.words_per_sentence,					"utts":my_bubble.utts,
+				"cdensity":my_bubble.content_density,				"idensity":my_bubble.idea_density,
+				"yngve":my_bubble.tree_based_yngve_score,			"frazier":my_bubble.tree_based_frazier_score,
+				"poscounts":my_bubble.pos_counts,					"maxdepth":my_bubble.max_depth,
+				"mostfreq":my_bubble.get_most_freq,					"leastfreq":my_bubble.get_least_freq,
+				"plotfreq":my_bubble.plot_freq,						"dpu":my_bubble.disfluencies_per_utterance,
+				"dps":my_bubble.disfluencies_per_sentence,			"disfluencies":my_bubble.disfluencies,
+				"als":my_bubble.average_sentence_length,			"exyngve":my_bubble.string_based_yngve_score,
+				"exfrazier":my_bubble.string_based_frazier_score,	"bubble":my_bubble.bubble,
+				"annotate":my_bubble.annotated_bubble,				"dpa":my_bubble.disfluencies_per_act}
 
 def main():
 	args = sys.argv

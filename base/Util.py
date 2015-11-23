@@ -1,11 +1,19 @@
 #!/usr/bin/python
 
+##### PYTHON IMPORTS ###################################################################################################
 import re
 
+##### NLTK IMPORTS #####################################################################################################
 from nltk.tree import Tree
 from nltk.probability import FreqDist
 
+##### SPLAT IMPORTS ####################################################################################################
 from corpus.Util import Stopwords
+
+##### GLOBAL VARIABLES #################################################################################################
+open_class_list = ['NN', 'NNS', 'NNP', 'NNPS', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ', 'JJ', 'JJR', 'JJS', 'RB', 'RBR', 'RBS', 'FW']
+ignore_list = ['LS', 'SYM', 'UH', 'LBR', 'RBR', '-LBR-', '-RBR-', '$', '``', '"', '\'\'', '(', ')', '()', '( )', '\,', '\-\-', '\.', '\:', 'SBAR', 'SBARQ']
+proposition_list = ['CC', 'CD', 'DT', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ', 'JJ', 'JJR', 'JJS', 'RB', 'RBR', 'RBS', 'IN', 'CC', 'PDT', 'POS', 'PP$', 'PRP$', 'TO', 'WDT', 'WP', 'WPS', 'WRB']
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
@@ -17,10 +25,6 @@ from corpus.Util import Stopwords
 ### @LICENSE_TYPE:																									 ###
 ########################################################################################################################
 ########################################################################################################################
-
-open_class_list = ['NN', 'NNS', 'NNP', 'NNPS', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ', 'JJ', 'JJR', 'JJS', 'RB', 'RBR', 'RBS', 'FW']
-ignore_list = ['LS', 'SYM', 'UH', 'LBR', 'RBR', '-LBR-', '-RBR-', '$', '``', '"', '\'\'', '(', ')', '()', '( )', '\,', '\-\-', '\.', '\:', 'SBAR', 'SBARQ']
-proposition_list = ['CC', 'CD', 'DT', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ', 'JJ', 'JJR', 'JJS', 'RB', 'RBR', 'RBS', 'IN', 'CC', 'PDT', 'POS', 'PP$', 'PRP$', 'TO', 'WDT', 'WP', 'WPS', 'WRB']
 
 def typify(tokens):
 	"""
@@ -40,6 +44,7 @@ def typify(tokens):
 	return sorted(temp_types.items())
 
 def wordcount(text):
+	""" Return the number of words in the given text. """
 	if type(text) == str:
 		return len(text.split(" "))
 	elif type(text) == list:
@@ -48,6 +53,7 @@ def wordcount(text):
 		raise ValueError("Text to count words for must be of type str or of type list.")
 
 def type_token_ratio(types, tokens):
+	""" Calculate the ratio of types to tokens. """
 	return round(float(len(types)) / float(len(tokens)) * 100, 4)
 
 def get_content_words(tokens):
@@ -159,6 +165,7 @@ def plot_freq_dist(freq_dist, x=None):
 	return ''
 
 def count_disfluencies(utterances):
+	""" Gather disfluency counts per utterance. """
 	disfluencies = {}
 	for utt in utterances:
 		disfluencies[utt] = []
@@ -170,17 +177,19 @@ def count_disfluencies(utterances):
 		pause_count = 0
 		repetition_count = 0
 		break_count = 0
+		words = 0
 		last_word = ""
 		for word in utt.split(" "):
-			if word.lower() == "UM":
+			words += 1
+			if word.lower() == "um":
 				um_count += 1
-			elif word.lower() == "UH":
+			elif word.lower() == "uh":
 				uh_count += 1
-			elif word.lower() == "AH":
+			elif word.lower() == "ah":
 				ah_count += 1
-			elif word.lower() == "ER":
+			elif word.lower() == "er":
 				er_count += 1
-			elif word.lower() == "HM":
+			elif word.lower() == "hm":
 				hm_count += 1
 			elif word.lower() == "{sl}":
 				pause_count += 1
@@ -200,10 +209,12 @@ def count_disfluencies(utterances):
 		disfluencies[utt].append(pause_count)
 		disfluencies[utt].append(repetition_count)
 		disfluencies[utt].append(break_count)
+		disfluencies[utt].append(words)
 
 	return disfluencies
 
 def total_disfluencies(dpu_dict):
+	""" Gather disfluency counts for the whole TextBubble. """
 	disfluencies = {}
 	disfluencies["UM"] = 0
 	disfluencies["UH"] = 0
@@ -229,3 +240,48 @@ def total_disfluencies(dpu_dict):
 	disfluencies["Non-Nasal"] = disfluencies["UH"] + disfluencies["AH"] + disfluencies["ER"]
 
 	return disfluencies
+
+def get_disfluencies_per_act(text):
+	""" Gather disfluency counts per dialog act. """
+	temp_dpa = {"Info-Request":[0,0,0,0,0,0,0,0], 			"Action-Request":[0,0,0,0,0,0,0,0],
+				"Action-Suggest":[0,0,0,0,0,0,0,0], 		"Answer-Yes":[0,0,0,0,0,0,0,0],
+				"Answer-No":[0,0,0,0,0,0,0,0], 				"Answer-Neutral":[0,0,0,0,0,0,0,0],
+				"Apology":[0,0,0,0,0,0,0,0], 				"Thanks":[0,0,0,0,0,0,0,0],
+				"Clarification-Request":[0,0,0,0,0,0,0,0], 	"Acknowledgement":[0,0,0,0,0,0,0,0],
+				"Filler":[0,0,0,0,0,0,0,0], 				"Inform":[0,0,0,0,0,0,0,0],
+				"Other":[0,0,0,0,0,0,0,0]}
+	for line in text.split("\n"):
+		#print(line.split("("))
+		split_line = line.split("(")
+		if len(split_line) >= 2:
+			text = line.split("(")[0]
+			acts = line.split("(")[1].strip(")").split(", ")
+			last_word = ""
+			for word in text.split(" "):
+				if word.lower() == "um":
+					for act in acts:
+						temp_dpa[act][0] += 1
+				elif word.lower() == "uh":
+					for act in acts:
+						temp_dpa[act][1] += 1
+				elif word.lower() == "ah":
+					for act in acts:
+						temp_dpa[act][2] += 1
+				elif word.lower() == "er":
+					for act in acts:
+						temp_dpa[act][3] += 1
+				elif word.lower() == "hm":
+					for act in acts:
+						temp_dpa[act][4] += 1
+				elif word.lower() == "{sl}":
+					for act in acts:
+						temp_dpa[act][5] += 1
+				elif re.match(r"\-", word):
+					for act in acts:
+						temp_dpa[act][7] += 1
+				elif word == last_word:
+					for act in acts:
+						temp_dpa[act][6] += 1
+				last_word = word
+
+	return temp_dpa

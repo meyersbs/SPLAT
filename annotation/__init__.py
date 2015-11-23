@@ -10,3 +10,15 @@
 ### @LICENSE_TYPE:																									 ###
 ########################################################################################################################
 ########################################################################################################################
+
+"""
+This package contains the following files:
+	[01] Dialog Act Annotation Scheme.md
+			An explanation of the annotation scheme used in the MeyersDialogActAnnotator.
+	[02] MeyersDialogActAnnotator.py
+			Provides functionality to semi-automatically insert dialog acts.
+	[03] QuarteroniDialogActAnnotator.py
+			Provides functionality to semi-automatically insert dialog acts.
+	[04] SpeakerIndicatorAnnotator.py
+			Provides functionality to semi-automatically insert speaker markers.
+"""

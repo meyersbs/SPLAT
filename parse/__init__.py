@@ -10,3 +10,15 @@
 ### @LICENSE_TYPE:																									 ###
 ########################################################################################################################
 ########################################################################################################################
+
+"""
+This package contains the following files:
+	[01] BerkeleyParser-1.7.jar
+			The Berkeley Parser provides a number of natural language processing functions. It is used by the codebase
+			to generate parse tree strings.
+			Project Site: <https://github.com/slavpetrov/berkeleyparser>
+	[02] eng_sm6.gr
+			A grammar file for English used by the Berkeley Parser
+	[03] TreeStringParser.py
+			Provides functions to run the Berkeley Parser and capture its output.
+"""

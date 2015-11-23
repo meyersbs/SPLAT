@@ -10,3 +10,13 @@
 ### @LICENSE_TYPE:																									 ###
 ########################################################################################################################
 ########################################################################################################################
+
+"""
+This package contains the following files:
+	[01] CleanSentenizer.py
+			Provides the functionality to generate a list of sentences from a text input with newlines removed.
+	[02] RawSentenizer.py
+			Provides the functionality to generate a list of unprocessed sentences from a text input.
+	[03] Sentenizer.py
+			An abstract class that is implemented by the other Sentenizers in this directory.
+"""
