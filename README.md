@@ -145,19 +145,3 @@ I would like to thank Emily Prud'hommeaux and Cissi Ovesdotter-Alm for their gui
 - - - -
 ## Licensing
 See [LICENSE.md](/LICENSE.md).
-The files listed below are part of the [Berkeley Parser](https://github.com/slavpetrov/berkeleyparser):
-* BerkeleyParser-1.7.jar
-* eng_sm6.gr
-
-For questions regarding the Berkeley Parser, please contact Slav Petrov < <petrov@cs.berkeley.edu> >.
-
-The functions listed below were adapted from [this script](https://github.com/neubig/util-scripts/blob/96c91e43b650136bb88bbb087edb1d31b65d389f/syntactic-complexity.py):
-* splat_functions.get_word_score(tree)
-* splat_functions.is_sentence(value)
-* splat_functions.calc_yngve_score(tree, parent)
-* splat_functions.calc_frazier_score(tree, parent, parent_label)
-* splat_functions.get_yngve_score(text_file)
-* splat_functions.get_frazier_score(text_file)
-
-Permission to use this script was granted by the code owner, Graham Neubig. For related questions, you may contact 
-him via email < <neubig@is.naist.jp> > or you can visit his [website](http://www.phontron.com/index.php).
