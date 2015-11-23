@@ -15,7 +15,7 @@
 This package contains the following files:
 	[01] brown-corpus.pkl
 			The Brown University Standard Corpus of Present-Day American English (or just Brown Corpus) was compiled in
-			the 1960s by Henry Kučera and W. Nelson Francis at Brown University, Providence, Rhode Island as a general
+			the 1960s by Henry Kucera and W. Nelson Francis at Brown University, Providence, Rhode Island as a general
 			corpus (text collection) in the field of corpus linguistics. It contains 500 samples of English-language
 			text, totaling roughly one million words, compiled from works published in the United States in 1961.
 			Project Site: <http://clu.uni.no/icame/brown/bcm.html>
