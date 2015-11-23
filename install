@@ -1,9 +1,9 @@
 #!/bin/sh
-sudo cp -r ~/Code/SPLAT/splat /usr/bin/splat
-sudo chmod 777 /usr/bin/splat
-#sudo mkdir /usr/bin/splat_src
-sudo cp -r ~/Code/SPLAT/splat_src /usr/bin/
-sudo chmod 777 /usr/bin/splat_src
-#sudo mkdir /usr/bin/splat_tmp
-sudo cp -r ~/Code/SPLAT/splat_tmp /usr/bin/
-sudo chmod 777 /usr/bin/splat_tmp
+
+mkdir ~/.SPLAT/
+cd ~/.SPLAT/
+wget https://github.com/meyersbs/SPLAT/archive/master.zip
+unzip master.zip
+chmod +x ~/.SPLAT/SPLAT-master/splat
+echo 'alias splat="~/.SPLAT/SPLAT-master/splat"' >> ~/.bashrc
+echo "Thank you for installing SPLAT! Documentation and example usage can be found here: https://github.com/meyersbs/SPLAT"
