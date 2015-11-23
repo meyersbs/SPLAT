@@ -21,11 +21,11 @@ SPLAT is being developed and tested on 64-bit Ubuntu 15.10 with Python 3.4.3. Mi
 - - - -
 ## Installation
 1. Ensure that Python is installed on your machine.
-2. Download the install file: [install.sh](/install.sh)
+2. Download the install file: [install](/install)
 3. Run the following in a command line:
 ``` bash
-    chmod +x path/to/install.sh
-    ./path/to/install.sh
+    chmod +x path/to/install
+    ./path/to/install
 ```
 
 To uninstall run the following in a command line.
