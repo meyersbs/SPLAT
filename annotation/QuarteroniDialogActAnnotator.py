@@ -28,6 +28,9 @@ class QuarteroniDialogActAnnotator:
 		pass
 
 	def annotate(self, text):
+		"""
+		Given a selection of text, semi-automatically insert dialog act and speaker annotation with input from the User.
+		"""
 		annotated_text = ""
 		for line in text.split("\n"):
 			looping = True
