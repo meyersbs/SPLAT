@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="SPLAT : Speech Processing &amp; Linguistic Annotation Tool">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+    <title>SPLAT</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/meyersbs/SPLAT">View on GitHub</a>
+            <img id="splat" src="images/SPLAT_logo.png" height="10%"/>
+
+            <a href="https://www.rit.edu/clasp/"><img id="clasp" src="images/clasp_logo.png" height="10%"/></a>
+          <h2 id="project_tagline">Speech Processing &amp; Linguistic Annotation Tool</h2>
+
+
+            <section id="downloads">
+              <a class="sh_button" href="install">
+                  <i class="fa fa-terminal"><strong>installer</strong></i>
+              </a>
+              <a class="zip_download_link" href="https://github.com/meyersbs/SPLAT/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/meyersbs/SPLAT/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+            <section>
+                <a class="button" href="index.html"> <span id="home">Home</span></a>
+                <a class="button" href="install.html"> <span id="install">Install</span></a>
+                <a class="button" href="usage.html"> <span id="usage">Usage</span></a>
+                <a class="button" href="license.html"> <span id="license">License</span></a>
+                <a class="button" href="release_notes.html"> <span id="notes">Releases</span></a>
+                <a class="button" href="acknowledgments.html"> <span id="acks">Thanks</span></a>
+                <a class="button" href="contact.html"> <span id="contact">Contact</span></a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<h2>
+    Input Files
+</h2>
+<p align="justify">SPLAT is designed to help you annotate text files and it is assumed that most input files will not be already annotated. In order for SPLAT to function properly, you should ensure that the input files that you provide do not contain any annotations. Because there are so many variations of linguistic annotation schemes, it would simply be impossible to account for all of them in the initial parsing of input files; it is easier for you to remove any existing annotations than it is for me to do so.</p>
+<h2>
+<a id="general-commands" class="anchor" href="#general-commands" aria-hidden="true"><span class="octicon octicon-link"></span></a>General Commands</h2>
+
+<div class="highlight highlight-source-shell"><pre>
+    splat --commands                <span class="pl-c"># List all available commands</span>
+    splat --help                    <span class="pl-c"># Provide helpful information</span>
+    splat --info                    <span class="pl-c"># Display copyright information</span>
+    splat --usage                   <span class="pl-c"># Display basic command line structure</span>
+    splat bubble filename           <span class="pl-c"># Display the raw text from the file</span></pre></div>
+
+<h2>
+<a id="analysis-functionality--usage" class="anchor" href="#analysis-functionality--usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Analysis Functionality &amp; Usage</h2>
+
+<h4>
+<a id="types--tokens" class="anchor" href="#types--tokens" aria-hidden="true"><span class="octicon octicon-link"></span></a>Types &amp; Tokens</h4>
+
+<div class="highlight highlight-source-shell"><pre>
+    splat tokens filename           <span class="pl-c"># List all Tokens</span>
+    splat types filename            <span class="pl-c"># List all Types</span>
+    splat ttr filename              <span class="pl-c"># Calculate Type-Token Ratio</span>
+    splat wc filename               <span class="pl-c"># Word Count (Token Count)</span>
+    splat uwc filename              <span class="pl-c"># Unique Word Count (Type Count)</span></pre></div>
+
+<h5>
+<a id="parts-of-speech" class="anchor" href="#parts-of-speech" aria-hidden="true"><span class="octicon octicon-link"></span></a>Parts-Of-Speech</h5>
+
+<div class="highlight highlight-source-shell"><pre>
+    splat pos filename              <span class="pl-c"># List Tokens with their POS</span>
+    splat poscounts filename        <span class="pl-c"># List POS Tags with their Frequencies</span></pre></div>
+
+<h4>
+<a id="syntactic-complexity" class="anchor" href="#syntactic-complexity" aria-hidden="true"><span class="octicon octicon-link"></span></a>Syntactic Complexity</h4>
+
+<div class="highlight highlight-source-shell"><pre>
+    splat cdensity filename         <span class="pl-c"># Calculate Content-Density</span>
+    splat idensity filename         <span class="pl-c"># Calculate Idea Density</span>
+    splat yngve filename            <span class="pl-c"># Calculate Yngve-Score</span>
+    splat frazier filename          <span class="pl-c"># Calculate Frazier-Score</span></pre></div>
+
+<h4>
+<a id="listing-content--function-words" class="anchor" href="#listing-content--function-words" aria-hidden="true"><span class="octicon octicon-link"></span></a>Listing Content &amp; Function Words</h4>
+
+<div class="highlight highlight-source-shell"><pre>
+    splat function filename         <span class="pl-c"># List all Function Words</span>
+    splat content filename          <span class="pl-c"># List all Content Words</span>
+    splat ufunction filename        <span class="pl-c"># Unique Function Words</span>
+    splat ucontent filename         <span class="pl-c"># Unique Content Words</span>
+    splat cfr filename              <span class="pl-c"># Calculate Content-Function Ratio</span></pre></div>
+
+<h4>
+<a id="utterances--sentences" class="anchor" href="#utterances--sentences" aria-hidden="true"><span class="octicon octicon-link"></span></a>Utterances &amp; Sentences</h4>
+
+<div class="highlight highlight-source-shell"><pre>
+    splat utts filename             <span class="pl-c"># List all Utterances</span>
+    splat sents filename            <span class="pl-c"># List all Sentences</span>
+    splat alu filename              <span class="pl-c"># Average Utterance Length</span>
+    splat als filename              <span class="pl-c"># Average Sentence Length</span>
+    splat uttcount filename         <span class="pl-c"># Utterance Count</span>
+    splat sentcount filename        <span class="pl-c"># Sentence Count</span>
+    splat wpu filename              <span class="pl-c"># List Wordcount for each Utterance</span>
+    splat wps filename              <span class="pl-c"># List Wordcount each Sentence</span></pre></div>
+
+<h4>
+<a id="frequency-distributions" class="anchor" href="#frequency-distributions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Frequency Distributions</h4>
+
+<div class="highlight highlight-source-shell"><pre>
+    splat mostfreq filename x       <span class="pl-c"># List the x Most Frequent Words</span>
+    splat leastfreq filename x      <span class="pl-c"># List the x Least Frequent Words</span>
+    splat plotfreq filename x       <span class="pl-c"># Draw and Display a Frequency Graph</span></pre></div>
+
+<h4>
+<a id="disfluencies" class="anchor" href="#disfluencies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Disfluencies</h4>
+
+<div class="highlight highlight-source-shell"><pre>
+    splat disfluencies filename     <span class="pl-c"># Calculate various Disfluency Counts</span>
+    splat dpa filename              <span class="pl-c"># List Disfluency Counts for Dialog Act</span>
+    splat dpu filename              <span class="pl-c"># List Disfluency Counts for Utterances</span>
+    splat dps filename              <span class="pl-c"># List Disfluency Counts for Sentences</span></pre></div>
+
+<h4>
+<a id="syntactic-parsing" class="anchor" href="#syntactic-parsing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Syntactic Parsing</h4>
+
+<div class="highlight highlight-source-shell"><pre>
+    splat trees filename            <span class="pl-c"># List Parse-Trees for each Utterance</span>
+    splat maxdepth filename         <span class="pl-c"># Calculate Max Tree Depth</span>
+    splat drawtrees filename        <span class="pl-c"># Draw Parse Trees</span></pre></div>
+
+<h4>
+<a id="language-modeling" class="anchor" href="#language-modeling" aria-hidden="true"><span class="octicon octicon-link"></span></a>Language Modeling</h4>
+
+<div class="highlight highlight-source-shell"><pre>
+    splat unigrams filename         <span class="pl-c"># List all Unigrams</span>
+    splat bigrams filename          <span class="pl-c"># List all Bigrams</span>
+    splat trigrams filename         <span class="pl-c"># List all Trigrams</span>
+    splat ngrams filename n         <span class="pl-c"># List all n-grams</span></pre></div>
+
+<h2>
+<a id="annotation-functionality--usage" class="anchor" href="#annotation-functionality--usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Annotation Functionality &amp; Usage</h2>
+
+<div class="highlight highlight-source-shell"><pre>
+    splat annotate filename         <span class="pl-c"># Interactively annotate the Text</span></pre></div>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p align="left">SPLAT &copy; Copyright 2015 by Benjamin S. Meyers</p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>

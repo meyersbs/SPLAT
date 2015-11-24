@@ -46,23 +46,47 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h2>
-<a id="project-description" class="anchor" href="#project-description" aria-hidden="true"><span class="octicon octicon-link"></span></a>Project Description</h2>
+<h2>
+<a id="release-notes" class="anchor" href="#release-notes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Release Notes</h2>
 
-<p align="justify">SPLAT is a command-line application designed to make it easy for linguists (both computer-oriented and non-computer-oriented) to perform natural language processing (NLP) on virtually any text file. It makes use of a few existing NLP tools and expands upon them by providing a python package interface and a command line interface. It was designed with ease-of-use and efficiency in mind.</p>
+<h4>
+<a id="release-30" class="anchor" href="#release-30" aria-hidden="true"><span class="octicon octicon-link"></span></a>Release 3.0</h4>
 
-        <h2>
-            About Me
-        </h2>
-<p align="justify">I began my journey into the depths of programming in 2008 where I was handed a F.I.R.S.T. robot and told to <em>do the code</em>. My coding experience began with Java and quickly grew to include HTML, CSS, Python, Ruby, and a whole slew of other languages and frameworks. In the nine years since I first wrote <em>hello word</em>, designing, writing, and debugging code has become more than a hobby; it's my lifestyle.<br><br>I am a third-year aspiring Software Engineer at the Rochester Institute of Technology. I am pursuing a concentration in linguistics in order to satiate my fascination with human languages. I designed SPLAT with the hope that it might, one day, surpass the tools that it is built on top of and provide the most positive experience to the User.<br><br>I hope SPLAT brings you as much joy as it has brought me.</p>
+<ul>
+<li>SPLAT has been reorganized into packages so that it can either be used as a Python library, or as a command-line tool.</li>
+<li>The command-line interface has been cleaned up, and hopefully looks better.</li>
+<li>Dependencies on non-standard libraries have been greatly reduced.
 
+<ul>
+<li>NLTK is a requirement for frequency distributions and Tree structures. This will hopefully change soon.</li>
+<li>The Berkeley Parser has been packaged with SPLAT in order for parse trees to be generated. This is likely a permanent dependency. </li>
+</ul>
+</li>
+<li>SPLAT functions have been optimized to increase efficiency and User satisfaction.</li>
+</ul>
+
+<h4>
+<a id="release-20" class="anchor" href="#release-20" aria-hidden="true"><span class="octicon octicon-link"></span></a>Release 2.0</h4>
+
+<ul>
+<li>The Berkeley Parser and NLTK have been integrated with the application.</li>
+<li>The provided functionality is, for the most part, complete - that is, there isn't much more I plan to add at this time.</li>
+</ul>
+
+<h4>
+<a id="release-10" class="anchor" href="#release-10" aria-hidden="true"><span class="octicon octicon-link"></span></a>Release 1.0</h4>
+
+<ul>
+<li>The application is now fully integrated with bash, removing some nasty reimplementing of code from previous versions.</li>
+<li>The provided functionality is far from complete; more will be coming, hopefully soon!</li>
+</ul>
       </section>
     </div>
 
     <!-- FOOTER  -->
     <div id="footer_wrap" class="outer">
       <footer class="inner">
-        <p>SPLAT &copy; Copyright 2015 by Benjamin S. Meyers</p>
+        <p align="left">SPLAT &copy; Copyright 2015 by Benjamin S. Meyers</p>
       </footer>
     </div>
 

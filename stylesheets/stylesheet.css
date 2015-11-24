@@ -99,6 +99,50 @@ p {
 
 footer p {
   color: #f2f2f2;
+  text-align:center;
+  padding: 0;
+  margin: 0;
+}
+
+#splat{
+  margin: 1em 0 0;
+  width: 30%;
+}
+
+#clasp{
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  margin: 0;
+}
+
+.button {
+  display: inline-block;
+    background-color: #ff5400;
+    /*adjust the roundness*/
+    border-radius: 0.25em;
+    moz-border-radius: 0.25em;
+    webkit-border-radius: 0.25em;
+    /*adjust height and width*/
+    width: 9.25%;
+    margin: 0.125em;
+    padding: 0.125em 0.75em;
+    border: none;
+  vertical-align: middle;
+    text-align: center;
+}
+
+.button span {
+  color: #333;
+  margin: 0;
+  font-size: large;
+
+}
+
+.button:hover{
+  background-color: #E5E5E5;
+  border-color: #E5E5E5;
+  text-decoration: none;
 }
 
 a {
@@ -137,15 +181,8 @@ img {
   position: relative;
   margin: 0 auto;
   max-width: 739px;
-  padding: 5px;
-  margin: 10px 0 10px 0;
-  border: 1px solid #ebebeb;
-
-  box-shadow: 0 0 5px #ebebeb;
-  -webkit-box-shadow: 0 0 5px #ebebeb;
-  -moz-box-shadow: 0 0 5px #ebebeb;
-  -o-box-shadow: 0 0 5px #ebebeb;
-  -ms-box-shadow: 0 0 5px #ebebeb;
+  padding: 0px;
+  margin: 1px 0 10px 0;
 }
 
 p img {
@@ -296,7 +333,7 @@ Full-Width Styles
 }
 
 #header_wrap .inner {
-  padding: 50px 10px 30px 10px;
+  padding: 50px 10px 40px 10px;
 }
 
 #project_title {
@@ -308,21 +345,53 @@ Full-Width Styles
 }
 
 #project_tagline {
-  color: #fff;
+  color: #ff5400;
   font-size: 24px;
   font-weight: 300;
   background: none;
   text-shadow: #111 0px 0px 10px;
+  padding-bottom: 0;
 }
 
 #downloads {
   position: absolute;
-  width: 210px;
   z-index: 10;
   bottom: -40px;
   right: 0;
   height: 70px;
-  background: url('../images/icon_download.png') no-repeat 0% 90%;
+}
+
+#ack{
+  border: none;
+}
+
+#ack th,td,tr{
+  border:none;
+}
+
+.sh_button {
+  display: block;
+  float: left;
+  margin-top: 2.375em;
+  background-color: #555;
+  padding: 0.125em 0.5em;
+  border-radius: 0.25em;
+  box-shadow: 0 0 5px #888888;
+  font-size: medium;
+  /*background: url('../images/icon_download.png') no-repeat 0% 90%;*/
+}
+
+.sh_button:hover{
+  background-color: #0075da;
+}
+
+.sh_button i{
+  color: #FFF;
+}
+
+.sh_button strong{
+  font-family: monospace;
+  margin-left: 0.5em;
 }
 
 .zip_download_link {

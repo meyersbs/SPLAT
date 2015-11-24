@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="SPLAT : Speech Processing &amp; Linguistic Annotation Tool">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+    <title>SPLAT</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/meyersbs/SPLAT">View on GitHub</a>
+            <img id="splat" src="images/SPLAT_logo.png" height="10%"/>
+
+            <a href="https://www.rit.edu/clasp/"><img id="clasp" src="images/clasp_logo.png" height="10%"/></a>
+          <h2 id="project_tagline">Speech Processing &amp; Linguistic Annotation Tool</h2>
+
+
+            <section id="downloads">
+              <a class="sh_button" href="install">
+                  <i class="fa fa-terminal"><strong>installer</strong></i>
+              </a>
+              <a class="zip_download_link" href="https://github.com/meyersbs/SPLAT/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/meyersbs/SPLAT/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+            <section>
+                <a class="button" href="index.html"> <span id="home">Home</span></a>
+                <a class="button" href="install.html"> <span id="install">Install</span></a>
+                <a class="button" href="usage.html"> <span id="usage">Usage</span></a>
+                <a class="button" href="license.html"> <span id="license">License</span></a>
+                <a class="button" href="release_notes.html"> <span id="notes">Releases</span></a>
+                <a class="button" href="acknowledgments.html"> <span id="acks">Thanks</span></a>
+                <a class="button" href="contact.html"> <span id="contact">Contact</span></a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<h2>
+    SPLAT
+</h2>
+<h3>
+    The MIT License (MIT)
+</h3>
+
+<p>Copyright (c) 2015 Benjamin S. Meyers</p>
+
+<p align="justify">Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+
+<p align="justify">The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.</p>
+
+<p align="justify">THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</p>
+
+<h2>
+    NLTK
+</h2>
+<p align="justify">The Natural Language ToolKit (NLTK) is a Python library the provides a wide selection of natural language processing functions.
+For documentation and other information, please visit <a href="http://www.nltk.org">nltk.org</a>.</p>
+
+<h2>
+    CORPORA
+</h2>
+<h4>
+    Brown Corpus
+</h4>
+<p align="justify">
+The Brown University Standard Corpus of Present-Day American English (or just Brown Corpus) was compiled in the 1960s by Henry Kučera and W. Nelson Francis at Brown University, Providence, Rhode Island as a general corpus (text collection) in the field of corpus linguistics. It contains 500 samples of English-language text, totaling roughly one million words, compiled from works published in the United States in 1961.</p>
+<div class="highlight highlight-source-shell"><pre>
+    /corpus/brown-corpus.pkl</pre></div>
+<h4>
+    English Open Word List
+</h4>
+<p align="justify">
+This corpus was created using Ken Loge's <a href="http://dreamsteep.com/projects/the-english-open-word-list.html">English Open Word List</a>.
+</p>
+<div class="highlight highlight-source-shell"><pre>
+    /corpus/eowl-corpus.pkl</pre></div>
+<h4>
+    Google Trillion Word Corpus
+</h4>
+<p align="justify">
+This corpus was created using the 20,000 most common English words from the <a href="https://github.com/first20hours/google-10000-english">Google Trillion-Word Corpus</a>.
+</p>
+<div class="highlight highlight-source-shell"><pre>
+    /corpus/google-20000-corpus.pkl</pre></div>
+<h4>
+    Gutenberg Corpus
+</h4>
+<p align="justify">
+This corpus was created using the <a href="https://www.gutenberg.org/wiki/Gutenberg:Terms_of_Use">Gutenberg</a> corpus available in NLTK.
+</p>
+<div class="highlight highlight-source-shell"><pre>
+    /corpus/gutenberg-corpus.pkl</pre></div>
+<h4>
+    NLTK Stopwords
+</h4>
+<p align="justify">
+The corpus was created using the <a href="https://github.com/nltk/nltk">Stopwords</a> corpus available in NLTK.
+</p>
+<div class="highlight highlight-source-shell"><pre>
+    /corpus/stopwords-corpus.pkl</pre></div>
+<h2>
+    The Berkeley Parser
+</h2>
+<p align="justify">
+The files listed below are part of the <a href="https://github.com/slavpetrov/berkeleyparser">Berkeley Parser</a>:
+</p>
+<div class="highlight highlight-source-shell"><pre>
+    /parse/BerkeleyParser-1.7.jar
+    /parse/eng_sm6.gr</pre></div>
+<p align="justify">
+For questions regarding the Berkeley Parser, please contact Slav Petrov through <a href="mailto:petrov@cs.berkeley.edu">email</a>.
+</p>
+<h2>
+    Graham Neubig
+</h2>
+<p align="justify">
+The functions listed below were adapted from <a href="https://github.com/neubig/util-scripts/blob/96c91e43b650136bb88bbb087edb1d31b65d389f/syntactic-complexity.py">this script</a>.</p>
+<div class="highlight highlight-source-shell"><pre>
+    /complexity/Util.get_word_score()
+    /complexity/Util.is_sentence()
+    /complexity/Util.calc_yngve_score()
+    /complexity/Util.calc_frazier_score()
+    /complexity/Util.get_yngve_score()
+    /complexity/Util.get_frazier_score()</pre></div>
+
+<p align="justify">Permission to use this script was granted by the code owner, Graham Neubig. For related questions, you may contact
+him through <a href="mailto:neubig@is.naist.jp">email</a> or you can visit his <a href="http://www.phontron.com/index.php">website</a>.</p>
+<h2>
+    Vecteezy
+</h2>
+<p align="justify">
+The SPLAT logo is based upon <a href="http://www.freepik.com/free-vector/set-of-paint-splash_756768.htm#term=splat&page=1&position=1">graphic art</a> produced and distributed by <a href="http://www.vecteezy.com/">Vecteezy</a>.
+</p>
+<div class="highlight highlight-source-shell"><pre>
+    /images/SPLAT_logo.png</pre></div>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p align="left">SPLAT &copy; Copyright 2015 by Benjamin S. Meyers</p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
