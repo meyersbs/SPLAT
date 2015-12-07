@@ -1,7 +1,7 @@
 #!/usr/bin/python3.4
 
 ##### PYTHON IMPORTS ###################################################################################################
-import os.path, sys
+import os.path, sys, re
 
 ##### SPLAT IMPORTS ####################################################################################################
 from model.FullNGramminator import FullNGramminator
@@ -47,6 +47,7 @@ class TextBubble:
 	__meyers_annotator = MeyersDialogActAnnotator()
 	__speaker_annotator = SpeakerIndicatorAnnotator()
 	__ex_yngve, __ex_frazier = 0.0, 0.0
+	__annotated_utts = {}
 	def __init__(self, text, ngramminator=FullNGramminator(), postagger= POSTagger()):
 		"""
 		Creates a TextBubble Object.
@@ -54,11 +55,27 @@ class TextBubble:
 		if os.path.exists(text):
 			temp_text = ""
 			temp_utts = []
+			temp_annotated_text = ""
+			temp_annotated_utts = {}
 			for line in open(text, 'r'):
-				temp_utts.append(line.strip())
-				temp_text += line.strip() + " "
+				if "(" in line:
+					temp_annotated_text += line.strip() + " "
+					split_line = line.strip("\n").strip(")").strip().split("(")
+					utt_key = split_line[0].strip()
+					#print(utt_key)
+					temp_text += utt_key + " "
+					temp_utts.append(utt_key.strip())
+					utt_acts = split_line[1].strip().split(", ")
+					#print(utt_acts)
+					temp_annotated_utts[utt_key] = utt_acts
+					#print(temp_annotated_utts)
+				else:
+					temp_utts.append(line.strip())
+					temp_text += line.strip() + " "
 			self.__bubble = temp_text
 			self.__utterances = temp_utts
+			self.__annotated_bubble = temp_annotated_text
+			self.__annotated_utts.update(temp_annotated_utts)
 		elif type(text) == str:
 			self.__bubble = text
 			temp_utts = []
@@ -121,6 +138,9 @@ class TextBubble:
 			return self.__annotated_bubble
 		else:
 			return self.__annotated_bubble
+
+	def annotated_utts(self):
+		return self.__annotated_utts
 
 	def disfluencies_per_act(self):
 		"""
@@ -360,6 +380,10 @@ class TextBubble:
 
 		return ''
 
+	def dpu(self):
+		""" Return the raw disfluencies per utterance dictionary. """
+		return self.__dpu
+
 	def disfluencies_per_sentence(self):
 		""" Displays the number of each type of disfluency per each sentence. """
 		template = "{0:7}{1:7}{2:7}{3:7}{4:7}{5:7}{6:7}{7:7}{8:7}{9:50}"
@@ -378,6 +402,10 @@ class TextBubble:
 			  "\t\t" + str(d["Repetitions"]) + "\t\t" + str(d["Break"]))
 
 		return ''
+
+	def dis(self):
+		""" Return the raw disfluencies dictionary. """
+		return self.__disfluencies
 
 	def splat(self):
 		"""

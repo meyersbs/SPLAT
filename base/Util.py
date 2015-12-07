@@ -97,7 +97,7 @@ def get_content_function_ratio(tokens):
 	content = get_content_words(tokens)
 	function = get_function_words(tokens)
 
-	ratio = float(len(content)) / float(len(function))
+	ratio = float(len(content)) / float(len(function)) if len(function) != 0 else 0
 
 	return round(ratio, 4)
 

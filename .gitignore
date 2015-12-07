@@ -6,9 +6,11 @@ reference_data/graham_neubig.py
 ### Directories
 asd_data/**/*
 test_data/**/*
+/classify_asd.py
 reference_data/**/*
 .idea/**/*
 ### File Types
 *~
 *.pyc
+*.html
 

@@ -30,7 +30,7 @@ def calc_content_density(tagged_text):
 		elif item[1] not in ignore_list:
 			closed_class_count += 1
 
-	return float(open_class_count) / float(closed_class_count)
+	return float(open_class_count) / float(closed_class_count) if float(closed_class_count) != 0 else 0
 
 def calc_idea_density(tagged_text):
 	""" Calculate the idea density. """
@@ -39,7 +39,7 @@ def calc_idea_density(tagged_text):
 		if item[1] in proposition_list:
 			proposition_count += 1
 
-	return float(proposition_count) / float(len(tagged_text))
+	return float(proposition_count) / float(len(tagged_text)) if float(len(tagged_text)) != 0 else 0
 
 # The code contained in this section was adapted based on the code located here:
 # https://github.com/neubig/util-scripts/blob/96c91e43b650136bb88bbb087edb1d31b65d389f/syntactic-complexity.py
