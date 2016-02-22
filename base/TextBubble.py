@@ -7,7 +7,7 @@ import os.path, sys, re
 from model.FullNGramminator import FullNGramminator
 from parse.TreeStringParser import TreeStringParser
 from sentenizers.CleanSentenizer import CleanSentenizer
-from tag.POSTagger import POSTagger
+from tag.NLTKPOSTagger import NLTKPOSTagger
 from tokenizers.RawTokenizer import RawTokenizer
 from tokenizers.CleanTokenizer import CleanTokenizer
 from annotation.MeyersDialogActAnnotator import MeyersDialogActAnnotator
@@ -42,13 +42,14 @@ class TextBubble:
 	__cleantokenizer = CleanTokenizer()
 	__rawtokenizer = RawTokenizer()
 	__sentenizer = CleanSentenizer()
-	__postagger = POSTagger()
+	__postagger = NLTKPOSTagger()
 	__treestring_gen = TreeStringParser()
 	__meyers_annotator = MeyersDialogActAnnotator()
 	__speaker_annotator = SpeakerIndicatorAnnotator()
 	__ex_yngve, __ex_frazier = 0.0, 0.0
 	__annotated_utts = {}
-	def __init__(self, text, ngramminator=FullNGramminator(), postagger= POSTagger()):
+
+	def __init__(self, text, ngramminator=FullNGramminator(), postagger=NLTKPOSTagger()):
 		"""
 		Creates a TextBubble Object.
 		"""

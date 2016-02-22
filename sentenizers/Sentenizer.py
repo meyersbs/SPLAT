@@ -19,6 +19,7 @@ class Sentenizer:
 	A Sentenizer provides the functionality to generate a list of sentences from a text input.
 	"""
 	punctlist = [".", "!", "?"]
+
 	def __init__(self):
 		"""
 		Creates a Sentenizer object.

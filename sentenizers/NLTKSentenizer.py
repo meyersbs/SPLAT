@@ -1,10 +1,11 @@
 #!/usr/bin/python3.4
 
 ##### PYTHON IMPORTS ###################################################################################################
-import re
+import os
+from nltk import sent_tokenize
 
 ##### SPLAT IMPORTS ####################################################################################################
-from tokenizers.Tokenizer import Tokenizer
+from sentenizers.Sentenizer import Sentenizer
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
@@ -17,24 +18,29 @@ from tokenizers.Tokenizer import Tokenizer
 ########################################################################################################################
 ########################################################################################################################
 
-class CleanTokenizer(Tokenizer):
+class NLTKSentenizer(Sentenizer):
 	"""
-	A CleanTokenizer provides the ability to tokenize a text input by converting it to lowercase and removing
-	basic punctuation.
+	A RawSentenizer provides the functionality to generate a list of unprocessed sentences from a text input.
 	"""
-	def tokenize(self, text):
-		raw_tokens = Tokenizer.tokenize(self, text)
-		clean_tokens = []
-		
-		temp = []
-		for token in raw_tokens:
-			if token != "" and token != " ":
-				temp.append(token.strip("\n"))
+	def sentenize(self, text):
+		"""
 
-		raw_tokens = temp
+		:param text:
+		:type text:
+		:return:
+		:rtype:
+		"""
+		sentences = ""
+		if type(text) == str:
+			if os.path.exists(text):
+				sentences = " ".join(self.__sentenize_file(self, text))
+			else:
+				sentences = text
+		elif type(text) == list:
+			sentences = " ".join(text)
+		else:
+			raise ValueError("Text to sentenize must be of type str or type list.")
 
-		for word in raw_tokens:
-			clean_word = re.sub(r"[\.,!\?]", "", word)
-			clean_tokens.append(clean_word.lower())
-		
-		return clean_tokens
+		sentences = sent_tokenize(sentences)
+
+		return sentences

@@ -1,7 +1,8 @@
 #!/usr/bin/python3.4
 
 ##### PYTHON IMPORTS ###################################################################################################
-import re
+import os, re
+from nltk import word_tokenize
 
 ##### SPLAT IMPORTS ####################################################################################################
 from tokenizers.Tokenizer import Tokenizer
@@ -17,24 +18,28 @@ from tokenizers.Tokenizer import Tokenizer
 ########################################################################################################################
 ########################################################################################################################
 
-class CleanTokenizer(Tokenizer):
+class NLTKCleanTokenizer(Tokenizer):
 	"""
-	A CleanTokenizer provides the ability to tokenize a text input by converting it to lowercase and removing
+	An NLTKCleanTokenizer provides the ability to tokenize a text input by converting it to lowercase and removing
 	basic punctuation.
 	"""
 	def tokenize(self, text):
-		raw_tokens = Tokenizer.tokenize(self, text)
+		raw_tokens = []
+		if type(text) == str:
+			if os.path.exists(text):
+				raw_tokens = self.__tokenize_file(text)
+			else:
+				raw_tokens = text
+		elif type(text) == list:
+			raw_tokens = text
+		else:
+			raise ValueError("Text to tokenize must be of type str or type list.")
+
 		clean_tokens = []
-		
-		temp = []
-		for token in raw_tokens:
-			if token != "" and token != " ":
-				temp.append(token.strip("\n"))
-
-		raw_tokens = temp
-
 		for word in raw_tokens:
 			clean_word = re.sub(r"[\.,!\?]", "", word)
 			clean_tokens.append(clean_word.lower())
-		
+
+		clean_tokens = word_tokenize(" ".join(clean_tokens))
+
 		return clean_tokens
