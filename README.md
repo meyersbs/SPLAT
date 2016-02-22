@@ -15,7 +15,7 @@ SPLAT is designed to help you annotate text files and it is assumed that most in
 ## System Requirements
 SPLAT is being developed and tested on 64-bit Ubuntu 15.10 with Python 3.4.3. Minimum requirements include:
 * Python 3.4 or Later
-* NLTK 3.1 or Later (for frequency distributions and Tree structures)
+* NLTK 3.1 or Later
 * Java (for the Berkeley Parser)
 
 - - - -
@@ -119,6 +119,9 @@ To uninstall run the following in a command line.
 
 - - - -
 ## Release Notes
+#### UPDATE
+SPLAT is taking a new direction. NLTK, while not maintained too well, is still the best at what it does. Since I do not have the background to do everything that NLTK does, I will work on having SPLAT complement NLTK, rather than replace it.
+
 #### Release 3.0
 * SPLAT has been reorganized into packages so that it can either be used as a Python library, or as a command-line tool.
 * The command-line interface has been cleaned up, and hopefully looks better.
