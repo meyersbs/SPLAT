@@ -1,8 +1,10 @@
 #!/usr/bin/python3.4
 
+##### SPLAT IMPORTS ####################################################################################################
+from model.NGramminator import NGramminator
+
 ##### NLTK IMPORTS #####################################################################################################
-from nltk import pos_tag
-from nltk import word_tokenize
+from nltk.util import ngrams
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
@@ -14,42 +16,35 @@ from nltk import word_tokenize
 ### @LICENSE_TYPE:																									 ###
 ########################################################################################################################
 ########################################################################################################################
-
-class NLTKPOSTagger:
+class NLTKRawNGramminator(NGramminator):
 	"""
-	An NLTKPOSTagger tokenizes the given input with punctuation as separate tokens, and then does a dictionary lookup to
-	determine the part-of-speech for each token.
+	An NLTKRawNGramminator provides the functionality to generate ngrams for a given text sequence.
+	No text normalization occurs.
 	"""
-
-	def __init__(self):
+	def ngrams(self, text, n):
 		"""
-		Creates a Tagger object.
+		Generates a list of ngrams of size n.
+		:param text:the text selection to ngramminate
+		:type text:str
+		:param n:the size of each ngram
+		:type n:int
+		:return:a list of ngrams of size n
+		:rtype:list
 		"""
-		pass
-
-	def tag(self, text):
-		"""
-		Return a list of tuples where each pair is a word and its TAG
-		:param text:a string of text to be tagged
-		:type text:
-		:return:a list of tuples where each pair is a word and its TAG
-		:rtype:list of tuples
-		"""
-		tagged_text = []
 		if type(text) == str:
-			tagged_text = pos_tag(word_tokenize(text))
+			text = text.split()
 		elif type(text) == list:
-			new_text = " ".join(text)
-			tagged_text = pos_tag(word_tokenize(new_text))
+			text = text
+		else:
+			raise ValueError
 
-		return tagged_text
+		return list(ngrams(text, n))
 
-	def untag(self, tagged_list):
-		"""
-		Return a string of untagged text
-		:param tagged_list:a list of tuples where each pair is a word and TAG
-		:type tagged_list:list of tuples
-		:return:a string of text
-		:rtype:str
-		"""
-		raise NotImplementedError
+	def unigrams(self, text):
+		return self.ngrams(text, 1)
+
+	def bigrams(self, text):
+		return self.ngrams(text, 2)
+
+	def trigrams(self, text):
+		return self.ngrams(text, 3)
