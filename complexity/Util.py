@@ -100,7 +100,7 @@ def get_formatted_trees(treestrings):
 
 	return form_trees
 
-# TODO: Verify Results
+# TODO: Verify Results with multiline input
 def get_yngve_score(treestrings):
 	""" Average all of the yngve scores for the given input_file. """
 	count = 0

@@ -114,7 +114,6 @@ class TextBubble:
 		self.__yngve_score = None
 		self.__frazier_score = None
 		self.__ex_yngve = None
-		self.__ex_yngve = None
 		self.__annotated_bubble = None
 		self.__dpa = None
 		self.__cdensity = cUtil.calc_content_density(self.__pos)
@@ -296,8 +295,14 @@ class TextBubble:
 		Returns the mean Yngve Score.
 		Yngve score is... http://www.m-mitchell.com/papers/RoarkEtAl-07-SynplexityforMCI.pdf
 		"""
-		print("WARNING: Yngve Score calculation is under review, and thus not available at this time.")
-		return ''
+		print("WARNING: Yngve Score calculation is under review, and thus this calculation may be incorrect.")
+		if self.__yngve_score is None:
+			trees = []
+			for treestring in self.treestrings():
+				trees.append(treestring)
+			return cUtil.get_yngve_score(trees)
+		else:
+			return self.__yngve_score
 
 	def string_based_yngve_score(self):
 		"""
