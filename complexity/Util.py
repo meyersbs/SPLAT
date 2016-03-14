@@ -5,7 +5,6 @@ import sys
 
 ##### NLTK IMPORTS #####################################################################################################
 from nltk.tree import Tree
-from nltk.tree import ParentedTree
 
 ##### SPLAT IMPORTS ####################################################################################################
 from base.Util import open_class_list, ignore_list, proposition_list
@@ -74,6 +73,32 @@ def calc_yngve_score(tree, parent):
 			count += calc_yngve_score(child, parent + i)
 		return count
 
+def yngve_redux(treestring):
+	""" For the given parse-tree-string, return the word count and the yngve score. """
+	tree = Tree.fromstring(treestring)
+	total = float(calc_yngve_score(tree, 0))
+	words = float(get_word_score(tree))
+
+	return [total, words]
+
+def get_mean_yngve(treestrings):
+	""" Average all of the yngve scores for the given input_file. """
+	count = 0
+	total = 0
+	for treestring in treestrings:
+		results = yngve_redux(treestring)
+		total += results[0]
+		count += results[1]
+	return float(total / count)
+
+def get_formatted_trees(treestrings):
+	""" Format the parse-tree-strings so they can be fed to the Frazier & Yngve parsers. """
+	form_trees = []
+	for item in treestrings:
+		form_trees.append('( ' + item + ' )')
+
+	return form_trees
+
 def calc_frazier_score(tree, parent, parent_label):
 	""" Calculate the Frazier Score for a given input_file. """
 	my_lab = ''
@@ -92,42 +117,23 @@ def calc_frazier_score(tree, parent, parent_label):
 			count += calc_frazier_score(child, score, my_lab)
 		return count
 
-def get_formatted_trees(treestrings):
-	""" Format the parse-tree-strings so they can be fed to the Frazier & Yngve parsers. """
-	form_trees = []
-	for item in treestrings:
-		form_trees.append('( ' + item + ' )')
-
-	return form_trees
-
-# TODO: Verify Results with multiline input
-def get_yngve_score(treestrings):
-	""" Average all of the yngve scores for the given input_file. """
-	count = 0
-	total = 0
-	for treestring in treestrings:
-		count += 1
-		total += yngve_redux(treestring)
-
-	return float(total / count)
-
 def get_frazier_score(treestrings):
 	""" Average all of the frazier scores for the given input_file. """
-	sentences, total_frazier_score = 0, 0
-	for tree_line in treestrings:#get_formatted_trees(treestrings):
+	sentences, total_frazier_score, total_word_count = 0, 0, 0
+	for tree_line in treestrings: #get_formatted_trees(treestrings):
 		if tree_line.strip() == "":
 			continue
 		tree = Tree.fromstring(tree_line)
 		sentences += 1
 		raw_frazier_score = calc_frazier_score(tree, 0, "")
 		try:
-			mean_frazier_score = float(raw_frazier_score) / float(get_word_score(tree))
-			total_frazier_score += mean_frazier_score
+			total_word_count += get_word_score(tree)
+			total_frazier_score += raw_frazier_score
 		except ZeroDivisionError:
 			print('WARNING: ZeroDisvisionError for the tree: ' + str(tree))
 			pass
 
-	score = float(total_frazier_score) / float(len(treestrings)) if len(treestrings) != 0 else 0
+	score = float(total_frazier_score) / float(total_word_count)
 
 	return score
 
@@ -155,10 +161,3 @@ def new_yngve(treestring):
 			pass
 
 	return float(total) / float(child_total)
-
-def yngve_redux(treestring):
-	tree = Tree.fromstring(treestring)
-	total = float(calc_yngve_score(tree, 0))
-	words = float(get_word_score(tree))
-
-	return float(total/words)

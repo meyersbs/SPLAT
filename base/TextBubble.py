@@ -300,7 +300,7 @@ class TextBubble:
 			trees = []
 			for treestring in self.treestrings():
 				trees.append(treestring)
-			return cUtil.get_yngve_score(trees)
+			return cUtil.get_mean_yngve(trees)
 		else:
 			return self.__yngve_score
 
@@ -317,8 +317,14 @@ class TextBubble:
 		Returns the Frazier Score.
 		Frazier score is... http://www.m-mitchell.com/papers/RoarkEtAl-07-SynplexityforMCI.pdf
 		"""
-		print("WARNING: Frazier Score calculation is under review, and thus not available at this time.")
-		return ''
+		print("WARNING: Frazier Score calculation is under review, and thus this calculation may be incorrect.")
+		if self.__frazier_score is None:
+			trees = []
+			for treestring in self.treestrings():
+				trees.append(treestring)
+			return cUtil.get_frazier_score(trees)
+		else:
+			return self.__frazier_score
 
 	def string_based_frazier_score(self):
 		"""
