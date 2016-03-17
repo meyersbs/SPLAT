@@ -141,6 +141,12 @@ SPLAT is taking a new direction. NLTK, while not maintained too well, is still t
 - - - -
 ## Acknowledgments
 I would like to thank Emily Prud'hommeaux and Cissi Ovesdotter-Alm for their guidance during my initial development process. I would also like to thank Bryan Meyers, my brother, letting me bounce ideas off of him, and for giving me wake-up calls when I was doing something in the less-than-intelligent (stupid) way.
+
+|-----|-----|-----|
+| Emily Prud'hommeaux | < <emilypx@rit.edu> > | < [CLaSP](http://www.rit.edu/clasp/people.html) > | |
+| Cissi O. Alm | < <coacla@rit.edu> > | < [CLaSP](http://www.rit.edu/clasp/people.html) > | |
+| Bryan T. Meyers | < <bmeyers@datadrake.com> > | < [DataDrake](http://www.datadrake.com/) > | < [GitHub](https://github.com/DataDrake) > |
+
 * Emily Tucker Prud'hommeaux < <emilypx@rit.edu> > < [CLaSP](http://www.rit.edu/clasp/people.html) >
 * Cissi Ovesdotter-Alm < <coacla@rit.edu> > < [CLaSP](http://www.rit.edu/clasp/people.html) >
 * Bryan T. Meyers < <bmeyers@datadrake.com> > < [DataDrake](http://www.datadrake.com/) > < [GitHub](https://github.com/DataDrake) >
