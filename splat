@@ -43,6 +43,7 @@ def command_message():
 	print(template.format("function", "--", "<input_file>", "Display all function words."))
 	print(template.format("idensity", "--", "<input_file>", "Display idea density."))
 	print(template.format("leastfreq", "<x>", "<input_file>", "Display the <x> least frequent words."))
+	print(template.format("lwords", "--", "<input_file>", "Display the longest words."))
 	print(template.format("maxdepth", "--", "<input_file>", "Display maxdepth of trees."))
 	print(template.format("mostfreq", "<x>", "<input_file>", "Display the <x> most frequent words."))
 	print(template.format("ngrams", "<n>", "<input_file>", "Display all <n>-grams."))
@@ -51,6 +52,7 @@ def command_message():
 	print(template.format("poscounts", "--", "<input_file>", "Display counts for each POS tag."))
 	print(template.format("sents", "--", "<input_file>", "Display sentences."))
 	print(template.format("sentcount", "--", "<input_file>", "Display number of sentences."))
+	print(template.format("swords", "--", "<input_file>", "Display the shortest words."))
 	print(template.format("tokens", "--", "<input_file>", "Display all tokens."))
 	print(template.format("trees", "--", "<input_file>", "Display all parse trees."))
 	print(template.format("trigrams", "--", "<input_file>", "Display all trigrams."))
@@ -156,7 +158,8 @@ def setup_commands():
 				"dps":my_bubble.disfluencies_per_sentence,			"disfluencies":my_bubble.disfluencies,
 				"als":my_bubble.average_sentence_length,			"exyngve":my_bubble.string_based_yngve_score,
 				"exfrazier":my_bubble.string_based_frazier_score,	"bubble":my_bubble.bubble,
-				"annotate":my_bubble.annotated_bubble,				"dpa":my_bubble.disfluencies_per_act}
+				"annotate":my_bubble.annotated_bubble,				"dpa":my_bubble.disfluencies_per_act,
+				"lwords":my_bubble.longest_words,					"swords":my_bubble.shortest_words}
 
 def main():
 	args = sys.argv

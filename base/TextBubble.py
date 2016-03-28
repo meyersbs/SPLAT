@@ -37,6 +37,7 @@ class TextBubble:
 	__c_words, __f_words, __uc_words, __uf_words = [], [], [], []
 	__rawtypes, __types, __poscounts, __dpu, __dps, __disfluencies = {}, {}, {}, {}, {}, {}
 	__bubble = ""
+	__longest_words, shortest_words = [], []
 	__annotated_bubble, __freq_dist, __dpa = None, None, None
 	__ngramminator = FullNGramminator()
 	__cleantokenizer = CleanTokenizer()
@@ -93,6 +94,8 @@ class TextBubble:
 		self.__sentcount = len(self.__sentences)
 		self.__rawtokens = self.__rawtokenizer.tokenize(self.__bubble)
 		self.__tokens = self.__cleantokenizer.tokenize(self.__bubble)
+		self.__longest_words = set([word for word in self.__tokens if len(word) == max(len(word) for word in self.__tokens)])
+		self.__shortest_words = set([word for word in self.__tokens if len(word) == min(len(word) for word in self.__tokens)])
 		self.__rawtypes = Util.typify(self.__rawtokens)
 		self.__types = Util.typify(self.__tokens)
 		self.__wordcount = Util.wordcount(self.__rawtokens)
@@ -275,6 +278,14 @@ class TextBubble:
 		for item in self.__sentences:
 			print(len(item.split(" ")))
 		return ''
+
+	def longest_words(self):
+		""" Returns the longest words in the text."""
+		return self.__longest_words
+
+	def shortest_words(self):
+		""" Returns the shortest words in the text."""
+		return self.__shortest_words
 
 	def content_density(self):
 		"""
