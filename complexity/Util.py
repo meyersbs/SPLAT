@@ -1,7 +1,7 @@
 #!/usr/bin/python3.4
 
 ##### PYTHON IMPORTS ###################################################################################################
-import sys
+import sys, re
 
 ##### NLTK IMPORTS #####################################################################################################
 from nltk.tree import Tree
@@ -99,6 +99,25 @@ def get_formatted_trees(treestrings):
 
 	return form_trees
 
+def yngve_redux(treestring):
+	""" For the given parse-tree-string, return the word count and the yngve score. """
+	tree = Tree.fromstring(treestring)
+	total = float(calc_yngve_score(tree, 0))
+	words = float(get_word_score(tree))
+
+	return [total, words]
+
+def get_mean_yngve(treestrings):
+	""" Average all of the yngve scores for the given input_file. """
+	count = 0
+	total = 0
+	for treestring in treestrings:
+		results = yngve_redux(treestring)
+		print(results)
+		total += results[0]
+		count += results[1]
+	return float(total / count)
+
 def calc_frazier_score(tree, parent, parent_label):
 	""" Calculate the Frazier Score for a given input_file. """
 	my_lab = ''
@@ -161,3 +180,83 @@ def new_yngve(treestring):
 			pass
 
 	return float(total) / float(child_total)
+
+def yngve(treestrings):
+	individual_scores = 0
+	for treestring in treestrings:
+		individual_scores += new_yngve(treestring)
+
+	return float(individual_scores) / float(len(treestrings))
+
+############################
+def get_reversed_parentree(parentree):
+	reversed_parentree = ""
+	for char in reversed(parentree):
+		if char == ")":
+			reversed_parentree += "("
+		elif char == "(":
+			reversed_parentree += ")"
+		else:
+			pass
+	return reversed_parentree
+
+def find_sub_parentree(reversed_parentree, start_index):
+	count = 0
+	end_index = start_index
+	for char in reversed_parentree:
+		if char == "(":
+			count += 1
+		else:
+			count -= 1
+		end_index += 1
+		if count == 0:
+			break
+
+	return end_index
+
+def calc_score(value, reversed_parentree):
+	#print(reversed_parentree)
+	reversed_parentree = reversed_parentree[1:-1] # Strip first and last parens
+	#print(reversed_parentree)
+	START_INDEX = 0
+	counter = 0
+	total = 0
+	print(reversed_parentree)
+	print("LEN: " + str(len(reversed_parentree)))
+	if len(reversed_parentree) == 2:
+		#print(counter)
+		return value
+	elif len(reversed_parentree) == 0:
+		return 0
+	while len(reversed_parentree) > 0:
+		end_index = find_sub_parentree(reversed_parentree, counter)
+		print(end_index)
+		if end_index > 0 or end_index <= len(reversed_parentree): # IF EXISTS
+			sub_parentree = reversed_parentree[START_INDEX:end_index]
+			reversed_parentree = reversed_parentree[end_index:]
+			print(reversed_parentree)
+			total += value + calc_score(counter, sub_parentree)
+			print("TOTAL: " + str(total))
+			#print(counter)
+			counter += 1
+
+	return total
+
+def get_single_mean_yngve(treestring):
+	#print(treestring)
+	reversed_parentree = get_reversed_parentree(treestring)
+	#print(reversed_parentree)
+	wordcount = len(re.findall(r'\(\)', reversed_parentree))
+	#print(wordcount)
+	return [calc_score(0, reversed_parentree), wordcount]
+
+def get_total_mean_yngve(treestrings):
+	count = 0
+	total = 0
+	for treestring in treestrings:
+		results = get_single_mean_yngve(treestring)
+		print(results)
+		total += results[0]
+		count += results[1]
+
+	return float(total / count)

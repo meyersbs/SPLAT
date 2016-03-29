@@ -306,7 +306,6 @@ class TextBubble:
 		Returns the mean Yngve Score.
 		Yngve score is... http://www.m-mitchell.com/papers/RoarkEtAl-07-SynplexityforMCI.pdf
 		"""
-		print("WARNING: Yngve Score calculation is under review, and thus this calculation may be incorrect.")
 		if self.__yngve_score is None:
 			trees = []
 			for treestring in self.treestrings():
@@ -321,7 +320,13 @@ class TextBubble:
 		Yngve score is... http://www.m-mitchell.com/papers/RoarkEtAl-07-SynplexityforMCI.pdf
 		"""
 		print("WARNING: Yngve Score calculation is under review, and thus not available at this time.")
-		return ''
+		if self.__ex_yngve is None:
+			trees = []
+			for treestring in self.treestrings():
+				trees.append(treestring)
+			return cUtil.get_total_mean_yngve(trees)
+		else:
+			return self.__ex_yngve
 
 	def tree_based_frazier_score(self):
 		"""
