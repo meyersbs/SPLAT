@@ -224,20 +224,27 @@ def calc_score(value, reversed_parentree):
 	print(reversed_parentree)
 	print("LEN: " + str(len(reversed_parentree)))
 	if len(reversed_parentree) == 2:
-		#print(counter)
+		print("HIT: " + str(value))
 		return value
 	elif len(reversed_parentree) == 0:
-		return 0
-	while len(reversed_parentree) > 0:
-		end_index = find_sub_parentree(reversed_parentree, counter)
-		print(end_index)
-		if end_index > 0 or end_index <= len(reversed_parentree): # IF EXISTS
-			sub_parentree = reversed_parentree[START_INDEX:end_index]
-			reversed_parentree = reversed_parentree[end_index:]
-			print(reversed_parentree)
-			total += value + calc_score(counter, sub_parentree)
-			print("TOTAL: " + str(total))
-			#print(counter)
+		return value
+	else:
+		while len(reversed_parentree) > 0:
+			# Eliminated odd end_index by changing 'counter' to 'START_INDEX'
+			end_index = find_sub_parentree(reversed_parentree, START_INDEX)
+			print("END: " + str(end_index))
+			#if end_index > len(reversed_parentree):
+			#	break
+			#else:
+			if end_index > 0 or end_index <= len(reversed_parentree): # IF EXISTS
+				sub_parentree = reversed_parentree[START_INDEX:end_index]
+				print("SUB: " + sub_parentree)
+				reversed_parentree = reversed_parentree[end_index:]
+				print("REM: " + reversed_parentree)
+				print("VAL: " + str(value))
+				total += value + calc_score(counter, sub_parentree)
+				print("TOT: " + str(total))
+				#print(counter)
 			counter += 1
 
 	return total
