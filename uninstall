@@ -1,0 +1,6 @@
+#!/bin/sh
+
+echo 'Uninstalling SPLAT...'
+rm -rf ~/.SPLAT/
+unalias splat
+echo "SPLAT has been uninstalled. If you change your mind, please visit: https://github.com/meyersbs/SPLAT"

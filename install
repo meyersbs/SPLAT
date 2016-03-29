@@ -6,4 +6,6 @@ wget https://github.com/meyersbs/SPLAT/archive/master.zip
 unzip master.zip
 chmod +x ~/.SPLAT/SPLAT-master/splat
 echo 'alias splat="~/.SPLAT/SPLAT-master/splat"' >> ~/.bashrc
-echo "Thank you for installing SPLAT! Documentation and example usage can be found here: https://github.com/meyersbs/SPLAT"
+rm master.zip
+splat --info
+#echo "Thank you for installing SPLAT! Documentation and example usage can be found here: https://github.com/meyersbs/SPLAT"

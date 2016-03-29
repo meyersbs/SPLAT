@@ -84,7 +84,7 @@ def info_message():
 	""" Display copyright information. """
 	prog_info = "#################################################################"
 	prog_info += "\n# SPLAT - Speech Processing & Linguistic Annotation Tool \t#"
-	prog_info += "\n# Copyright (C) 2015, Benjamin S. Meyers\t\t\t#"
+	prog_info += "\n# Copyright (C) 2016, Benjamin S. Meyers\t\t\t#"
 	prog_info += "\n# \t\t\t\t\t\t\t\t#"
 	prog_info += "\n# Developed by Benjamin S. Meyers in collaboration with:\t#"
 	prog_info += "\n#\tEmily Prud'hommeaux\tCissi O. Alm\t\t\t#"
