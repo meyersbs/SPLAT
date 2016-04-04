@@ -52,7 +52,9 @@ def command_message():
 	print(template.format("poscounts", "--", "<input_file>", "Display counts for each POS tag."))
 	print(template.format("sents", "--", "<input_file>", "Display sentences."))
 	print(template.format("sentcount", "--", "<input_file>", "Display number of sentences."))
+	print(template.format("sfrazier", "--", "<input_file>", "Display string-based frazier score."))
 	print(template.format("swords", "--", "<input_file>", "Display the shortest words."))
+	print(template.format("syngve", "--", "<input_file>", "Display string-based yngve score."))
 	print(template.format("tokens", "--", "<input_file>", "Display all tokens."))
 	print(template.format("trees", "--", "<input_file>", "Display all parse trees."))
 	print(template.format("trigrams", "--", "<input_file>", "Display all trigrams."))
@@ -156,8 +158,8 @@ def setup_commands():
 				"mostfreq":my_bubble.get_most_freq,					"leastfreq":my_bubble.get_least_freq,
 				"plotfreq":my_bubble.plot_freq,						"dpu":my_bubble.disfluencies_per_utterance,
 				"dps":my_bubble.disfluencies_per_sentence,			"disfluencies":my_bubble.disfluencies,
-				"als":my_bubble.average_sentence_length,			"exyngve":my_bubble.string_based_yngve_score,
-				"exfrazier":my_bubble.string_based_frazier_score,	"bubble":my_bubble.bubble,
+				"als":my_bubble.average_sentence_length,			"syngve":my_bubble.string_based_yngve_score,
+				"sfrazier":my_bubble.string_based_frazier_score,	"bubble":my_bubble.bubble,
 				"annotate":my_bubble.annotated_bubble,				"dpa":my_bubble.disfluencies_per_act,
 				"lwords":my_bubble.longest_words,					"swords":my_bubble.shortest_words}
 
