@@ -81,24 +81,6 @@ def yngve_redux(treestring):
 
 	return [total, words]
 
-def get_mean_yngve(treestrings):
-	""" Average all of the yngve scores for the given input_file. """
-	count = 0
-	total = 0
-	for treestring in treestrings:
-		results = yngve_redux(treestring)
-		total += results[0]
-		count += results[1]
-	return float(total / count)
-
-def get_formatted_trees(treestrings):
-	""" Format the parse-tree-strings so they can be fed to the Frazier & Yngve parsers. """
-	form_trees = []
-	for item in treestrings:
-		form_trees.append('( ' + item + ' )')
-
-	return form_trees
-
 def yngve_redux(treestring):
 	""" For the given parse-tree-string, return the word count and the yngve score. """
 	tree = Tree.fromstring(treestring)
@@ -138,7 +120,7 @@ def calc_frazier_score(tree, parent, parent_label):
 def get_frazier_score(treestrings):
 	""" Average all of the frazier scores for the given input_file. """
 	sentences, total_frazier_score, total_word_count = 0, 0, 0
-	for tree_line in treestrings: #get_formatted_trees(treestrings):
+	for tree_line in treestrings:
 		if tree_line.strip() == "":
 			continue
 		tree = Tree.fromstring(tree_line)
