@@ -1,13 +1,10 @@
 #!/usr/bin/python3.4
 
 ##### PYTHON IMPORTS ###################################################################################################
-import os, re
-
-##### NLTK IMPORTS #####################################################################################################
-from nltk import word_tokenize
+import re
 
 ##### SPLAT IMPORTS ####################################################################################################
-from tokenizers.Tokenizer import Tokenizer
+from splat.tokenizers.Tokenizer import Tokenizer
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
@@ -20,28 +17,21 @@ from tokenizers.Tokenizer import Tokenizer
 ########################################################################################################################
 ########################################################################################################################
 
-class NLTKCleanTokenizer(Tokenizer):
+class PunctTokenizer(Tokenizer):
 	"""
-	An NLTKCleanTokenizer provides the ability to tokenize a text input by converting it to lowercase and removing
-	basic punctuation.
+	A PuncTokenizer provides the ability to tokenize a text input, including punctuation as separate tokens.
 	"""
 	def tokenize(self, text):
-		raw_tokens = []
-		if type(text) == str:
-			if os.path.exists(text):
-				raw_tokens = self.__tokenize_file(text)
-			else:
-				raw_tokens = text
-		elif type(text) == list:
-			raw_tokens = text
-		else:
-			raise ValueError("Text to tokenize must be of type str or type list.")
+		punc_tokens = []
+		raw_tokens = Tokenizer.tokenize(self, text)
+		
+		temp = []
+		for token in raw_tokens:
+			temp_tokens = re.findall(r"[\w']+|[\.,!?;:]", token)
+			for temp_token in temp_tokens:
+				if token != "" and token != " " and token != ' ' and token != '':
+					temp.append(temp_token.lower())
 
-		clean_tokens = []
-		for word in raw_tokens:
-			clean_word = re.sub(r"[\.,!\?]", "", word)
-			clean_tokens.append(clean_word.lower())
-
-		clean_tokens = word_tokenize(" ".join(clean_tokens))
-
-		return clean_tokens
+		punc_tokens = temp
+		
+		return punc_tokens

@@ -7,7 +7,7 @@ import sys, re
 from nltk.tree import Tree
 
 ##### SPLAT IMPORTS ####################################################################################################
-from base.Util import open_class_list, ignore_list, proposition_list
+from splat.base.Util import open_class_list, ignore_list, proposition_list
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
@@ -113,7 +113,6 @@ def get_mean_yngve(treestrings):
 	total = 0
 	for treestring in treestrings:
 		results = yngve_redux(treestring)
-		print(results)
 		total += results[0]
 		count += results[1]
 	return float(total / count)

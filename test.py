@@ -1,13 +1,13 @@
 import unittest
 
-from model.RawNGramminator import RawNGramminator
-from model.PunctNGramminator import PunctNGramminator
-from model.CaseNGramminator import CaseNGramminator
-from model.FullNGramminator import FullNGramminator
-from base.TextBubble import TextBubble
-from tag.POSTagger import POSTagger
-from tokenizers.PunctTokenizer import PunctTokenizer
-import complexity.Util
+from splat.model.RawNGramminator import RawNGramminator
+from splat.model.PunctNGramminator import PunctNGramminator
+from splat.model.CaseNGramminator import CaseNGramminator
+from splat.model.FullNGramminator import FullNGramminator
+from splat.base.TextBubble import TextBubble
+from splat.tag.POSTagger import POSTagger
+from splat.tokenizers.PunctTokenizer import PunctTokenizer
+import splat.complexity.Util
 
 class TestTextBubble(unittest.TestCase):
 	whitman = "I celebrate myself, And what I assume you shall assume, For every atom belonging to me as good belongs to you."
@@ -17,6 +17,7 @@ class TestTextBubble(unittest.TestCase):
 	test_bubble_2 = TextBubble(frankenstein, full_ngram)
 	pos_tagger = POSTagger()
 	p_tokenizer = PunctTokenizer()
+
 	def test_TextBubble_rawtokens(self):
 		output = self.test_bubble_1.rawtokens()
 		expected = ['I', 'celebrate', 'myself,', 'And', 'what', 'I', 'assume', 'you', 'shall', 'assume,', 'For', 'every', 'atom', 'belonging', 'to', 'me', 'as', 'good', 'belongs', 'to', 'you.']

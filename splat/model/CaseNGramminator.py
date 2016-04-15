@@ -1,13 +1,7 @@
 #!/usr/bin/python3.4
 
-##### PYTHON IMPORTS ###################################################################################################
-import os
-
-##### NLTK IMPORTS #####################################################################################################
-from nltk import sent_tokenize
-
 ##### SPLAT IMPORTS ####################################################################################################
-from sentenizers.Sentenizer import Sentenizer
+from splat.model.NGramminator import NGramminator
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
@@ -19,30 +13,48 @@ from sentenizers.Sentenizer import Sentenizer
 ### @LICENSE_TYPE:																									 ###
 ########################################################################################################################
 ########################################################################################################################
-
-class NLTKSentenizer(Sentenizer):
+class CaseNGramminator(NGramminator):
 	"""
-	A RawSentenizer provides the functionality to generate a list of unprocessed sentences from a text input.
+	A CaseNGramminator provides the functionality to generate ngrams for a given text sequence.
+	All characters in the given text are lowercased before being ngramminated.
 	"""
-	def sentenize(self, text):
+	def ngrams(self, text, n):
 		"""
-
-		:param text:
-		:type text:
-		:return:
-		:rtype:
+		Generates a list of ngrams of size n.
+		:param text:the text selection to ngramminate
+		:type text:str
+		:param n:the size of each ngram
+		:type n:int
+		:return:a list of ngrams of size n
+		:rtype:list
 		"""
-		sentences = ""
+		temp_text = []
 		if type(text) == str:
-			if os.path.exists(text):
-				sentences = " ".join(self.__sentenize_file(self, text))
-			else:
-				sentences = text
+			temp_text = text.lower().split()
 		elif type(text) == list:
-			sentences = " ".join(text)
+			temp_text = text
+			text = []
+			for temp_word in temp_text:
+				text.append(temp_word.lower())
+			temp_text = text
 		else:
-			raise ValueError("Text to sentenize must be of type str or type list.")
+			raise ValueError
 
-		sentences = sent_tokenize(sentences)
+		text = temp_text
 
-		return sentences
+		ngram_list = []
+		for i in range(len(text)-n+1):
+			ngram = []
+			for j in range(0,n):
+				ngram.append(text[i+j])
+			ngram_list.append(tuple(ngram))
+		return ngram_list
+
+	def unigrams(self, text):
+		return self.ngrams(text, 1)
+
+	def bigrams(self, text):
+		return self.ngrams(text, 2)
+
+	def trigrams(self, text):
+		return self.ngrams(text, 3)

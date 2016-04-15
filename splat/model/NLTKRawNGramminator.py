@@ -1,7 +1,10 @@
 #!/usr/bin/python3.4
 
 ##### SPLAT IMPORTS ####################################################################################################
-from model.NGramminator import NGramminator
+from splat.model.NGramminator import NGramminator
+
+##### NLTK IMPORTS #####################################################################################################
+from nltk.util import ngrams
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
@@ -13,10 +16,10 @@ from model.NGramminator import NGramminator
 ### @LICENSE_TYPE:																									 ###
 ########################################################################################################################
 ########################################################################################################################
-class CaseNGramminator(NGramminator):
+class NLTKRawNGramminator(NGramminator):
 	"""
-	A CaseNGramminator provides the functionality to generate ngrams for a given text sequence.
-	All characters in the given text are lowercased before being ngramminated.
+	An NLTKRawNGramminator provides the functionality to generate ngrams for a given text sequence.
+	No text normalization occurs.
 	"""
 	def ngrams(self, text, n):
 		"""
@@ -28,27 +31,14 @@ class CaseNGramminator(NGramminator):
 		:return:a list of ngrams of size n
 		:rtype:list
 		"""
-		temp_text = []
 		if type(text) == str:
-			temp_text = text.lower().split()
+			text = text.split()
 		elif type(text) == list:
-			temp_text = text
-			text = []
-			for temp_word in temp_text:
-				text.append(temp_word.lower())
-			temp_text = text
+			text = text
 		else:
 			raise ValueError
 
-		text = temp_text
-
-		ngram_list = []
-		for i in range(len(text)-n+1):
-			ngram = []
-			for j in range(0,n):
-				ngram.append(text[i+j])
-			ngram_list.append(tuple(ngram))
-		return ngram_list
+		return list(ngrams(text, n))
 
 	def unigrams(self, text):
 		return self.ngrams(text, 1)

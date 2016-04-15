@@ -5,7 +5,7 @@
 import sys, os, pickle, subprocess
 
 ##### SPLAT IMPORTS ####################################################################################################
-from base.TextBubble import TextBubble
+from splat.base.TextBubble import TextBubble
 
 ##### GLOBAL VARIABLES #################################################################################################
 my_bubble = None

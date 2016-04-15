@@ -1,7 +1,13 @@
 #!/usr/bin/python3.4
 
+##### PYTHON IMPORTS ###################################################################################################
+import os, re
+
+##### NLTK IMPORTS #####################################################################################################
+from nltk import word_tokenize
+
 ##### SPLAT IMPORTS ####################################################################################################
-from model.NGramminator import NGramminator
+from splat.tokenizers.Tokenizer import Tokenizer
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
@@ -13,41 +19,29 @@ from model.NGramminator import NGramminator
 ### @LICENSE_TYPE:																									 ###
 ########################################################################################################################
 ########################################################################################################################
-class RawNGramminator(NGramminator):
+
+class NLTKCleanTokenizer(Tokenizer):
 	"""
-	A RawNGramminator provides the functionality to generate ngrams for a given text sequence.
-	No text normalization occurs.
+	An NLTKCleanTokenizer provides the ability to tokenize a text input by converting it to lowercase and removing
+	basic punctuation.
 	"""
-	def ngrams(self, text, n):
-		"""
-		Generates a list of ngrams of size n.
-		:param text:the text selection to ngramminate
-		:type text:str
-		:param n:the size of each ngram
-		:type n:int
-		:return:a list of ngrams of size n
-		:rtype:list
-		"""
+	def tokenize(self, text):
+		raw_tokens = []
 		if type(text) == str:
-			text = text.split()
+			if os.path.exists(text):
+				raw_tokens = self.__tokenize_file(text)
+			else:
+				raw_tokens = text
 		elif type(text) == list:
-			text = text
+			raw_tokens = text
 		else:
-			raise ValueError
+			raise ValueError("Text to tokenize must be of type str or type list.")
 
-		ngram_list = []
-		for i in range(len(text)-n+1):
-			ngram = []
-			for j in range(0,n):
-				ngram.append(text[i+j])
-			ngram_list.append(tuple(ngram))
-		return ngram_list
+		clean_tokens = []
+		for word in raw_tokens:
+			clean_word = re.sub(r"[\.,!\?]", "", word)
+			clean_tokens.append(clean_word.lower())
 
-	def unigrams(self, text):
-		return self.ngrams(text, 1)
+		clean_tokens = word_tokenize(" ".join(clean_tokens))
 
-	def bigrams(self, text):
-		return self.ngrams(text, 2)
-
-	def trigrams(self, text):
-		return self.ngrams(text, 3)
+		return clean_tokens

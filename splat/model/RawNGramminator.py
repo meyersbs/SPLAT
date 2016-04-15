@@ -1,10 +1,7 @@
 #!/usr/bin/python3.4
 
-##### PYTHON IMPORTS ###################################################################################################
-import re
-
 ##### SPLAT IMPORTS ####################################################################################################
-from model.NGramminator import NGramminator
+from splat.model.NGramminator import NGramminator
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
@@ -16,11 +13,10 @@ from model.NGramminator import NGramminator
 ### @LICENSE_TYPE:																									 ###
 ########################################################################################################################
 ########################################################################################################################
-class FullNGramminator(NGramminator):
+class RawNGramminator(NGramminator):
 	"""
-	A FullNGramminator provides the functionality to generate ngrams for a given text sequence.
-	Characters matching r"[\.,:;!\?\(\)\[\]\{\}]" are excluded from the ngram model.
-	All characters in the given text are lowercased before being ngramminated.
+	A RawNGramminator provides the functionality to generate ngrams for a given text sequence.
+	No text normalization occurs.
 	"""
 	def ngrams(self, text, n):
 		"""
@@ -32,30 +28,12 @@ class FullNGramminator(NGramminator):
 		:return:a list of ngrams of size n
 		:rtype:list
 		"""
-		temp_text = []
 		if type(text) == str:
-			temp_text = text.split()
+			text = text.split()
 		elif type(text) == list:
-			temp_text = text
+			text = text
 		else:
 			raise ValueError
-
-		temp_text = []
-		if type(text) == str:
-			temp_text = text.lower().split()
-		elif type(text) == list:
-			temp_text = text
-			text = []
-			for temp_word in temp_text:
-				text.append(temp_word.lower())
-			temp_text = text
-		else:
-			raise ValueError
-
-		text = []
-
-		for temp_word in temp_text:
-			text.append(re.sub(r"[\.,:;!\?\(\)\[\]\{\}]", "", temp_word))
 
 		ngram_list = []
 		for i in range(len(text)-n+1):

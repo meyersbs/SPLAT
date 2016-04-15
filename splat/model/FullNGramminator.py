@@ -1,10 +1,10 @@
 #!/usr/bin/python3.4
 
-##### SPLAT IMPORTS ####################################################################################################
-from model.NGramminator import NGramminator
+##### PYTHON IMPORTS ###################################################################################################
+import re
 
-##### NLTK IMPORTS #####################################################################################################
-from nltk.util import ngrams
+##### SPLAT IMPORTS ####################################################################################################
+from splat.model.NGramminator import NGramminator
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
@@ -16,10 +16,11 @@ from nltk.util import ngrams
 ### @LICENSE_TYPE:																									 ###
 ########################################################################################################################
 ########################################################################################################################
-class NLTKRawNGramminator(NGramminator):
+class FullNGramminator(NGramminator):
 	"""
-	An NLTKRawNGramminator provides the functionality to generate ngrams for a given text sequence.
-	No text normalization occurs.
+	A FullNGramminator provides the functionality to generate ngrams for a given text sequence.
+	Characters matching r"[\.,:;!\?\(\)\[\]\{\}]" are excluded from the ngram model.
+	All characters in the given text are lowercased before being ngramminated.
 	"""
 	def ngrams(self, text, n):
 		"""
@@ -31,14 +32,38 @@ class NLTKRawNGramminator(NGramminator):
 		:return:a list of ngrams of size n
 		:rtype:list
 		"""
+		temp_text = []
 		if type(text) == str:
-			text = text.split()
+			temp_text = text.split()
 		elif type(text) == list:
-			text = text
+			temp_text = text
 		else:
 			raise ValueError
 
-		return list(ngrams(text, n))
+		temp_text = []
+		if type(text) == str:
+			temp_text = text.lower().split()
+		elif type(text) == list:
+			temp_text = text
+			text = []
+			for temp_word in temp_text:
+				text.append(temp_word.lower())
+			temp_text = text
+		else:
+			raise ValueError
+
+		text = []
+
+		for temp_word in temp_text:
+			text.append(re.sub(r"[\.,:;!\?\(\)\[\]\{\}]", "", temp_word))
+
+		ngram_list = []
+		for i in range(len(text)-n+1):
+			ngram = []
+			for j in range(0,n):
+				ngram.append(text[i+j])
+			ngram_list.append(tuple(ngram))
+		return ngram_list
 
 	def unigrams(self, text):
 		return self.ngrams(text, 1)

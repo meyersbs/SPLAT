@@ -1,13 +1,7 @@
 #!/usr/bin/python3.4
 
-##### PYTHON IMPORTS ###################################################################################################
-import os
-
-##### NLTK IMPORTS #####################################################################################################
-from nltk import wordpunct_tokenize
-
 ##### SPLAT IMPORTS ####################################################################################################
-from tokenizers.Tokenizer import Tokenizer
+from splat.sentenizers.Sentenizer import Sentenizer
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
@@ -20,22 +14,18 @@ from tokenizers.Tokenizer import Tokenizer
 ########################################################################################################################
 ########################################################################################################################
 
-class NLTKPunctTokenizer(Tokenizer):
+class RawSentenizer(Sentenizer):
 	"""
-	An NLTKPunctTokenizer provides the ability to tokenize a text input, including punctuation as separate tokens.
+	A RawSentenizer provides the functionality to generate a list of unprocessed sentences from a text input.
 	"""
-	def tokenize(self, text):
-		raw_text = ""
-		raw_tokens = []
-		if type(text) == str:
-			if os.path.exists(text):
-				raw_text = " ".join(self.__tokenize_file(text))
-			else:
-				raw_text = text
-		elif type(text) == list:
-			raw_text = " ".join(text)
-		else:
-			raise ValueError("Text to tokenize must be of type str or type list.")
-		raw_tokens = wordpunct_tokenize(raw_text)
+	def sentenize(self, text):
+		"""
 
-		return raw_tokens
+		:param text:
+		:type text:
+		:return:
+		:rtype:
+		"""
+		sentences = Sentenizer.sentenize(self, text)
+
+		return sentences

@@ -4,16 +4,16 @@
 import os.path, sys, re
 
 ##### SPLAT IMPORTS ####################################################################################################
-from model.FullNGramminator import FullNGramminator
-from parse.TreeStringParser import TreeStringParser
-from sentenizers.CleanSentenizer import CleanSentenizer
-from tag.NLTKPOSTagger import NLTKPOSTagger
-from tokenizers.RawTokenizer import RawTokenizer
-from tokenizers.CleanTokenizer import CleanTokenizer
-from annotation.MeyersDialogActAnnotator import MeyersDialogActAnnotator
-from annotation.SpeakerIndicatorAnnotator import SpeakerIndicatorAnnotator
-import base.Util as Util
-import complexity.Util as cUtil
+from splat.model.FullNGramminator import FullNGramminator
+from splat.parse.TreeStringParser import TreeStringParser
+from splat.sentenizers.CleanSentenizer import CleanSentenizer
+from splat.tag.NLTKPOSTagger import NLTKPOSTagger
+from splat.tokenizers.RawTokenizer import RawTokenizer
+from splat.tokenizers.CleanTokenizer import CleanTokenizer
+from splat.annotation.MeyersDialogActAnnotator import MeyersDialogActAnnotator
+from splat.annotation.SpeakerIndicatorAnnotator import SpeakerIndicatorAnnotator
+import splat.base.Util as Util
+import splat.complexity.Util as cUtil
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################

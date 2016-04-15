@@ -4,10 +4,10 @@
 import os
 
 ##### NLTK IMPORTS #####################################################################################################
-from nltk import word_tokenize
+from nltk import wordpunct_tokenize
 
 ##### SPLAT IMPORTS ####################################################################################################
-from tokenizers.Tokenizer import Tokenizer
+from splat.tokenizers.Tokenizer import Tokenizer
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
@@ -20,9 +20,9 @@ from tokenizers.Tokenizer import Tokenizer
 ########################################################################################################################
 ########################################################################################################################
 
-class NLTKRawTokenizer(Tokenizer):
+class NLTKPunctTokenizer(Tokenizer):
 	"""
-	An NLTKRawTokenizer provides the ability to tokenize a text input ignoring case and punctuation.
+	An NLTKPunctTokenizer provides the ability to tokenize a text input, including punctuation as separate tokens.
 	"""
 	def tokenize(self, text):
 		raw_text = ""
@@ -36,6 +36,6 @@ class NLTKRawTokenizer(Tokenizer):
 			raw_text = " ".join(text)
 		else:
 			raise ValueError("Text to tokenize must be of type str or type list.")
-		raw_tokens = word_tokenize(raw_text)
-		
+		raw_tokens = wordpunct_tokenize(raw_text)
+
 		return raw_tokens

@@ -1,7 +1,7 @@
 #!/usr/bin/python3.4
 
 ##### SPLAT IMPORTS ####################################################################################################
-from corpus.Util import Brown
+from splat.corpus.Util import Brown
 from tokenizers.PunctTokenizer import PunctTokenizer
 
 ########################################################################################################################

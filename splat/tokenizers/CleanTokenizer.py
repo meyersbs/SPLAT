@@ -1,7 +1,10 @@
 #!/usr/bin/python3.4
 
+##### PYTHON IMPORTS ###################################################################################################
+import re
+
 ##### SPLAT IMPORTS ####################################################################################################
-from sentenizers.Sentenizer import Sentenizer
+from splat.tokenizers.Tokenizer import Tokenizer
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
@@ -14,18 +17,24 @@ from sentenizers.Sentenizer import Sentenizer
 ########################################################################################################################
 ########################################################################################################################
 
-class RawSentenizer(Sentenizer):
+class CleanTokenizer(Tokenizer):
 	"""
-	A RawSentenizer provides the functionality to generate a list of unprocessed sentences from a text input.
+	A CleanTokenizer provides the ability to tokenize a text input by converting it to lowercase and removing
+	basic punctuation.
 	"""
-	def sentenize(self, text):
-		"""
+	def tokenize(self, text):
+		raw_tokens = Tokenizer.tokenize(self, text)
+		clean_tokens = []
+		
+		temp = []
+		for token in raw_tokens:
+			if token != "" and token != " ":
+				temp.append(token.strip("\n"))
 
-		:param text:
-		:type text:
-		:return:
-		:rtype:
-		"""
-		sentences = Sentenizer.sentenize(self, text)
+		raw_tokens = temp
 
-		return sentences
+		for word in raw_tokens:
+			clean_word = re.sub(r"[\.,!\?]", "", word)
+			clean_tokens.append(clean_word.lower())
+		
+		return clean_tokens
