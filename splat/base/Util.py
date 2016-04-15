@@ -20,7 +20,7 @@ Stopwords = stopwords.words('english')
 ### @VERSION_NUMBER:																								 ###
 ### @PROJECT_SITE:		github.com/meyersbs/SPLAT																     ###
 ### @AUTHOR_NAME:		Benjamin S. Meyers																			 ###
-### @CONTACT_EMAIL:		ben@splat-library.org																				 ###
+### @CONTACT_EMAIL:		ben@splat-library.org																		 ###
 ### @LICENSE_TYPE:																									 ###
 ########################################################################################################################
 ########################################################################################################################

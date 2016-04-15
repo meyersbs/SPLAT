@@ -120,6 +120,9 @@ To uninstall run the following in a command line.
 - - - -
 ## Release Notes
 #### UPDATE
+I plan on adding some new functionality in the coming weeks, including rudimentary support for Praat TextGrids and the ProsodyLab Forced Aligner.
+
+#### UPDATE
 SPLAT is taking a new direction. NLTK, while not maintained too well, is still the best at what it does. Since I do not have the background to do everything that NLTK does, I will work on having SPLAT complement NLTK, rather than replace it.
 
 #### Release 3.0
