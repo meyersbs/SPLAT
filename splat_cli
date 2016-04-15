@@ -46,9 +46,11 @@ def command_message():
 	print(template.format("dps", "--", "<input_file>", "Display disfluencies per sentence."))
 	print(template.format("dpu", "--", "<input_file>", "Display disfluencies per utterance."))
 	print(template.format("drawtrees", "--", "<input_file>", "Draw syntactic parse trees."))
+	print(template.format("flesch", "--", "<input_file>", "Display Flesch Readability Score."))
 	print(template.format("frazier", "--", "<input_file>", "Display frazier score."))
 	print(template.format("function", "--", "<input_file>", "Display all function words."))
 	print(template.format("idensity", "--", "<input_file>", "Display idea density."))
+	print(template.format("kincaid", "--", "<input_file>", "Display Flesch-Kincaid Grade Level."))
 	print(template.format("leastfreq", "<x>", "<input_file>", "Display the <x> least frequent words."))
 	print(template.format("lwords", "--", "<input_file>", "Display the longest words."))
 	print(template.format("maxdepth", "--", "<input_file>", "Display maxdepth of trees."))
@@ -61,12 +63,14 @@ def command_message():
 	print(template.format("sentcount", "--", "<input_file>", "Display number of sentences."))
 	print(template.format("sfrazier", "--", "<input_file>", "Display string-based frazier score."))
 	print(template.format("swords", "--", "<input_file>", "Display the shortest words."))
+	print(template.format("syllables", "--", "<input_file>", "Display number of syllables."))
 	print(template.format("syngve", "--", "<input_file>", "Display string-based yngve score."))
 	print(template.format("tokens", "--", "<input_file>", "Display all tokens."))
 	print(template.format("trees", "--", "<input_file>", "Display all parse trees."))
 	print(template.format("trigrams", "--", "<input_file>", "Display all trigrams."))
 	print(template.format("ttr", "--", "<input_file>", "Display type-token ratio."))
 	print(template.format("types", "--", "<input_file>", "Display all types."))
+	print(template.format("ucontent", "--", "<input_file>", "Display all unique content words."))
 	print(template.format("ufunction", "--", "<input_file>", "Display all unique function words."))
 	print(template.format("unigrams", "--", "<input_file>", "Display all unigrams."))
 	print(template.format("uttcount", "--", "<input_file>", "Display number of utterances."))
@@ -168,7 +172,9 @@ def setup_commands():
 				"als":my_bubble.average_sentence_length,			"syngve":my_bubble.string_based_yngve_score,
 				"sfrazier":my_bubble.string_based_frazier_score,	"bubble":my_bubble.bubble,
 				"annotate":my_bubble.annotated_bubble,				"dpa":my_bubble.disfluencies_per_act,
-				"lwords":my_bubble.longest_words,					"swords":my_bubble.shortest_words}
+				"lwords":my_bubble.longest_words,					"swords":my_bubble.shortest_words,
+				"syllables":my_bubble.syllables,					"flesch":my_bubble.flesch_readability,
+				"kincaid":my_bubble.kincaid_grade_level}
 
 def main():
 	args = sys.argv

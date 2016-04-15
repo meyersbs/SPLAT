@@ -36,9 +36,9 @@ class TextBubble:
 	__cfr, __alu, __ttr, __als, __cdensity, __idensity, __yngve_score, __frazier_score, __string_yngve, __string_frazier = (0.0,) * 10
 	__sentences, __utterances, __rawtokens, __tokens, __pos, __treestrings = ([],) * 6
 	__c_words, __f_words, __uc_words, __uf_words, __longest_words, shortest_words = ([],) * 6
-	__rawtypes, __types, __poscounts, __dpu, __dps, __disfluencies, __annotated_utts = ({},) * 7
+	__rawtypes, __types, __poscounts, __dpu, __dps, __disfluencies, __annotated_utts, __syllables = ({},) * 8
 	__bubble = ""
-	__annotated_bubble, __freq_dist, __dpa = (None,) * 3
+	__annotated_bubble, __freq_dist, __dpa, __flesch, __kincaid = (None,) * 5
 
 	# Object Declarations
 	__ngramminator = FullNGramminator()
@@ -89,6 +89,7 @@ class TextBubble:
 		self.__sentcount = len(self.__sentences)
 		self.__rawtokens = self.__rawtokenizer.tokenize(self.__bubble)
 		self.__tokens = self.__cleantokenizer.tokenize(self.__bubble)
+		self.__syllables = cUtil.count_syllables(self.__tokens)
 		self.__longest_words = set([word for word in self.__tokens if len(word) == max(len(word) for word in self.__tokens)])
 		self.__shortest_words = set([word for word in self.__tokens if len(word) == min(len(word) for word in self.__tokens)])
 		self.__rawtypes = Util.typify(self.__rawtokens)
@@ -148,6 +149,26 @@ class TextBubble:
 		for (k, v) in self.__dpa.items():
 			print(template.format(str(v[0]), str(v[1]), str(v[2]), str(v[3]), str(v[4]), str(v[5]), str(v[6]), str(v[7]), k))
 		return ''
+
+	def syllables(self):
+		""" Returns the number of syllables in the TextBubble. """
+		return self.__syllables
+
+	def flesch_readability(self):
+		""" Returns the flesch readability score. """
+		if self.__flesch is None:
+			self.__flesch = cUtil.calc_flesch_readability(self.__wordcount, self.__sentcount, self.__syllables)
+			return self.__flesch
+		else:
+			return self.__flesch
+
+	def kincaid_grade_level(self):
+		""" Returns the flesch-kincaid grade level score. """
+		if self.__kincaid is None:
+			self.__kincaid = cUtil.calc_flesch_kincaid(self.__wordcount, self.__sentcount, self.__syllables)
+			return self.__kincaid
+		else:
+			return self.__kincaid
 
 	def sents(self):
 		""" Returns a list of all sentences contained within the TextBubble. """

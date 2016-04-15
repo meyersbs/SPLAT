@@ -5,6 +5,7 @@ import sys, re
 
 ##### NLTK IMPORTS #####################################################################################################
 from nltk.tree import Tree
+from nltk.corpus import cmudict
 
 ##### SPLAT IMPORTS ####################################################################################################
 from splat.base.Util import open_class_list, ignore_list, proposition_list
@@ -19,6 +20,25 @@ from splat.base.Util import open_class_list, ignore_list, proposition_list
 ### @LICENSE_TYPE:																									 ###
 ########################################################################################################################
 ########################################################################################################################
+
+##### GLOBAL VARIABLES #################################################################################################
+cmu_dict = cmudict.dict()
+
+def count_syllables(tokens):
+	""" Uses NLTK's cmudict to count the number of syllables in the TextBubble. """
+	sum = 0
+	for word in tokens:
+		sum += max([len(list(y for y in x if y[-1].isdigit())) for x in cmu_dict[word.lower()]])
+
+	return sum
+
+def calc_flesch_readability(wordcount, sentcount, syllcount):
+	""" Calculates the Flesch Readability Score. """
+	return float(206.835 - float(1.015 * (float(wordcount / sentcount)))) - float(float(84.6 * (float(syllcount / wordcount))))
+
+def calc_flesch_kincaid(wordcount, sentcount, syllcount):
+	""" Calculates the Flesach-Kincaid Grade Level Score. """
+	return float(0.39 * (float(wordcount / sentcount))) + float(float(11.8 * (float(syllcount / wordcount))) - 15.59)
 
 def calc_content_density(tagged_text):
 	""" Calculate the content density. """
