@@ -62,8 +62,10 @@ To uninstall run the following in a command line.
 ```bash
     splat cdensity filename         # Calculate Content-Density
     splat idensity filename         # Calculate Idea Density
-    splat yngve filename            # (UNDER REVIEW) Calculate Yngve-Score
-    splat frazier filename          # (UNDER REVIEW) Calculate Frazier-Score
+    splat flesch filename           # Calculate Flesch Readability Ease
+    splat kincaid filename          # Calculate Flesch-Kincaid Grade Level
+    splat yngve filename            # Calculate Yngve-Score
+    splat frazier filename          # Calculate Frazier-Score
 ```
 #### Listing Content \& Function Words
 ```bash
@@ -81,6 +83,7 @@ To uninstall run the following in a command line.
     splat als filename              # Average Sentence Length
     splat uttcount filename         # Utterance Count
     splat sentcount filename        # Sentence Count
+    splat syllables filename        # Display Number of Syllables
     splat wpu filename              # List the Number of Words in each Utterance
     splat wps filename              # List the number of Words in each Sentence
 ```
