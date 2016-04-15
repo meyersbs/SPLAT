@@ -2,7 +2,7 @@
 ## SPLAT
 The MIT License (MIT)
 
-Copyright (c) 2015 Benjamin S. Meyers < <bsm9339@rit.edu> >
+Copyright (c) 2015 Benjamin S. Meyers < <ben@splat-library.org> >
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

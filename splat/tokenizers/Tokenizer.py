@@ -10,7 +10,7 @@ import os.path
 ### @VERSION_NUMBER:																								 ###
 ### @PROJECT_SITE:		github.com/meyersbs/SPLAT																     ###
 ### @AUTHOR_NAME:		Benjamin S. Meyers																			 ###
-### @CONTACT_EMAIL:		bsm9339@rit.edu																				 ###
+### @CONTACT_EMAIL:		ben@splat-library.org																				 ###
 ### @LICENSE_TYPE:																									 ###
 ########################################################################################################################
 ########################################################################################################################

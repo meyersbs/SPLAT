@@ -15,7 +15,7 @@ from splat.base.Util import open_class_list, ignore_list, proposition_list
 ### @VERSION_NUMBER:																								 ###
 ### @PROJECT_SITE:		github.com/meyersbs/SPLAT																     ###
 ### @AUTHOR_NAME:		Benjamin S. Meyers																			 ###
-### @CONTACT_EMAIL:		bsm9339@rit.edu																				 ###
+### @CONTACT_EMAIL:		ben@splat-library.org																				 ###
 ### @LICENSE_TYPE:																									 ###
 ########################################################################################################################
 ########################################################################################################################

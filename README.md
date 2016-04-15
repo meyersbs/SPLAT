@@ -3,7 +3,7 @@
 
 - - - -
 ## Contact Information
-&nbsp;&nbsp;&nbsp;&nbsp;Benjamin S. Meyers < <bsm9339@rit.edu> >
+&nbsp;&nbsp;&nbsp;&nbsp;Benjamin S. Meyers < <ben@splat-library.org> >
 
 - - - -
 ## Project Description
