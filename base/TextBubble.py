@@ -31,14 +31,16 @@ class TextBubble:
 	A TextBubble is a bubble of text. It can be a single word, a paragraph, or even a whole novel!
 	The TextBubble object makes it super simple to extract features from a selection of text.
 	"""
-	__wordcount, __unique_wordcount, __sentcount, __uttcount, __maxdepth = 0, 0, 0, 0, 0
-	__cfr, __alu, __ttr, __als, __cdensity, __idensity, __yngve_score, __frazier_score = 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
-	__sentences, __utterances, __rawtokens, __tokens, __pos, __treestrings = [], [], [], [], [], []
-	__c_words, __f_words, __uc_words, __uf_words = [], [], [], []
-	__rawtypes, __types, __poscounts, __dpu, __dps, __disfluencies = {}, {}, {}, {}, {}, {}
+	# Variable Declarations
+	__wordcount, __unique_wordcount, __sentcount, __uttcount, __maxdepth = (0,) * 5
+	__cfr, __alu, __ttr, __als, __cdensity, __idensity, __yngve_score, __frazier_score, __string_yngve, __string_frazier = (0.0,) * 10
+	__sentences, __utterances, __rawtokens, __tokens, __pos, __treestrings = ([],) * 6
+	__c_words, __f_words, __uc_words, __uf_words, __longest_words, shortest_words = ([],) * 6
+	__rawtypes, __types, __poscounts, __dpu, __dps, __disfluencies, __annotated_utts = ({},) * 7
 	__bubble = ""
-	__longest_words, shortest_words = [], []
-	__annotated_bubble, __freq_dist, __dpa = None, None, None
+	__annotated_bubble, __freq_dist, __dpa = (None,) * 3
+
+	# Object Declarations
 	__ngramminator = FullNGramminator()
 	__cleantokenizer = CleanTokenizer()
 	__rawtokenizer = RawTokenizer()
@@ -47,30 +49,24 @@ class TextBubble:
 	__treestring_gen = TreeStringParser()
 	__meyers_annotator = MeyersDialogActAnnotator()
 	__speaker_annotator = SpeakerIndicatorAnnotator()
-	__ex_yngve, __ex_frazier = 0.0, 0.0
-	__annotated_utts = {}
 
 	def __init__(self, text, ngramminator=FullNGramminator(), postagger=NLTKPOSTagger()):
 		"""
 		Creates a TextBubble Object.
 		"""
 		if os.path.exists(text):
-			temp_text = ""
+			temp_text, temp_annotated_text = ("",) * 2
 			temp_utts = []
-			temp_annotated_text = ""
 			temp_annotated_utts = {}
 			for line in open(text, 'r'):
 				if "(" in line:
 					temp_annotated_text += line.strip() + " "
 					split_line = line.strip("\n").strip(")").strip().split("(")
 					utt_key = split_line[0].strip()
-					#print(utt_key)
 					temp_text += utt_key + " "
 					temp_utts.append(utt_key.strip())
 					utt_acts = split_line[1].strip().split(", ")
-					#print(utt_acts)
 					temp_annotated_utts[utt_key] = utt_acts
-					#print(temp_annotated_utts)
 				else:
 					temp_utts.append(line.strip())
 					temp_text += line.strip() + " "
@@ -89,8 +85,7 @@ class TextBubble:
 
 		self.__uttcount = len(self.__utterances)
 		self.__sentences = self.__sentenizer.sentenize(self.__bubble)
-		if self.__sentences == []:
-			self.__sentences = self.__utterances
+		if self.__sentences == []: self.__sentences = self.__utterances
 		self.__sentcount = len(self.__sentences)
 		self.__rawtokens = self.__rawtokenizer.tokenize(self.__bubble)
 		self.__tokens = self.__cleantokenizer.tokenize(self.__bubble)
@@ -112,13 +107,7 @@ class TextBubble:
 		self.__uf_words = Util.get_unique_function_words(self.__types)
 		self.__cfr = Util.get_content_function_ratio(self.__tokens)
 		self.__treestring_gen = TreeStringParser()
-		self.__treestrings = None
-		self.__maxdepth = None
-		self.__yngve_score = None
-		self.__frazier_score = None
-		self.__ex_yngve = None
-		self.__annotated_bubble = None
-		self.__dpa = None
+		self.__treestrings, self.__maxdepth, self.__yngve_score, self.__frazier_score, self.__string_yngve, self.__annotated_bubble, self.__dpa = (None,) * 7
 		self.__cdensity = cUtil.calc_content_density(self.__pos)
 		self.__idensity = cUtil.calc_idea_density(self.__pos)
 		self.__poscounts = Util.get_pos_counts(self.__pos)
@@ -217,7 +206,9 @@ class TextBubble:
 		return self.__ngramminator.trigrams(self.__bubble)
 
 	def ngrams(self, n):
-		""" Returns a list of n-grams. """
+		""" Returns a list of n-grams.
+		:param n: the size of the n-grams to be generated
+		"""
 		return self.__ngramminator.ngrams(self.__bubble, n)
 
 	def pos(self):
@@ -319,21 +310,20 @@ class TextBubble:
 		Returns the mean Yngve Score.
 		Yngve score is... http://www.m-mitchell.com/papers/RoarkEtAl-07-SynplexityforMCI.pdf
 		"""
-		print("WARNING: Yngve Score calculation is under review, and thus not available at this time.")
-		if self.__ex_yngve is None:
+		print("WARNING: String-Based Yngve Score calculation is under review, and thus not available at this time.")
+		if self.__string_yngve is None:
 			trees = []
 			for treestring in self.treestrings():
 				trees.append(treestring)
 			return cUtil.get_total_mean_yngve(trees)
 		else:
-			return self.__ex_yngve
+			return self.__string_yngve
 
 	def tree_based_frazier_score(self):
 		"""
 		Returns the Frazier Score.
 		Frazier score is... http://www.m-mitchell.com/papers/RoarkEtAl-07-SynplexityforMCI.pdf
 		"""
-		print("WARNING: Frazier Score calculation is under review, and thus this calculation may be incorrect.")
 		if self.__frazier_score is None:
 			trees = []
 			for treestring in self.treestrings():
@@ -347,7 +337,7 @@ class TextBubble:
 		Returns the Frazier Score.
 		Frazier score is... http://www.m-mitchell.com/papers/RoarkEtAl-07-SynplexityforMCI.pdf
 		"""
-		print("WARNING: Frazier Score calculation is under review, and thus not available at this time.")
+		print("WARNING: String-Based Frazier Score calculation is under review, and thus not available at this time.")
 		return ''
 
 	def pos_counts(self):
@@ -367,6 +357,7 @@ class TextBubble:
 		"""
 		Returns the x most frequent words with their frequencies,
 		or all words with their frequencies if x is not specified.
+		:param x: the number of most frequent words to return
 		"""
 		if x is None:
 			return self.__freq_dist.most_common()
@@ -379,6 +370,7 @@ class TextBubble:
 		"""
 		Returns the x least frequent words with their frequencies,
 		or all words with their frequencies if x is not specified.
+		:param x: the number of least frequent words to return
 		"""
 		most_common = self.__freq_dist.most_common()
 		freq_dist = []
@@ -395,7 +387,9 @@ class TextBubble:
 		return freq_dist
 
 	def plot_freq(self, x=None):
-		""" Uses matplotlib to graph the frequency distribution. """
+		""" Uses matplotlib to graph the frequency distribution.
+		:param x:
+		"""
 		Util.plot_freq_dist(self.__freq_dist,x)
 		return ''
 
