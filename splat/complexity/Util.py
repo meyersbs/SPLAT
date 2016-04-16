@@ -5,7 +5,7 @@ import sys, re
 
 ##### NLTK IMPORTS #####################################################################################################
 from nltk.tree import Tree
-from nltk.corpus import cmudict
+from nltk.corpus import names
 
 ##### SPLAT IMPORTS ####################################################################################################
 from splat.base.Util import open_class_list, ignore_list, proposition_list
@@ -22,15 +22,47 @@ from splat.base.Util import open_class_list, ignore_list, proposition_list
 ########################################################################################################################
 
 ##### GLOBAL VARIABLES #################################################################################################
-cmu_dict = cmudict.dict()
+human_names = names.words()
 
 def count_syllables(tokens):
-	""" Uses NLTK's cmudict to count the number of syllables in the TextBubble. """
-	sum = 0
-	for word in tokens:
-		sum += max([len(list(y for y in x if y[-1].isdigit())) for x in cmu_dict[word.lower()]])
+	"""
+	Returns the number of syllables.
+	Adapted from: https://github.com/DigTheDoug/SyllableCounter/blob/master/SyllableCounter.py
+	"""
+	global human_names
+	total = 0
+	for token in tokens:
+		word = token.strip("/n")
+		vowels = ['a', 'e', 'i', 'o', 'u', 'y']
+		diphthongs = ["ia","ea"] if word in human_names else ["ia"]
+		non_ending_syllables = ["ie","ya","es","ed"]
+		curr_word = word.lower()
+		vowel_count = 0
+		prev_was_vowel = False
+		last_letter = ""
 
-	return sum
+		for char in curr_word:
+			if char in vowels:
+				combo = last_letter + char
+				if prev_was_vowel and combo not in diphthongs and combo not in non_ending_syllables:
+					prev_was_vowel = True
+				else:
+					vowel_count += 1
+					prev_was_vowel = True
+			else:
+				prev_was_vowel = False
+
+			last_letter = char
+
+		if len(curr_word) > 2 and curr_word[-2:] in non_ending_syllables:
+			vowel_count -= 1
+
+		elif len(curr_word) > 2 and curr_word[-1:] == "e" and curr_word[-2:] != "ee":
+			vowel_count -= 1
+
+		total += vowel_count
+
+	return total
 
 def calc_flesch_readability(wordcount, sentcount, syllcount):
 	""" Calculates the Flesch Readability Score. """

@@ -52,7 +52,7 @@ class Tokenizer:
 		"""
 		tokens = []
 		for word in text.split(" "):
-			tokens.append(word)
+			tokens.append(word.strip("\n"))
 
 		return tokens
 
