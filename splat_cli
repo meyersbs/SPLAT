@@ -28,6 +28,8 @@ commands = {}
 #TODO: String-Based Yngve
 #TODO: String-Based Frazier
 #TODO: ProsodyLab Aligner Support?
+#TODO: Average Syllables per Sentence
+#TODO: Average Disfluencies per Sentence/Utterance
 
 def command_message():
 	""" Display all available commands and their descriptions. """
