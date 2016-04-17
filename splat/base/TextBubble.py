@@ -396,14 +396,19 @@ class TextBubble:
 		most_common = self.__freq_dist.most_common()
 		freq_dist = []
 		count = 0
+		for item in reversed(most_common):
+				freq_dist.append(item)
+		temp_freq = []
 
 		if x is None:
-			freq_dist = most_common
+			freq_dist = freq_dist
 		else:
-			for item in reversed(most_common):
+			for item in freq_dist:
 				if count < int(x):
-					freq_dist.append(item)
+					temp_freq.append(item)
 					count += 1
+
+			freq_dist = temp_freq
 
 		return freq_dist
 
