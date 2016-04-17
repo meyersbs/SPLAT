@@ -53,7 +53,7 @@ def wordcount(text):
 
 def type_token_ratio(types, tokens):
 	""" Calculate the ratio of types to tokens. """
-	return round(float(len(types)) / float(len(tokens)) * 100, 4)
+	return round(float(len(types)) / float(len(tokens)), 4)
 
 def get_content_words(tokens):
 	""" Get a list of all content words. """
