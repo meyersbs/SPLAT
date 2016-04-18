@@ -66,9 +66,7 @@ class TestBasics(unittest.TestCase):
 	def test_syllables(self):
 		expected = 26
 		output = self.flesch_bubble.syllables()
-		acceptable_range = [25, 26, 27]
-		self.assertTrue(output in acceptable_range)
-		self.assertNotEqual(output, expected)
+		self.assertEqual(output, expected)
 
 	def test_wordcount(self):
 		expected = 49
@@ -157,7 +155,7 @@ class TestComplexity(unittest.TestCase):
 		expected = 24.4
 		output = self.flesch_bubble.flesch_readability()
 		unexpected = self.whitman_bubble.flesch_readability()
-		self.assertEqual(output, expected)
+		self.assertAlmostEqual(output, expected, 1)
 		self.assertNotEqual(output, unexpected)
 
 	def test_flesch_kincaid(self):
@@ -167,6 +165,94 @@ class TestComplexity(unittest.TestCase):
 		self.assertEqual(output, expected)
 		self.assertNotEqual(output, unexpected)
 
+class TestSyllables(unittest.TestCase):
+
+	def test_syllabic_l(self):
+		expected_mantle = 2
+		output_mantle = TextBubble("mantle").syllables()
+		self.assertEqual(output_mantle, expected_mantle)
+		expected_bottle = 2
+		output_bottle = TextBubble("bottle").syllables()
+		self.assertEqual(output_bottle, expected_bottle)
+		expected_saddle = 2
+		output_saddle = TextBubble("saddle").syllables()
+		self.assertEqual(output_saddle, expected_saddle)
+		expected_poodle = 2
+		output_poodle = TextBubble("poodle").syllables()
+		self.assertEqual(output_poodle, expected_poodle)
+		expected_pistol = 2
+		output_pistol = TextBubble("pistol").syllables()
+		self.assertEqual(output_pistol, expected_pistol)
+		expected_tunnel = 2
+		output_tunnel = TextBubble("tunnel").syllables()
+		self.assertEqual(output_tunnel, expected_tunnel)
+
+	def test_syllabic_m(self):
+		expected_heroism = 4
+		output_heroism = TextBubble("heroism").syllables()
+		self.assertEqual(output_heroism, expected_heroism)
+		expected_feudalism = 4
+		output_feudalism = TextBubble("feudalism").syllables()
+		self.assertEqual(output_feudalism, expected_feudalism)
+		expected_blossom = 2
+		output_blossom = TextBubble("blossom").syllables()
+		self.assertEqual(output_blossom, expected_blossom)
+		expected_rhythm = 2
+		output_rhythm = TextBubble("rhythm").syllables()
+		self.assertEqual(output_rhythm, expected_rhythm)
+
+	def test_syllabic_n(self):
+		expected_cotton = 2
+		output_cotton = TextBubble("cotton").syllables()
+		self.assertEqual(output_cotton, expected_cotton)
+		expected_button = 2
+		output_button = TextBubble("button").syllables()
+		self.assertEqual(output_button, expected_button)
+		expected_risen = 2
+		output_risen = TextBubble("risen").syllables()
+		self.assertEqual(output_risen, expected_risen)
+		expected_prison = 2
+		output_prison = TextBubble("prison").syllables()
+		self.assertEqual(output_prison, expected_prison)
+		expected_sadden = 2
+		output_sadden = TextBubble("sadden").syllables()
+		self.assertEqual(output_sadden, expected_sadden)
+		expected_listen = 2
+		output_listen = TextBubble("listen").syllables()
+		self.assertEqual(output_listen, expected_listen)
+
+	def test_syllabic_ng(self):
+		expected_going = 2
+		output_going = TextBubble("going").syllables()
+		self.assertEqual(output_going, expected_going)
+		expected_listening = 3
+		output_listening = TextBubble("listening").syllables()
+		self.assertEqual(output_listening, expected_listening)
+		expected_ringing = 2
+		output_ringing = TextBubble("ringing").syllables()
+		self.assertEqual(output_ringing, expected_ringing)
+
+	def test_syllabic_r(self):
+		expected_history = 3
+		output_history = TextBubble("history").syllables()
+		self.assertEqual(output_history, expected_history)
+		expected_hungary = 3
+		output_hungary = TextBubble("hungary").syllables()
+		self.assertEqual(output_hungary, expected_hungary)
+		expected_preference = 3
+		output_preference = TextBubble("preference").syllables()
+		self.assertEqual(output_preference, expected_preference)
+
+	def test_special_cases(self):
+		expected_australian = 4
+		output_australian = TextBubble("australian").syllables()
+		self.assertEqual(output_australian, expected_australian)
+		expected_literal = 3
+		output_literal = TextBubble("literal").syllables()
+		self.assertEqual(output_literal, expected_literal)
+		expected_forebodings = 4
+		output_forebodings = TextBubble("forebodings").syllables()
+		self.assertEqual(output_forebodings, expected_forebodings)
 
 if __name__ == '__main__':
 	unittest.main()
