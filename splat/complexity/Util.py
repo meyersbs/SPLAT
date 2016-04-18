@@ -24,6 +24,7 @@ from splat.base.Util import open_class_list, ignore_list, proposition_list
 ##### GLOBAL VARIABLES #################################################################################################
 human_names = names.words()
 
+# TODO: Syllabic consonants!
 def count_syllables(tokens):
 	"""
 	Returns the number of syllables.
@@ -54,11 +55,30 @@ def count_syllables(tokens):
 
 			last_letter = char
 
+		if curr_word == "the":
+			vowel_count += 1
 		if len(curr_word) > 2 and curr_word[-2:] in non_ending_syllables:
 			vowel_count -= 1
-
 		elif len(curr_word) > 2 and curr_word[-1:] == "e" and curr_word[-2:] != "ee":
 			vowel_count -= 1
+		# Syllabic NG - 'going'
+		elif len(curr_word) > 3 and curr_word[-3:] == "ing" and curr_word[-4] in "aeiou":
+			vowel_count += 1
+		# Syllabic M - 'heroism'
+		elif len(curr_word) > 3 and curr_word[-3:] == "ism" and curr_word[-4] in "aeiou":
+			vowel_count += 2
+		# Syllabic M - 'feudalism'
+		elif len(curr_word) > 3 and curr_word[-3:] == "ism" and curr_word[-4] not in "aeiou":
+			vowel_count += 1
+		# Syllabic M - 'rhythm'
+		elif len(curr_word) > 3 and curr_word[-3:] == "thm":
+			vowel_count += 1
+		# Syllabic L - 'mantle'
+		elif len(curr_word) > 3 and curr_word[-4:] == "ntle": # TODO: FAILS
+			vowel_count += 1
+		# Syllabic N = 'risen'
+		elif len(curr_word) > 3 and curr_word[-4:] == "isen": # TODO: FAILS
+			vowel_count += 1
 
 		total += vowel_count
 
@@ -66,11 +86,11 @@ def count_syllables(tokens):
 
 def calc_flesch_readability(wordcount, sentcount, syllcount):
 	""" Calculates the Flesch Readability Score. """
-	return float(206.835 - float(1.015 * (float(wordcount / sentcount)))) - float(float(84.6 * (float(syllcount / wordcount))))
+	return round(float(float(206.835 - float(1.015 * float(wordcount / sentcount))) - float(84.6 * float(syllcount / wordcount))), 1)
 
 def calc_flesch_kincaid(wordcount, sentcount, syllcount):
 	""" Calculates the Flesach-Kincaid Grade Level Score. """
-	return float(0.39 * (float(wordcount / sentcount))) + float(float(11.8 * (float(syllcount / wordcount))) - 15.59)
+	return round(float(0.39 * (float(wordcount / sentcount))) + float(float(11.8 * (float(syllcount / wordcount))) - 15.59), 1)
 
 def calc_content_density(tagged_text):
 	""" Calculate the content density. """
