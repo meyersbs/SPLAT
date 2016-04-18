@@ -190,6 +190,7 @@ class TextBubble:
 
 	def flesch_readability(self):
 		""" Returns the flesch readability score. """
+		print("WARNING: Flesch Readability Ease calculation is under review. Results may be inaccurate.")
 		if self.__flesch is None:
 			self.__flesch = cUtil.calc_flesch_readability(self.__wordcount, self.__sentcount, self.syllables())
 			return self.__flesch
@@ -198,6 +199,7 @@ class TextBubble:
 
 	def kincaid_grade_level(self):
 		""" Returns the flesch-kincaid grade level score. """
+		print("WARNING: Flesch-Kincaid Grade Level calculation is under review. Results may be inaccurate.")
 		if self.__kincaid is None:
 			self.__kincaid = cUtil.calc_flesch_kincaid(self.__wordcount, self.__sentcount, self.syllables())
 			return self.__kincaid
@@ -210,7 +212,7 @@ class TextBubble:
 		Content Density is the ratio of open class words to closed class words.
 		"""
 		if self.__cdensity is None:
-			self.__cdensity = cUtil.calc_content_density(self.__pos)
+			self.__cdensity = cUtil.calc_content_density(self.pos())
 		return self.__cdensity
 
 	def idea_density(self):
@@ -219,7 +221,7 @@ class TextBubble:
 		Idea Density is the ratio of propositions to total word count.
 		"""
 		if self.__idensity is None:
-			self.__idensity = cUtil.calc_idea_density(self.__pos)
+			self.__idensity = cUtil.calc_idea_density(self.pos())
 		return self.__idensity
 
 	def tree_based_yngve_score(self):

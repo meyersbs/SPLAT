@@ -57,7 +57,7 @@ class TestBasics(unittest.TestCase):
 		self.assertNotEqual(output, unexpected)
 
 	def test_type_token_ratio(self):
-		expected = 81.6327
+		expected = 0.8163
 		output = self.frankenstein_bubble.type_token_ratio()
 		unexpected = self.whitman_bubble.type_token_ratio()
 		self.assertEqual(output, expected)
@@ -123,6 +123,7 @@ class TestComplexity(unittest.TestCase):
 	whitman_bubble = TextBubble("tests/whitman_test.txt")
 	frankenstein_bubble = TextBubble("tests/frankenstein_test.txt")
 	flesch_bubble = TextBubble("tests/flesch_kincaid_test.txt")
+	roark_bubble = TextBubble("tests/roark_sample.txt")
 
 	def test_idea_density(self):
 		expected = 0.5
@@ -137,6 +138,35 @@ class TestComplexity(unittest.TestCase):
 		unexpected = self.frankenstein_bubble.content_density()
 		self.assertEqual(output, expected)
 		self.assertNotEqual(output, unexpected)
+
+	def test_tree_based_yngve(self):
+		expected = 1.1250
+		output = self.roark_bubble.tree_based_yngve_score()
+		unexpected = self.whitman_bubble.tree_based_yngve_score()
+		self.assertEqual(output, expected)
+		self.assertNotEqual(output, unexpected)
+
+	def test_tree_based_frazier(self):
+		expected = 0.9375
+		output = self.roark_bubble.tree_based_frazier_score()
+		unexpected = self.whitman_bubble.tree_based_frazier_score()
+		self.assertEqual(output, expected)
+		self.assertNotEqual(output, unexpected)
+
+	def test_flesch_readability(self):
+		expected = 24.4
+		output = self.flesch_bubble.flesch_readability()
+		unexpected = self.whitman_bubble.flesch_readability()
+		self.assertEqual(output, expected)
+		self.assertNotEqual(output, unexpected)
+
+	def test_flesch_kincaid(self):
+		expected = 13.1
+		output = self.flesch_bubble.kincaid_grade_level()
+		unexpected = self.whitman_bubble.kincaid_grade_level()
+		self.assertEqual(output, expected)
+		self.assertNotEqual(output, unexpected)
+
 
 if __name__ == '__main__':
 	unittest.main()
