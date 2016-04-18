@@ -190,7 +190,6 @@ class TextBubble:
 
 	def flesch_readability(self):
 		""" Returns the flesch readability score. """
-		print("WARNING: Flesch Readability Ease calculation is under review. Results may be inaccurate.")
 		if self.__flesch is None:
 			self.__flesch = cUtil.calc_flesch_readability(self.__wordcount, self.__sentcount, self.syllables())
 			return self.__flesch
@@ -199,7 +198,6 @@ class TextBubble:
 
 	def kincaid_grade_level(self):
 		""" Returns the flesch-kincaid grade level score. """
-		print("WARNING: Flesch-Kincaid Grade Level calculation is under review. Results may be inaccurate.")
 		if self.__kincaid is None:
 			self.__kincaid = cUtil.calc_flesch_kincaid(self.__wordcount, self.__sentcount, self.syllables())
 			return self.__kincaid
