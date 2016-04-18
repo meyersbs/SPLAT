@@ -91,11 +91,8 @@ def get_unique_function_words(types):
 
 	return function_words
 
-def get_content_function_ratio(tokens):
+def get_content_function_ratio(content, function):
 	""" Calculate the content-function word ratio. """
-	content = get_content_words(tokens)
-	function = get_function_words(tokens)
-
 	ratio = float(len(content)) / float(len(function)) if len(function) != 0 else 0
 
 	return round(ratio, 4)
@@ -210,7 +207,10 @@ def count_disfluencies(utterances):
 		disfluencies[utt].append(break_count)
 		disfluencies[utt].append(words)
 
-	return disfluencies
+		average_disfluencies = um_count + uh_count + ah_count + er_count + hm_count + pause_count + repetition_count + break_count
+		average_disfluencies = float(average_disfluencies / len(utterances))
+
+	return disfluencies, average_disfluencies
 
 def total_disfluencies(dpu_dict):
 	""" Gather disfluency counts for the whole TextBubble. """

@@ -28,13 +28,15 @@ commands = {}
 #TODO: String-Based Yngve
 #TODO: String-Based Frazier
 #TODO: ProsodyLab Aligner Support?
-#TODO: Average Syllables per Sentence
-#TODO: Average Disfluencies per Sentence/Utterance
 
 def command_message():
 	""" Display all available commands and their descriptions. """
 	template = "{0:15}{1:15}{2:15}{3:100}"
 	print(template.format("COMMAND", "ARG1", "ARG2", "DESCRIPTION"))
+	print(template.format("adps", "--", "<input_file>", "Display average disfluencies per sentence."))
+	print(template.format("adpu", "--", "<input_file>", "Display average disfluencies per utterance."))
+	print(template.format("asps", "--", "<input_file>", "Display average syllables per sentence."))
+	print(template.format("aspu", "--", "<input_file>", "Display average syllables per utterance."))
 	print(template.format("als", "--", "<input_file>", "Display average sentence length."))
 	print(template.format("alu", "--", "<input_file>", "Display average utterance length."))
 	print(template.format("annotate", "--", "<input_file>", "Display the annotated TextBubble."))
@@ -176,7 +178,9 @@ def setup_commands():
 				"annotate":my_bubble.annotated_bubble,				"dpa":my_bubble.disfluencies_per_act,
 				"lwords":my_bubble.longest_words,					"swords":my_bubble.shortest_words,
 				"syllables":my_bubble.syllables,					"flesch":my_bubble.flesch_readability,
-				"kincaid":my_bubble.kincaid_grade_level}
+				"kincaid":my_bubble.kincaid_grade_level,			"adpu":my_bubble.average_dpu,
+				"adps":my_bubble.average_dps,						"aspu":my_bubble.average_spu,
+				"asps":my_bubble.average_sps}
 
 def main():
 	args = sys.argv

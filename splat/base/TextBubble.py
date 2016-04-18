@@ -31,14 +31,32 @@ class TextBubble:
 	A TextBubble is a bubble of text. It can be a single word, a paragraph, or even a whole novel!
 	The TextBubble object makes it super simple to extract features from a selection of text.
 	"""
-	# Variable Declarations
-	__wordcount, __unique_wordcount, __sentcount, __uttcount, __maxdepth = (0,) * 5
-	__cfr, __alu, __ttr, __als, __cdensity, __idensity, __yngve_score, __frazier_score, __string_yngve, __string_frazier = (0.0,) * 10
-	__sentences, __utterances, __rawtokens, __tokens, __pos, __treestrings = ([],) * 6
-	__c_words, __f_words, __uc_words, __uf_words, __longest_words, shortest_words = ([],) * 6
-	__rawtypes, __types, __poscounts, __dpu, __dps, __disfluencies, __annotated_utts, __syllables = ({},) * 8
+	# Basic Feature Variables
+	__wordcount, __unique_wordcount, __sentcount, __uttcount = (0,) * 4
+	__rawtokens, __tokens, __rawtypes, __types, __sentences, __utterances = ([],) * 6
+	__shortest_words, __longest_words = (None,) * 2
+	__alu, __ttr, __als = (0.0,) * 3
+
+	# Syntactic Complexity Variables
+	__yngve_score, __frazier_score, __string_yngve, __string_frazier, __cdensity, __idensity = (None,) * 6
+	__flesch, __kincaid, __syllables, __asps, __aspu = (None,) * 5
+
+	# Parsing Variables
+	__treestrings, __maxdepth = (None,) * 2
+
+	# Part-Of-Speech Variables
+	__poscounts, __pos, __cwords, __fwords, __cfr, __u_cwords, __u_fwords = (None,) * 7
+
+	# Language Modeling Variables
+	__unigrams, __bigrams, __trigrams = (None,) * 3
+
+	# Discourse Based Variables
+	__annotated_bubble, __dpa, __adpu, __adps = (None,) * 4
 	__bubble = ""
-	__annotated_bubble, __freq_dist, __dpa, __flesch, __kincaid = (None,) * 5
+	__dpu, __dps, __disfluencies, __annotated_utts = ({},) * 4
+
+	# Frequency Distribution Variables
+	__freq_dist = None
 
 	# Object Declarations
 	__ngramminator = FullNGramminator()
@@ -89,9 +107,6 @@ class TextBubble:
 		self.__sentcount = len(self.__sentences)
 		self.__rawtokens = self.__rawtokenizer.tokenize(self.__bubble)
 		self.__tokens = self.__cleantokenizer.tokenize(self.__bubble)
-		self.__syllables = cUtil.count_syllables(self.__tokens)
-		self.__longest_words = set([word for word in self.__tokens if len(word) == max(len(word) for word in self.__tokens)])
-		self.__shortest_words = set([word for word in self.__tokens if len(word) == min(len(word) for word in self.__tokens)])
 		self.__rawtypes = Util.typify(self.__rawtokens)
 		self.__types = Util.typify(self.__tokens)
 		self.__wordcount = Util.wordcount(self.__rawtokens)
@@ -99,23 +114,21 @@ class TextBubble:
 		self.__ngramminator = ngramminator
 		self.__postagger = postagger
 		self.__ttr = Util.type_token_ratio(self.__types, self.__tokens)
-		self.__pos = self.__postagger.tag(self.__bubble)
 		self.__alu = round(float(self.__wordcount) / float(self.__uttcount), 4) if self.__uttcount != 0 else 0.0
 		self.__als = round(float(self.__wordcount) / float(self.__sentcount), 4) if self.__sentcount != 0 else 0.0
-		self.__c_words = Util.get_content_words(self.__tokens)
-		self.__f_words = Util.get_function_words(self.__tokens)
-		self.__uc_words = Util.get_unique_content_words(self.__types)
-		self.__uf_words = Util.get_unique_function_words(self.__types)
-		self.__cfr = Util.get_content_function_ratio(self.__tokens)
-		self.__treestring_gen = TreeStringParser()
-		self.__treestrings, self.__maxdepth, self.__yngve_score, self.__frazier_score, self.__string_yngve, self.__annotated_bubble, self.__dpa = (None,) * 7
-		self.__cdensity = cUtil.calc_content_density(self.__pos)
-		self.__idensity = cUtil.calc_idea_density(self.__pos)
-		self.__poscounts = Util.get_pos_counts(self.__pos)
-		self.__freq_dist = Util.get_freq_dist(self.__tokens)
-		self.__dpu = Util.count_disfluencies(self.__utterances)
-		self.__dps = Util.count_disfluencies(self.__sentences)
+		temp_dpu = Util.count_disfluencies(self.__utterances)
+		self.__dpu = temp_dpu[0]
+		self.__adpu = temp_dpu[1]
+		temp_dps = Util.count_disfluencies(self.__sentences)
+		self.__dps = temp_dps[0]
+		self.__adps = temp_dps[1]
 		self.__disfluencies = Util.total_disfluencies(self.__dpu)
+
+	##### ANNOTATION ###################################################################################################
+
+	@staticmethod
+	def __update_annotations():
+		raise NotImplementedError
 
 	def bubble(self):
 		""" Returns the raw TextBubble. """
@@ -133,6 +146,11 @@ class TextBubble:
 			return self.__annotated_bubble
 
 	def annotated_utts(self):
+		if self.__annotated_bubble is None:
+			self.__meyers_annotator = MeyersDialogActAnnotator()
+			temp_bubble = self.__meyers_annotator.annotate(self.__utterances)
+			self.__speaker_annotator = SpeakerIndicatorAnnotator()
+			self.__annotated_bubble = self.__speaker_annotator.annotate(temp_bubble)
 		return self.__annotated_utts
 
 	def disfluencies_per_act(self):
@@ -150,14 +168,30 @@ class TextBubble:
 			print(template.format(str(v[0]), str(v[1]), str(v[2]), str(v[3]), str(v[4]), str(v[5]), str(v[6]), str(v[7]), k))
 		return ''
 
+	##### SYNTACTIC COMPLEXITY #########################################################################################
+
 	def syllables(self):
 		""" Returns the number of syllables in the TextBubble. """
+		if self.__syllables is None:
+			self.__syllables = cUtil.count_syllables(self.__tokens)
 		return self.__syllables
+
+	def average_sps(self):
+		""" Returns the average number of syllables per sentence. """
+		if self.__asps is None:
+			self.__asps = float(self.syllables() / self.__sentcount)
+		return self.__asps
+
+	def average_spu(self):
+		""" Returns the average number of syllables per utterance. """
+		if self.__aspu is None:
+			self.__aspu = float(self.syllables() / self.__uttcount)
+		return self.__aspu
 
 	def flesch_readability(self):
 		""" Returns the flesch readability score. """
 		if self.__flesch is None:
-			self.__flesch = cUtil.calc_flesch_readability(self.__wordcount, self.__sentcount, self.__syllables)
+			self.__flesch = cUtil.calc_flesch_readability(self.__wordcount, self.__sentcount, self.syllables())
 			return self.__flesch
 		else:
 			return self.__flesch
@@ -165,10 +199,81 @@ class TextBubble:
 	def kincaid_grade_level(self):
 		""" Returns the flesch-kincaid grade level score. """
 		if self.__kincaid is None:
-			self.__kincaid = cUtil.calc_flesch_kincaid(self.__wordcount, self.__sentcount, self.__syllables)
+			self.__kincaid = cUtil.calc_flesch_kincaid(self.__wordcount, self.__sentcount, self.syllables())
 			return self.__kincaid
 		else:
 			return self.__kincaid
+
+	def content_density(self):
+		"""
+		Returns the Content Density.
+		Content Density is the ratio of open class words to closed class words.
+		"""
+		if self.__cdensity is None:
+			self.__cdensity = cUtil.calc_content_density(self.__pos)
+		return self.__cdensity
+
+	def idea_density(self):
+		"""
+		Returns the Idea Density.
+		Idea Density is the ratio of propositions to total word count.
+		"""
+		if self.__idensity is None:
+			self.__idensity = cUtil.calc_idea_density(self.__pos)
+		return self.__idensity
+
+	def tree_based_yngve_score(self):
+		"""
+		Returns the mean Yngve Score.
+		Yngve score is... http://www.m-mitchell.com/papers/RoarkEtAl-07-SynplexityforMCI.pdf
+		"""
+		if self.__yngve_score is None:
+			trees = []
+			for treestring in self.treestrings():
+				trees.append(treestring)
+			self.__yngve_score = cUtil.get_mean_yngve(trees)
+			return self.__yngve_score
+		else:
+			return self.__yngve_score
+
+	def string_based_yngve_score(self):
+		"""
+		Returns the mean Yngve Score.
+		Yngve score is... http://www.m-mitchell.com/papers/RoarkEtAl-07-SynplexityforMCI.pdf
+		"""
+		print("WARNING: String-Based Yngve Score calculation is under review. Results may be inaccurate.")
+		if self.__string_yngve is None:
+			trees = []
+			for treestring in self.treestrings():
+				trees.append(treestring)
+			self.__string_yngve = cUtil.get_total_mean_yngve(trees)
+			return self.__string_yngve
+		else:
+			return self.__string_yngve
+
+	def tree_based_frazier_score(self):
+		"""
+		Returns the Frazier Score.
+		Frazier score is... http://www.m-mitchell.com/papers/RoarkEtAl-07-SynplexityforMCI.pdf
+		"""
+		if self.__frazier_score is None:
+			trees = []
+			for treestring in self.treestrings():
+				trees.append(treestring)
+			self.__frazier_score = cUtil.get_frazier_score(trees)
+			return self.__frazier_score
+		else:
+			return self.__frazier_score
+
+	def string_based_frazier_score(self):
+		"""
+		Returns the Frazier Score.
+		Frazier score is... http://www.m-mitchell.com/papers/RoarkEtAl-07-SynplexityforMCI.pdf
+		"""
+		print("WARNING: String-Based Frazier Score calculation is under review, and thus not available at this time.")
+		return ''
+
+	##### BASICS #######################################################################################################
 
 	def sents(self):
 		""" Returns a list of all sentences contained within the TextBubble. """
@@ -214,28 +319,6 @@ class TextBubble:
 		""" Returns the ratio of types to tokens. """
 		return self.__ttr
 
-	def unigrams(self):
-		""" Returns a list of unigrams. """
-		return self.__ngramminator.unigrams(self.__bubble)
-
-	def bigrams(self):
-		""" Returns a list of bigrams. """
-		return self.__ngramminator.bigrams(self.__bubble)
-
-	def trigrams(self):
-		""" Returns a list of trigrams. """
-		return self.__ngramminator.trigrams(self.__bubble)
-
-	def ngrams(self, n):
-		""" Returns a list of n-grams.
-		:param n: the size of the n-grams to be generated
-		"""
-		return self.__ngramminator.ngrams(self.__bubble, n)
-
-	def pos(self):
-		""" Returns a list of tuple pairs: (word, POS tag). """
-		return self.__pos
-
 	def average_utterance_length(self):
 		""" Returns the average utterance length. """
 		return self.__alu
@@ -243,41 +326,6 @@ class TextBubble:
 	def average_sentence_length(self):
 		""" Returns the average sentence length. """
 		return self.__als
-
-	def content_function_ratio(self):
-		""" Returns the ratio of content words to function words. """
-		return self.__cfr
-
-	def content_words(self):
-		""" Returns a list of content words. """
-		return self.__c_words
-
-	def function_words(self):
-		""" Returns a list of function words. """
-		return self.__f_words
-
-	def unique_content_words(self):
-		""" Returns a list of unique content words. """
-		return self.__uc_words
-
-	def unique_function_words(self):
-		""" Returns a list of unique function words. """
-		return self.__uf_words
-
-	def treestrings(self):
-		""" Returns a list of parse trees. """
-		if self.__treestrings is None:
-			self.__treestring_gen = TreeStringParser()
-			self.__treestrings = self.__treestring_gen.get_parse_trees(self.__utterances)
-		return self.__treestrings
-
-	def drawtrees(self):
-		""" Uses matplotlib and nltk to draw syntactic parse trees. """
-		if self.__treestrings is None:
-			self.__treestring_gen = TreeStringParser()
-			self.__treestrings = self.__treestring_gen.get_parse_trees(self.__utterances)
-		Util.draw_trees(self.__treestrings)
-		return ''
 
 	def words_per_utterance(self):
 		""" Prints the number of words in each utterance. """
@@ -293,86 +341,124 @@ class TextBubble:
 
 	def longest_words(self):
 		""" Returns the longest words in the text."""
-		return self.__longest_words
+		if self.__longest_words is None:
+			self.__longest_words = set([word for word in self.__tokens if len(word) == max(len(word) for word in self.__tokens)])
+			return self.__longest_words
+		else:
+			return self.__longest_words
 
 	def shortest_words(self):
 		""" Returns the shortest words in the text."""
-		return self.__shortest_words
-
-	def content_density(self):
-		"""
-		Returns the Content Density.
-		Content Density is the ratio of open class words to closed class words.
-		"""
-		return self.__cdensity
-
-	def idea_density(self):
-		"""
-		Returns the Idea Density.
-		Idea Density is the ratio of propositions to total word count.
-		"""
-		return self.__idensity
-
-	def tree_based_yngve_score(self):
-		"""
-		Returns the mean Yngve Score.
-		Yngve score is... http://www.m-mitchell.com/papers/RoarkEtAl-07-SynplexityforMCI.pdf
-		"""
-		if self.__yngve_score is None:
-			trees = []
-			for treestring in self.treestrings():
-				trees.append(treestring)
-			return cUtil.get_mean_yngve(trees)
+		if self.__shortest_words is None:
+			self.__shortest_words = set([word for word in self.__tokens if len(word) == min(len(word) for word in self.__tokens)])
+			return self.__shortest_words
 		else:
-			return self.__yngve_score
+			return self.__shortest_words
 
-	def string_based_yngve_score(self):
-		"""
-		Returns the mean Yngve Score.
-		Yngve score is... http://www.m-mitchell.com/papers/RoarkEtAl-07-SynplexityforMCI.pdf
-		"""
-		print("WARNING: String-Based Yngve Score calculation is under review, and thus not available at this time.")
-		if self.__string_yngve is None:
-			trees = []
-			for treestring in self.treestrings():
-				trees.append(treestring)
-			return cUtil.get_total_mean_yngve(trees)
+	##### LANGUAGE MODELING ############################################################################################
+
+	def unigrams(self):
+		""" Returns a list of unigrams. """
+		if self.__unigrams is None:
+			self.__unigrams = self.__ngramminator.unigrams(self.__bubble)
+			return self.__unigrams
 		else:
-			return self.__string_yngve
+			return self.__unigrams
 
-	def tree_based_frazier_score(self):
-		"""
-		Returns the Frazier Score.
-		Frazier score is... http://www.m-mitchell.com/papers/RoarkEtAl-07-SynplexityforMCI.pdf
-		"""
-		if self.__frazier_score is None:
-			trees = []
-			for treestring in self.treestrings():
-				trees.append(treestring)
-			return cUtil.get_frazier_score(trees)
+	def bigrams(self):
+		""" Returns a list of bigrams. """
+		if self.__bigrams is None:
+			self.__bigrams = self.__ngramminator.bigrams(self.__bubble)
+			return self.__bigrams
 		else:
-			return self.__frazier_score
+			return self.__bigrams
 
-	def string_based_frazier_score(self):
+	def trigrams(self):
+		""" Returns a list of trigrams. """
+		if self.__trigrams is None:
+			self.__trigrams = self.__ngramminator.trigrams(self.__bubble)
+			return self.__trigrams
+		else:
+			return self.__trigrams
+
+	def ngrams(self, n):
+		""" Returns a list of n-grams.
+		:param n: the size of the n-grams to be generated
 		"""
-		Returns the Frazier Score.
-		Frazier score is... http://www.m-mitchell.com/papers/RoarkEtAl-07-SynplexityforMCI.pdf
-		"""
-		print("WARNING: String-Based Frazier Score calculation is under review, and thus not available at this time.")
-		return ''
+		if n == 1:
+			return self.unigrams()
+		elif n == 2:
+			return self.bigrams()
+		elif n == 3:
+			return self.trigrams()
+		else:
+			return self.__ngramminator.ngrams(self.__bubble, n)
+
+	##### PART-OF-SPEECH BASED #########################################################################################
+
+	def pos(self):
+		""" Returns a list of tuple pairs: (word, POS tag). """
+		if self.__pos is None:
+			self.__pos = self.__postagger.tag(self.__bubble)
+		return self.__pos
+
+	def content_function_ratio(self):
+		""" Returns the ratio of content words to function words. """
+		if self.__cfr is None:
+			self.__cfr = Util.get_content_function_ratio(self.content_words(), self.function_words())
+		return self.__cfr
+
+	def content_words(self):
+		""" Returns a list of content words. """
+		if self.__cwords is None:
+			self.__cwords = Util.get_content_words(self.__tokens)
+		return self.__cwords
+
+	def function_words(self):
+		""" Returns a list of function words. """
+		if self.__fwords is None:
+			self.__fwords = Util.get_function_words(self.__tokens)
+		return self.__fwords
+
+	def unique_content_words(self):
+		""" Returns a list of unique content words. """
+		if self.__u_cwords is None:
+			self.__u_cwords = Util.get_unique_content_words(self.__types)
+		return self.__u_cwords
+
+	def unique_function_words(self):
+		""" Returns a list of unique function words. """
+		if self.__u_fwords is None:
+			self.__u_fwords = Util.get_unique_function_words(self.__types)
+		return self.__u_fwords
 
 	def pos_counts(self):
 		""" Returns a dictionary with POS tags as keys and their frequencies as values. """
+		if self.__poscounts is None:
+			self.__poscounts = Util.get_pos_counts(self.pos())
 		return self.__poscounts
 
-	def max_depth(self):
-		""" Returns the maxdepth of all syntactic parse trees. """
+	##### PARSING ######################################################################################################
+
+	def treestrings(self):
+		""" Returns a list of parse trees. """
 		if self.__treestrings is None:
 			self.__treestring_gen = TreeStringParser()
 			self.__treestrings = self.__treestring_gen.get_parse_trees(self.__utterances)
+		return self.__treestrings
+
+	def drawtrees(self):
+		""" Uses matplotlib and nltk to draw syntactic parse trees. """
+		Util.draw_trees(self.treestrings())
+		return ''
+
+	def max_depth(self):
+		""" Returns the maxdepth of all syntactic parse trees. """
 		if self.__maxdepth is None:
-			self.__maxdepth = Util.get_max_depth(self.__treestrings)
+			self.__maxdepth = Util.get_max_depth(self.treestrings())
 		return self.__maxdepth
+
+	##### FREQUENCY DISTRIBUTIONS ######################################################################################
 
 	def get_most_freq(self, x=None):
 		"""
@@ -380,6 +466,8 @@ class TextBubble:
 		or all words with their frequencies if x is not specified.
 		:param x: the number of most frequent words to return
 		"""
+		if self.__freq_dist is None:
+			self.__freq_dist = Util.get_freq_dist(self.__tokens)
 		if x is None:
 			return self.__freq_dist.most_common()
 		elif x > 0:
@@ -393,6 +481,9 @@ class TextBubble:
 		or all words with their frequencies if x is not specified.
 		:param x: the number of least frequent words to return
 		"""
+		if self.__freq_dist is None:
+			self.__freq_dist = Util.get_freq_dist(self.__tokens)
+
 		most_common = self.__freq_dist.most_common()
 		freq_dist = []
 		count = 0
@@ -416,8 +507,12 @@ class TextBubble:
 		""" Uses matplotlib to graph the frequency distribution.
 		:param x:
 		"""
+		if self.__freq_dist is None:
+			self.__freq_dist = Util.get_freq_dist(self.__tokens)
 		Util.plot_freq_dist(self.__freq_dist,x)
 		return ''
+
+	##### DISCOURSE BASED ##############################################################################################
 
 	def disfluencies_per_utterance(self):
 		""" Displays the number of each type of disfluency per each utterance. """
@@ -428,9 +523,9 @@ class TextBubble:
 
 		return ''
 
-	def dpu(self):
-		""" Return the raw disfluencies per utterance dictionary. """
-		return self.__dpu
+	def average_dpu(self):
+		""" Return the average disfluencies per utterance. """
+		return self.__adpu
 
 	def disfluencies_per_sentence(self):
 		""" Displays the number of each type of disfluency per each sentence. """
@@ -440,6 +535,10 @@ class TextBubble:
 			print(template.format(str(v[0]), str(v[1]), str(v[2]), str(v[3]), str(v[4]), str(v[5]), str(v[6]), str(v[7]), str(v[8]), k))
 
 		return ''
+
+	def average_dps(self):
+		""" Return the average disfluencies per sentence. """
+		return self.__adps
 
 	def disfluencies(self):
 		""" Displays the total number of each type of disfluency. """
@@ -454,6 +553,8 @@ class TextBubble:
 	def dis(self):
 		""" Return the raw disfluencies dictionary. """
 		return self.__disfluencies
+
+	##### UNCATEGORIZED ################################################################################################
 
 	def splat(self):
 		"""
