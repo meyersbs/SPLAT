@@ -13,17 +13,15 @@ commands = {}
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
-### @PROJECT_NAME:		SPLAT: Speech Processing and Linguistic Annotation Tool										 ###
+### @PROJECT_NAME:		SPLAT: Speech Processing and Linguistic Analysis Tool										 ###
 ### @VERSION_NUMBER:																								 ###
 ### @PROJECT_SITE:		github.com/meyersbs/SPLAT																     ###
 ### @AUTHOR_NAME:		Benjamin S. Meyers																			 ###
 ### @CONTACT_EMAIL:		ben@splat-library.org																		 ###
-### @LICENSE_TYPE:																									 ###
+### @LICENSE_TYPE:		MIT																							 ###
 ########################################################################################################################
 ########################################################################################################################
 
-#TODO: Reimplement Flesch Readability
-#TODO: Reimplement Flesch-Kincaid Grade Level
 #TODO: TextGrid Support
 #TODO: String-Based Yngve
 #TODO: String-Based Frazier
@@ -31,7 +29,7 @@ commands = {}
 
 def command_message():
 	""" Display all available commands and their descriptions. """
-	template = "{0:15}{1:15}{2:15}{3:100}"
+	template = "{0:16}{1:8}{2:16}{3:128}"
 	print(template.format("COMMAND", "ARG1", "ARG2", "DESCRIPTION"))
 	print(template.format("adps", "--", "<input_file>", "Display average disfluencies per sentence."))
 	print(template.format("adpu", "--", "<input_file>", "Display average disfluencies per utterance."))
@@ -87,28 +85,27 @@ def command_message():
 
 def usage_message():
 	""" Display usage message. """
-	message = "USAGE: splat <command> <options> <text_source>"
+	message = "USAGE:\tsplat <command> <options> <text_source>"
 	return message
 
 def help_message():
 	""" Display help message. """
-	message = "USAGE: splat <command> <options> <text_source>\n"
-	message += "\t--commands\tList available commands.\n"
-	message += "\t--info\t\tDisplay licensing information.\n"
+	message = "USAGE:\tsplat <command> <options> <text_source>\n"
+	message += "\tsplat --commands\tList available commands.\n"
+	message += "\tsplat --info\t\tDisplay licensing information.\n"
 	return message
 
 def info_message():
 	""" Display copyright information. """
-	prog_info = "#################################################################"
-	prog_info += "\n# SPLAT - Speech Processing & Linguistic Annotation Tool \t#"
-	prog_info += "\n# Copyright (C) 2016, Benjamin S. Meyers\t\t\t#"
-	prog_info += "\n# \t\t\t\t\t\t\t\t#"
-	prog_info += "\n# Developed by Benjamin S. Meyers in collaboration with:\t#"
-	prog_info += "\n#\tEmily Prud'hommeaux\tCissi O. Alm\t\t\t#"
-	prog_info += "\n#\tAndrew Carpenter\tBryan T. Meyers\t\t\t#"
-	prog_info += "\n# \t\t\t\t\t\t\t\t#"
-	prog_info += "\n# For documentation, visit: https://github.com/meyersbs/SPLAT \t#"
-	prog_info += "\n#################################################################"
+	prog_info = "\n####################################################################"
+	prog_info += "\n# SPLAT - Speech Processing & Linguistic Analysis Tool\t\t   #"
+	prog_info += "\n# Copyright (C) 2016, Benjamin S. Meyers < ben@splat-library.org > #"
+	prog_info += "\n# \t\t\t\t\t\t\t\t   #"
+	prog_info += "\n# Developed by Benjamin S. Meyers under the guidance of:\t   #"
+	prog_info += "\n#\tEmily Prud'hommeaux\tCissi O. Alm\t\t\t   #"
+	prog_info += "\n# \t\t\t\t\t\t\t\t   #"
+	prog_info += "\n# For documentation, visit: http://splat-library.org\t\t   #"
+	prog_info += "\n####################################################################\n"
 	return prog_info
 
 def check_dependencies():

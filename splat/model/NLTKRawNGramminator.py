@@ -8,12 +8,12 @@ from nltk.util import ngrams
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
-### @PROJECT_NAME:		SPLAT: Speech Processing and Linguistic Annotation Tool										 ###
+### @PROJECT_NAME:		SPLAT: Speech Processing and Linguistic Analysis Tool										 ###
 ### @VERSION_NUMBER:																								 ###
 ### @PROJECT_SITE:		github.com/meyersbs/SPLAT																     ###
 ### @AUTHOR_NAME:		Benjamin S. Meyers																			 ###
 ### @CONTACT_EMAIL:		ben@splat-library.org																		 ###
-### @LICENSE_TYPE:																									 ###
+### @LICENSE_TYPE:		MIT																							 ###
 ########################################################################################################################
 ########################################################################################################################
 class NLTKRawNGramminator(NGramminator):

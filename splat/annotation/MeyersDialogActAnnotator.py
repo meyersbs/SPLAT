@@ -2,12 +2,12 @@
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
-### @PROJECT_NAME:		SPLAT: Speech Processing and Linguistic Annotation Tool										 ###
+### @PROJECT_NAME:		SPLAT: Speech Processing and Linguistic Analysis Tool										 ###
 ### @VERSION_NUMBER:																								 ###
 ### @PROJECT_SITE:		github.com/meyersbs/SPLAT																     ###
 ### @AUTHOR_NAME:		Benjamin S. Meyers																			 ###
 ### @CONTACT_EMAIL:		ben@splat-library.org																		 ###
-### @LICENSE_TYPE:																									 ###
+### @LICENSE_TYPE:		MIT																							 ###
 ########################################################################################################################
 ########################################################################################################################
 
@@ -21,6 +21,7 @@ class MeyersDialogActAnnotator:
 	__print_acts += ' 7\t' + __dialog_acts[7] + '\t\t 8\t' + __dialog_acts[8] + '\t\t 9\t' + __dialog_acts[9] + '\n'
 	__print_acts += '10\t' + __dialog_acts[10] + '\t11\t' + __dialog_acts[11] + '\t\t12\t' + __dialog_acts[12] + '\n'
 	__print_acts += '13\t' + __dialog_acts[13] + '\n'
+
 	def __init__(self):
 		pass
 
