@@ -117,6 +117,17 @@ class TestBasics(unittest.TestCase):
 		self.assertEqual(output, expected)
 		self.assertNotEqual(output, unexpected)
 
+class TestParsing(unittest.TestCase):
+
+	def test_garden_path(self):
+		pass
+
+	def test_local_ambiguity(self):
+		pass
+
+	def test_global_ambiguity(self):
+		pass
+
 class TestComplexity(unittest.TestCase):
 	whitman_bubble = TextBubble("tests/whitman_test.txt")
 	frankenstein_bubble = TextBubble("tests/frankenstein_test.txt")
@@ -166,6 +177,20 @@ class TestComplexity(unittest.TestCase):
 		self.assertNotEqual(output, unexpected)
 
 class TestSyllables(unittest.TestCase):
+
+	def test_suffixes(self):
+		expected_added = 2
+		output_added = TextBubble("added").syllables()
+		self.assertEqual(output_added, expected_added)
+		expected_apples = 2
+		output_apples = TextBubble("apples").syllables()
+		self.assertEqual(output_apples, expected_apples)
+		expected_foxes = 2
+		output_foxes = TextBubble("foxes").syllables()
+		self.assertEqual(output_foxes, expected_foxes)
+		expected_auntie = 2
+		output_auntie = TextBubble("auntie").syllables()
+		self.assertEqual(output_auntie, expected_auntie)
 
 	def test_syllabic_l(self):
 		expected_mantle = 2
@@ -253,6 +278,26 @@ class TestSyllables(unittest.TestCase):
 		expected_forebodings = 4
 		output_forebodings = TextBubble("forebodings").syllables()
 		self.assertEqual(output_forebodings, expected_forebodings)
+		expected_pterodactyl = 4
+		output_pterodactyl = TextBubble("pterodactyl").syllables()
+		self.assertEqual(output_pterodactyl, expected_pterodactyl)
+
+	def test_proper_names(self):
+		expected_benjamin = 3
+		output_benjamin = TextBubble("benjamin").syllables()
+		self.assertEqual(output_benjamin, expected_benjamin)
+		expected_emily = 3
+		output_emily = TextBubble("emily").syllables()
+		self.assertEqual(output_emily, expected_emily)
+		expected_cissi = 2
+		output_cissi = TextBubble("cissi").syllables()
+		self.assertEqual(output_cissi, expected_cissi)
+		expected_cecilia = 4
+		output_cecilia = TextBubble("cecilia").syllables()
+		self.assertEqual(output_cecilia, expected_cecilia)
+		expected_ares = 2
+		output_ares = TextBubble("ares").syllables()
+		self.assertEqual(output_ares, expected_ares)
 
 if __name__ == '__main__':
 	unittest.main()

@@ -57,9 +57,12 @@ def count_syllables(tokens):
 
 		if curr_word == "the":
 			vowel_count += 1
-		if len(curr_word) > 2 and curr_word[-2:] in non_ending_syllables:
-			vowel_count -= 1
-		elif len(curr_word) > 2 and curr_word[-1:] == "e" and curr_word[-2:] != "ee":
+
+		#if len(curr_word) > 2 and curr_word[-2:] in non_ending_syllables:
+		#	vowel_count -= 1
+		# Syllabic L - 'mantle'
+		# Silent E = 'home'
+		if len(curr_word) > 2 and curr_word[-1:] == "e" and curr_word[-2:] != "ee" and curr_word[-2:] != "le":
 			vowel_count -= 1
 		# Syllabic NG - 'going'
 		elif len(curr_word) > 3 and curr_word[-3:] == "ing" and curr_word[-4] in "aeiou":
@@ -73,12 +76,9 @@ def count_syllables(tokens):
 		# Syllabic M - 'rhythm'
 		elif len(curr_word) > 3 and curr_word[-3:] == "thm":
 			vowel_count += 1
-		# Syllabic L - 'mantle'
-		elif len(curr_word) > 3 and curr_word[-4:] == "ntle": # TODO: FAILS
-			vowel_count += 1
 		# Syllabic N = 'risen'
-		elif len(curr_word) > 3 and curr_word[-4:] == "isen": # TODO: FAILS
-			vowel_count += 1
+		#elif len(curr_word) > 3 and curr_word[-4:] == "isen": # TODO: FAILS
+		#	vowel_count += 2
 
 		total += vowel_count
 
