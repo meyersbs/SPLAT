@@ -26,6 +26,8 @@ commands = {}
 #TODO: String-Based Yngve
 #TODO: String-Based Frazier
 #TODO: ProsodyLab Aligner Support?
+#TODO: Config File
+#TODO: Moving Window
 
 def command_message():
 	""" Display all available commands and their descriptions. """

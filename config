@@ -1,0 +1,24 @@
+#### TEXT NORMALIZATION ################################################################################################
+# When tokenizing, should capitals be lowercased (True) or left alone (False)?
+capitals: True
+# When tokenizing, should punctuation be separate tokens (True) or attached to the preceding word (False)?
+separate_punctuation: True
+# When tokenizing, should punctuation be removed (True) or left alone (False)?
+# Answering 'True' will override the setting for 'separate_punctuation'.
+punctuation: True
+
+##### SYNTACTIC PARSING ################################################################################################
+# How many threads should the Berkeley Parser use?
+threads: 1
+
+##### COMMAND-LINE INTERFACE ###########################################################################################
+# If a feature has already been calculated, should it be recalculated when accessed again (True) or left alone (False)?
+recalculate: False
+# When a feature is accessed, should all features be recalculated (True) or left alone (False)?
+# Answering 'True' will override the setting for 'recalculate'.
+reset: False
+# When running on the command line, should dependencies be checked on every run (True) or not (False)?
+dependencies: True
+# Should calculated features be saved to the harddrive (True) or discarded (False)?
+# Answering 'False' will override the settings for 'recalculate' and 'reset'.
+save: True

@@ -29,7 +29,7 @@ class TreeStringParser:
 			parse_file.write(sentence + "\n")
 		parse_file.close()
 
-		rawtrees = subprocess.Popen(['java', '-jar', self.__berkeley_path, '-gr', self.__grammar_path, '-inputFile', parse_file.name], stdout=subprocess.PIPE).communicate()[0]
+		rawtrees = subprocess.Popen(['java', '-jar', self.__berkeley_path, '-gr', self.__grammar_path, '-inputFile', parse_file.name, '-nThreads', '1'], stdout=subprocess.PIPE).communicate()[0]
 		temp_parse_trees = rawtrees.decode("utf-8").split("\n")
 
 		parse_trees = []
