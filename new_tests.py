@@ -135,17 +135,17 @@ class TestComplexity(unittest.TestCase):
 	roark_bubble = TextBubble("tests/roark_sample.txt")
 
 	def test_idea_density(self):
-		expected = 0.5
+		expected = 0.46429
 		output = self.whitman_bubble.idea_density()
 		unexpected = self.frankenstein_bubble.idea_density()
-		self.assertEqual(output, expected)
+		self.assertAlmostEqual(output, expected, 3)
 		self.assertNotEqual(output, unexpected)
 
 	def test_content_density(self):
-		expected = 0.4
+		expected = 0.47368
 		output = self.whitman_bubble.content_density()
 		unexpected = self.frankenstein_bubble.content_density()
-		self.assertEqual(output, expected)
+		self.assertAlmostEqual(output, expected, 3)
 		self.assertNotEqual(output, unexpected)
 
 	def test_tree_based_yngve(self):

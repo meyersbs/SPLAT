@@ -8,7 +8,7 @@ from nltk.tree import Tree
 from nltk.corpus import names
 
 ##### SPLAT IMPORTS ####################################################################################################
-from splat.base.Util import open_class_list, ignore_list, proposition_list
+from splat.base.Util import open_class_list, ignore_list, preposition_list
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
@@ -106,12 +106,12 @@ def calc_content_density(tagged_text):
 
 def calc_idea_density(tagged_text):
 	""" Calculate the idea density. """
-	proposition_count = 0
+	preposition_count = 0
 	for item in tagged_text:
-		if item[1] in proposition_list:
-			proposition_count += 1
+		if item[1] in preposition_list:
+			preposition_count += 1
 
-	return float(proposition_count) / float(len(tagged_text)) if float(len(tagged_text)) != 0 else 0
+	return float(preposition_count) / float(len(tagged_text)) if float(len(tagged_text)) != 0 else 0
 
 # The code contained in this section was adapted based on the code located here:
 # https://github.com/neubig/util-scripts/blob/96c91e43b650136bb88bbb087edb1d31b65d389f/syntactic-complexity.py

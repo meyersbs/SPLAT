@@ -216,7 +216,7 @@ class TextBubble:
 	def idea_density(self):
 		"""
 		Returns the Idea Density.
-		Idea Density is the ratio of propositions to total word count.
+		Idea Density is the ratio of prepositions to total word count.
 		"""
 		if self.__idensity is None:
 			self.__idensity = cUtil.calc_idea_density(self.pos())
