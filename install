@@ -7,5 +7,6 @@ unzip master.zip
 chmod +x ~/.SPLAT/SPLAT-master/splat_cli
 echo 'alias splat="~/.SPLAT/SPLAT-master/splat_cli"' >> ~/.bashrc
 rm master.zip
+source ~/.bashrc
 splat --info
 #echo "Thank you for installing SPLAT! Documentation and example usage can be found here: https://github.com/meyersbs/SPLAT"
