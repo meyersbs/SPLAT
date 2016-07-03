@@ -1,4 +1,4 @@
-#!/usr/bin/python3.4
+#!/usr/bin/python3
 
 ##### PYTHON IMPORTS ###################################################################################################
 import sys, re
@@ -95,7 +95,6 @@ def calc_flesch_kincaid(wordcount, sentcount, syllcount):
 def calc_content_density(tagged_text):
 	""" Calculate the content density. """
 	open_class_count, closed_class_count = 0, 0
-
 	for item in tagged_text:
 		if item[1] in open_class_list:
 			open_class_count += 1
@@ -107,11 +106,14 @@ def calc_content_density(tagged_text):
 def calc_idea_density(tagged_text):
 	""" Calculate the idea density. """
 	preposition_count = 0
+	len_count = 0
 	for item in tagged_text:
 		if item[1] in preposition_list:
 			preposition_count += 1
+		if item[1] not in ignore_list:
+			len_count += 1
 
-	return float(preposition_count) / float(len(tagged_text)) if float(len(tagged_text)) != 0 else 0
+	return float(preposition_count) / float(len_count) if float(len_count) != 0 else 0
 
 # The code contained in this section was adapted based on the code located here:
 # https://github.com/neubig/util-scripts/blob/96c91e43b650136bb88bbb087edb1d31b65d389f/syntactic-complexity.py
