@@ -245,6 +245,9 @@ class TestSyllables(unittest.TestCase):
 		expected_listen = 2
 		output_listen = TextBubble("listen").syllables()
 		self.assertEqual(output_listen, expected_listen)
+		expected_even = 2
+		output_even = TextBubble("even").syllables()
+		self.assertEqual(output_even, expected_even)
 
 	def test_syllabic_ng(self):
 		expected_going = 2

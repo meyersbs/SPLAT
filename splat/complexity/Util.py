@@ -33,7 +33,7 @@ def count_syllables(tokens):
 	global human_names
 	total = 0
 	for token in tokens:
-		word = token.strip("/n")
+		word = token.strip("\n")
 		vowels = ['a', 'e', 'i', 'o', 'u', 'y']
 		diphthongs = ["ia","ea"] if word in human_names else ["ia"]
 		non_ending_syllables = ["ie","ya","es","ed"]
@@ -55,11 +55,10 @@ def count_syllables(tokens):
 
 			last_letter = char
 
+		# SPECIAL CASES
 		if curr_word == "the":
 			vowel_count += 1
 
-		#if len(curr_word) > 2 and curr_word[-2:] in non_ending_syllables:
-		#	vowel_count -= 1
 		# Syllabic L - 'mantle'
 		# Silent E = 'home'
 		if len(curr_word) > 2 and curr_word[-1:] == "e" and curr_word[-2:] != "ee" and curr_word[-2:] != "le":
@@ -76,9 +75,6 @@ def count_syllables(tokens):
 		# Syllabic M - 'rhythm'
 		elif len(curr_word) > 3 and curr_word[-3:] == "thm":
 			vowel_count += 1
-		# Syllabic N = 'risen'
-		#elif len(curr_word) > 3 and curr_word[-4:] == "isen": # TODO: FAILS
-		#	vowel_count += 2
 
 		total += vowel_count
 
@@ -146,14 +142,6 @@ def calc_yngve_score(tree, parent):
 		for i, child in enumerate(reversed(tree)):
 			count += calc_yngve_score(child, parent + i)
 		return count
-
-def yngve_redux(treestring):
-	""" For the given parse-tree-string, return the word count and the yngve score. """
-	tree = Tree.fromstring(treestring)
-	total = float(calc_yngve_score(tree, 0))
-	words = float(get_word_score(tree))
-
-	return [total, words]
 
 def yngve_redux(treestring):
 	""" For the given parse-tree-string, return the word count and the yngve score. """
