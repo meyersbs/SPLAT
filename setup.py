@@ -24,7 +24,6 @@ setup(
         'splat.tag',
         'splat.tokenizers'
     ],
-    install_requires=['matplotlib', 'nltk'],
     download_url='https://github.com/meyersbs/SPLAT/tarball/0.1.6',
     requires=['matplotlib', 'nltk'],
     classifiers=[

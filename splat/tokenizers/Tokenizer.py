@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 ##### PYTHON IMPORTS ###################################################################################################
 from abc import abstractmethod

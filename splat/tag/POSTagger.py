@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 ##### SPLAT IMPORTS ####################################################################################################
 from splat.corpus.Util import Brown

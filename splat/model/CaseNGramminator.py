@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 ##### SPLAT IMPORTS ####################################################################################################
 from splat.model.NGramminator import NGramminator
