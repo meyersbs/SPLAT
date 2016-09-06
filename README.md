@@ -20,17 +20,20 @@ SPLAT is being developed and tested on 64-bit Ubuntu 15.10 with Python 3.4.3. Mi
 
 - - - -
 ## Installation
-1. Ensure that Python is installed on your machine.
-2. Download the install file: [install](/install)
-3. Run the following in a command line:
+1. Ensure that Python3.4 (or newer) is installed on your machine.
+2. Run the following in a command line:
 ``` bash
-    chmod +x path/to/install
-    ./path/to/install
+    pip3 install SPLAT-library
+
+    # Recommended, but not required.
+    echo 'alias splat="splat-cli"' >> ~/.bashrc
+    echo 'alias splat="splat-cli"' >> ~/.bash_profile
+    source .bashrc
 ```
 
 To uninstall run the following in a command line.
 ```bash
-    rm -rf ~/.SPLAT
+    pip3 uninstall SPLAT-library
 ```
 
 - - - -
@@ -119,30 +122,6 @@ To uninstall run the following in a command line.
 ```bash
     splat annotate filename         # Semi-Automatically annotate the Utterances
 ```
-
-- - - -
-## Release Notes
-#### UPDATE
-I plan on adding some new functionality in the coming weeks, including rudimentary support for Praat TextGrids and the ProsodyLab Forced Aligner.
-
-#### UPDATE
-SPLAT is taking a new direction. NLTK, while not maintained too well, is still the best at what it does. Since I do not have the background to do everything that NLTK does, I will work on having SPLAT complement NLTK, rather than replace it.
-
-#### Release 3.0
-* SPLAT has been reorganized into packages so that it can either be used as a Python library, or as a command-line tool.
-* The command-line interface has been cleaned up, and hopefully looks better.
-* Dependencies on non-standard libraries have been greatly reduced.
-  * NLTK is a requirement for frequency distributions and Tree structures. This will hopefully change soon.
-  * The Berkeley Parser has been packaged with SPLAT in order for parse trees to be generated. This is likely a permanent dependency. 
-* SPLAT functions have been optimized to increase efficiency and User satisfaction.
-
-#### Release 2.0
-* The Berkeley Parser and NLTK have been integrated with the application.
-* The provided functionality is, for the most part, complete - that is, there isn't much more I plan to add at this time.
-
-#### Release 1.0
-* The application is now fully integrated with bash, removing some nasty reimplementing of code from previous versions.
-* The provided functionality is far from complete; more will be coming, hopefully soon!
 
 - - - -
 ## Acknowledgments
