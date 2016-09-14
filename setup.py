@@ -25,7 +25,7 @@ setup(
         'splat.tag',
         'splat.tokenizers'
     ],
-    download_url='https://github.com/meyersbs/SPLAT/tarball/0.2.1',
+    download_url='https://github.com/meyersbs/SPLAT/archive/v0.2.1.tar.gz',
     requires=['matplotlib', 'nltk'],
     classifiers=[
         'Development Status :: 3 - Alpha',
