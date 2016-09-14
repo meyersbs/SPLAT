@@ -11,7 +11,6 @@ setup(
     license='MIT',
     scripts=['splat/base/splat-cli'],
     keywords=['nlp', 'natural language', 'natural language processing'],
-    data_files=[('splat', ['parse/*.jar', 'parse/*.gr'])],
     packages=[
         'splat',
         'splat.annotation',
