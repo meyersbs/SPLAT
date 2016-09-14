@@ -1,6 +1,5 @@
 include LICENSE.md
-
-recursive-include splat/ *.jar
-recursive-include splat/ *.gr
+include splat/parse/BerkeleyParser-1.7.jar
+include splat/parse/eng_sm6.gr
 
 global-exclude *~
