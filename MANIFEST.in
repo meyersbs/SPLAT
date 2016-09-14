@@ -1,5 +1,6 @@
 include LICENSE.md
 
-recursive-include *.jar *.gr
+recursive-include *.jar
+recursive-include *.gr
 
 global-exclude *~
