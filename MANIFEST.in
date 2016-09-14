@@ -1,6 +1,5 @@
-
-# Include the license file
 include LICENSE.md
 
-# Include the data files
-recursive-include splat *.jar *.gr
+recursive-include splat/parse/ *.jar *.gr
+
+global-exclude *~
