@@ -1,5 +1,5 @@
 include LICENSE.md
 
-recursive-include splat/parse/ *.jar *.gr
+recursive-include *.jar *.gr
 
 global-exclude *~
