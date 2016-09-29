@@ -12,7 +12,7 @@ SPLAT is a command-line application designed to make it easy for linguists (both
 SPLAT is designed to help you gather linguistic features from text files and it is assumed that most input files will not be already annotated. In order for SPLAT to function properly, you should ensure that the input files that you provide do not contain any annotations. Because there are so many variations of linguistic annotation schemes, it would simply be impossible to account for all of them in the initial parsing of input files; it is easier for you to remove any existing annotations than it is for me to do so.
 
 - - - -
-## System Requirements
+## System Requirementsgit 
 SPLAT is being developed and tested on 64-bit Ubuntu 15.10 with Python 3.4.3. Minimum requirements include:
 * Python 3.4 or Later
 * NLTK 3.1 or Later
