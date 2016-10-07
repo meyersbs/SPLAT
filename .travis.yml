@@ -7,10 +7,8 @@ matrix:
 before_install:
   - travis_retry wget https://bootstrap.pypa.io/get-pip.py
   - python get-pip.py
-  - pip install nltk matplotlib
-  - pip install codecov
-  - python -m nltk.downloader stopwords
-  - python -m nltk.downloader names
+  - pip install nltk matplotlib codecov
+  - travis_wait 30 python -m nltk.downloader all
 
 script:
   - coverage run tests.py
