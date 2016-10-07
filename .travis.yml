@@ -9,6 +9,8 @@ before_install:
   - python get-pip.py
   - pip install nltk matplotlib
   - pip install codecov
+  - python -m nltk.downloader stopwords
+  - python -m nltk.downloader names
 
 script:
   - coverage run tests.py
