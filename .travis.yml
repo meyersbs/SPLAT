@@ -7,7 +7,7 @@ matrix:
 before_install:
   - travis_retry wget https://bootstrap.pypa.io/get-pip.py
   - python get-pip.py
-  - pip install -r requirements.txt
+  - pip install nltk matplotlib
   - pip install codecov
 
 script:
