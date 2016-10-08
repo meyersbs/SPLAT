@@ -1,6 +1,8 @@
 # SPLAT
 ## Speech Processing \& Linguistic Analysis Tool
 
+[![Build Status](https://travis-ci.org/meyersbs/SPLAT.svg?branch=master)](https://travis-ci.org/meyersbs/SPLAT)
+
 - - - -
 ## Contact Information
 &nbsp;&nbsp;&nbsp;&nbsp;Benjamin S. Meyers < <ben@splat-library.org> >
