@@ -1,7 +1,6 @@
+[![Build Status](https://travis-ci.org/meyersbs/SPLAT.svg?branch=master)](https://travis-ci.org/meyersbs/SPLAT)
 # SPLAT
 ## Speech Processing \& Linguistic Analysis Tool
-
-[![Build Status](https://travis-ci.org/meyersbs/SPLAT.svg?branch=master)](https://travis-ci.org/meyersbs/SPLAT)
 
 - - - -
 ## Contact Information
