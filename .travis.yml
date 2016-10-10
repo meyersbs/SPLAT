@@ -14,7 +14,7 @@ before_install:
   - travis_wait 30 python -m nltk.downloader averaged_perceptron_tagger
 
 script:
-  - coverage run tests.py
+  - coverage run setup.py tests.py
 
 after_success:
   - codecov
