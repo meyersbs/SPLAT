@@ -7,16 +7,16 @@ matrix:
 before_install:
   - travis_retry wget https://bootstrap.pypa.io/get-pip.py
   - python get-pip.py
-  - pip install nltk matplotlib codecov coveralls
+  - pip install nltk matplotlib codecov coveralls nose
   - travis_wait 30 python -m nltk.downloader stopwords
   - travis_wait 30 python -m nltk.downloader names
   - travis_wait 30 python -m nltk.downloader punkt
   - travis_wait 30 python -m nltk.downloader averaged_perceptron_tagger
 
 script:
-  - coverage run setup.py
   - coverage run tests.py
 
 after_success:
   - codecov
+  - nosetests
   - coveralls
