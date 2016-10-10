@@ -12,7 +12,6 @@ setup(
     scripts=['splat/base/splat-cli'],
     keywords=['nlp', 'natural language', 'natural language processing'],
     package_data={'splat.parse': ['BerkeleyParser-1.7.jar', 'eng_sm6.gr']},
-    #data_files=[('splat', ['parse/BerkeleyParser-1.7.jar', 'parse/eng_sm6.gr'])],
     packages=[
         'splat',
         'splat.annotation',
@@ -31,11 +30,16 @@ setup(
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: End Users/Desktop',
+        'Intended Audience :: Science/Research',
         'Topic :: Text Processing :: Linguistic',
+        'Topic :: Software Development :: Libraries :: Python Modules',
+        'Topic :: Scientific/Engineering :: Information Analysis',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Operating System :: MacOS :: MacOS X',
+        'Operating System :: POSIX :: Linux'
     ]
 )
