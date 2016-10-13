@@ -1,10 +1,10 @@
 from distutils.core import setup
-from distutils.command.install_data import install_data
+from distutils.command.install import install
 import subprocess
 
-class MyInstall(install_data):
+class MyInstall(install):
     def run(self):
-        install_data.run(self)
+        install.run(self)
         subprocess.call("python3 -m nltk.downloader stopwords", stdin=None, stdout=None, stderr=None, shell=False, timeout=None)
         subprocess.call("python3 -m nltk.downloader names", stdin=None, stdout=None, stderr=None, shell=False, timeout=None)
         subprocess.call("python3 -m nltk.downloader punkt", stdin=None, stdout=None, stderr=None, shell=False, timeout=None)
