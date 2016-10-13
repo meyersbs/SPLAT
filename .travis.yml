@@ -8,10 +8,10 @@ before_install:
   - travis_retry wget https://bootstrap.pypa.io/get-pip.py
   - python get-pip.py
   - pip install nltk matplotlib codecov nose
-#  - travis_wait 30 python -m nltk.downloader stopwords
-#  - travis_wait 30 python -m nltk.downloader names
-#  - travis_wait 30 python -m nltk.downloader punkt
-#  - travis_wait 30 python -m nltk.downloader averaged_perceptron_tagger
+  - travis_wait 30 python -m nltk.downloader stopwords
+  - travis_wait 30 python -m nltk.downloader names
+  - travis_wait 30 python -m nltk.downloader punkt
+  - travis_wait 30 python -m nltk.downloader averaged_perceptron_tagger
 
 script:
   - coverage run tests.py
