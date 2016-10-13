@@ -11,26 +11,13 @@
 ########################################################################################################################
 ########################################################################################################################
 
-"""
-This package contains the following directories:
-	[01] annotation
-			A collection of annotation functions.
-	[02] base
-			The heart of SPLAT, where everything connects together.
-	[03] classify
-			Coming soon!
-	[04] complexity
-			A collection of functions for determining syntactic complexity.
-	[05] corpus
-			A collection of corpora and functions for reading them.
-	[06] model
-			A collection of language modelling functions.
-	[07] parse
-			A collection of functions for interfacing with the Berkeley Parser.
-	[08] sentenizers
-			A collection of functions for breaking text into sentences.
-	[09] tag
-			A collection of functions for tagging parts-of-speech.
-	[10] tokenizers
-			A collection of functions for tokenizing text.
-"""
+try:
+    import nltk
+    from splat.SPLAT import SPLAT
+    nltk.download("stopwords")
+    nltk.download("names")
+    nltk.download("punkt")
+    nltk.download("averaged_perceptron_tagger")
+except:
+    print(
+        "WARNING: Essential NLTK data could not be installed. Please run the following:\n pip3 -m nltk.downloader stopwords names punkt averaged_perceptron_tagger")

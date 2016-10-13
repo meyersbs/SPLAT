@@ -5,6 +5,7 @@ reference_data/graham_neubig.py
 ### Directories
 test_data/**/*
 reference_data/**/*
+dist/**/*
 .idea/**/*
 ### File Types
 *~

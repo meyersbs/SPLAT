@@ -4,15 +4,16 @@
 import unittest
 
 ##### SPLAT IMPORTS ####################################################################################################
-from splat.base.TextBubble import TextBubble
+#from splat.SPLAT import SPLAT
+from splat import *
 
 ##### GLOBAL VARIABLES #################################################################################################
 
 
 class TestBasics(unittest.TestCase):
-    whitman_bubble = TextBubble("tests/whitman_test.txt")
-    frankenstein_bubble = TextBubble("tests/frankenstein_test.txt")
-    flesch_bubble = TextBubble("tests/flesch_kincaid_test.txt")
+    whitman_bubble = SPLAT("tests/whitman_test.txt")
+    frankenstein_bubble = SPLAT("tests/frankenstein_test.txt")
+    flesch_bubble = SPLAT("tests/flesch_kincaid_test.txt")
 
     def test_sents(self):
         expected = ['I celebrate myself, and sing myself, And what I assume you shall assume, For every atom belonging to me as good belongs to you.']
@@ -143,10 +144,10 @@ class TestParsing(unittest.TestCase):
         pass
 
 class TestComplexity(unittest.TestCase):
-    whitman_bubble = TextBubble("tests/whitman_test.txt")
-    frankenstein_bubble = TextBubble("tests/frankenstein_test.txt")
-    flesch_bubble = TextBubble("tests/flesch_kincaid_test.txt")
-    roark_bubble = TextBubble("tests/roark_sample.txt")
+    whitman_bubble = SPLAT("tests/whitman_test.txt")
+    frankenstein_bubble = SPLAT("tests/frankenstein_test.txt")
+    flesch_bubble = SPLAT("tests/flesch_kincaid_test.txt")
+    roark_bubble = SPLAT("tests/roark_sample.txt")
 
     def test_idea_density(self):
         expected = 0.5833
@@ -194,126 +195,126 @@ class TestSyllables(unittest.TestCase):
 
     def test_suffixes(self):
         expected_added = 2
-        output_added = TextBubble("added").syllables()
+        output_added = SPLAT("added").syllables()
         self.assertEqual(output_added, expected_added)
         expected_apples = 2
-        output_apples = TextBubble("apples").syllables()
+        output_apples = SPLAT("apples").syllables()
         self.assertEqual(output_apples, expected_apples)
         expected_foxes = 2
-        output_foxes = TextBubble("foxes").syllables()
+        output_foxes = SPLAT("foxes").syllables()
         self.assertEqual(output_foxes, expected_foxes)
         expected_auntie = 2
-        output_auntie = TextBubble("auntie").syllables()
+        output_auntie = SPLAT("auntie").syllables()
         self.assertEqual(output_auntie, expected_auntie)
 
     def test_syllabic_l(self):
         expected_mantle = 2
-        output_mantle = TextBubble("mantle").syllables()
+        output_mantle = SPLAT("mantle").syllables()
         self.assertEqual(output_mantle, expected_mantle)
         expected_bottle = 2
-        output_bottle = TextBubble("bottle").syllables()
+        output_bottle = SPLAT("bottle").syllables()
         self.assertEqual(output_bottle, expected_bottle)
         expected_saddle = 2
-        output_saddle = TextBubble("saddle").syllables()
+        output_saddle = SPLAT("saddle").syllables()
         self.assertEqual(output_saddle, expected_saddle)
         expected_poodle = 2
-        output_poodle = TextBubble("poodle").syllables()
+        output_poodle = SPLAT("poodle").syllables()
         self.assertEqual(output_poodle, expected_poodle)
         expected_pistol = 2
-        output_pistol = TextBubble("pistol").syllables()
+        output_pistol = SPLAT("pistol").syllables()
         self.assertEqual(output_pistol, expected_pistol)
         expected_tunnel = 2
-        output_tunnel = TextBubble("tunnel").syllables()
+        output_tunnel = SPLAT("tunnel").syllables()
         self.assertEqual(output_tunnel, expected_tunnel)
 
     def test_syllabic_m(self):
         expected_heroism = 4
-        output_heroism = TextBubble("heroism").syllables()
+        output_heroism = SPLAT("heroism").syllables()
         self.assertEqual(output_heroism, expected_heroism)
         expected_feudalism = 4
-        output_feudalism = TextBubble("feudalism").syllables()
+        output_feudalism = SPLAT("feudalism").syllables()
         self.assertEqual(output_feudalism, expected_feudalism)
         expected_blossom = 2
-        output_blossom = TextBubble("blossom").syllables()
+        output_blossom = SPLAT("blossom").syllables()
         self.assertEqual(output_blossom, expected_blossom)
         expected_rhythm = 2
-        output_rhythm = TextBubble("rhythm").syllables()
+        output_rhythm = SPLAT("rhythm").syllables()
         self.assertEqual(output_rhythm, expected_rhythm)
 
     def test_syllabic_n(self):
         expected_cotton = 2
-        output_cotton = TextBubble("cotton").syllables()
+        output_cotton = SPLAT("cotton").syllables()
         self.assertEqual(output_cotton, expected_cotton)
         expected_button = 2
-        output_button = TextBubble("button").syllables()
+        output_button = SPLAT("button").syllables()
         self.assertEqual(output_button, expected_button)
         expected_risen = 2
-        output_risen = TextBubble("risen").syllables()
+        output_risen = SPLAT("risen").syllables()
         self.assertEqual(output_risen, expected_risen)
         expected_prison = 2
-        output_prison = TextBubble("prison").syllables()
+        output_prison = SPLAT("prison").syllables()
         self.assertEqual(output_prison, expected_prison)
         expected_sadden = 2
-        output_sadden = TextBubble("sadden").syllables()
+        output_sadden = SPLAT("sadden").syllables()
         self.assertEqual(output_sadden, expected_sadden)
         expected_listen = 2
-        output_listen = TextBubble("listen").syllables()
+        output_listen = SPLAT("listen").syllables()
         self.assertEqual(output_listen, expected_listen)
         expected_even = 2
-        output_even = TextBubble("even").syllables()
+        output_even = SPLAT("even").syllables()
         self.assertEqual(output_even, expected_even)
 
     def test_syllabic_ng(self):
         expected_going = 2
-        output_going = TextBubble("going").syllables()
+        output_going = SPLAT("going").syllables()
         self.assertEqual(output_going, expected_going)
         expected_listening = 3
-        output_listening = TextBubble("listening").syllables()
+        output_listening = SPLAT("listening").syllables()
         self.assertEqual(output_listening, expected_listening)
         expected_ringing = 2
-        output_ringing = TextBubble("ringing").syllables()
+        output_ringing = SPLAT("ringing").syllables()
         self.assertEqual(output_ringing, expected_ringing)
 
     def test_syllabic_r(self):
         expected_history = 3
-        output_history = TextBubble("history").syllables()
+        output_history = SPLAT("history").syllables()
         self.assertEqual(output_history, expected_history)
         expected_hungary = 3
-        output_hungary = TextBubble("hungary").syllables()
+        output_hungary = SPLAT("hungary").syllables()
         self.assertEqual(output_hungary, expected_hungary)
         expected_preference = 3
-        output_preference = TextBubble("preference").syllables()
+        output_preference = SPLAT("preference").syllables()
         self.assertEqual(output_preference, expected_preference)
 
     def test_special_cases(self):
         expected_australian = 4
-        output_australian = TextBubble("australian").syllables()
+        output_australian = SPLAT("australian").syllables()
         self.assertEqual(output_australian, expected_australian)
         expected_literal = 3
-        output_literal = TextBubble("literal").syllables()
+        output_literal = SPLAT("literal").syllables()
         self.assertEqual(output_literal, expected_literal)
         expected_forebodings = 4
-        output_forebodings = TextBubble("forebodings").syllables()
+        output_forebodings = SPLAT("forebodings").syllables()
         self.assertEqual(output_forebodings, expected_forebodings)
         expected_pterodactyl = 4
-        output_pterodactyl = TextBubble("pterodactyl").syllables()
+        output_pterodactyl = SPLAT("pterodactyl").syllables()
         self.assertEqual(output_pterodactyl, expected_pterodactyl)
 
     def test_proper_names(self):
         expected_benjamin = 3
-        output_benjamin = TextBubble("benjamin").syllables()
+        output_benjamin = SPLAT("benjamin").syllables()
         self.assertEqual(output_benjamin, expected_benjamin)
         expected_emily = 3
-        output_emily = TextBubble("emily").syllables()
+        output_emily = SPLAT("emily").syllables()
         self.assertEqual(output_emily, expected_emily)
         expected_cissi = 2
-        output_cissi = TextBubble("cissi").syllables()
+        output_cissi = SPLAT("cissi").syllables()
         self.assertEqual(output_cissi, expected_cissi)
         expected_cecilia = 4
-        output_cecilia = TextBubble("cecilia").syllables()
+        output_cecilia = SPLAT("cecilia").syllables()
         self.assertEqual(output_cecilia, expected_cecilia)
         expected_ares = 2
-        output_ares = TextBubble("ares").syllables()
+        output_ares = SPLAT("ares").syllables()
         self.assertEqual(output_ares, expected_ares)
 
 if __name__ == '__main__':

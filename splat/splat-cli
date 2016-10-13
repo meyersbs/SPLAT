@@ -1,0 +1,216 @@
+#!/usr/bin/env python3
+
+##### PYTHON IMPORTS ###################################################################################################
+import os
+import pickle
+import subprocess
+import sys
+
+##### SPLAT IMPORTS ####################################################################################################
+from splat.SPLAT import SPLAT
+
+##### GLOBAL VARIABLES #################################################################################################
+my_bubble = None
+commands = {}
+
+########################################################################################################################
+##### INFORMATION ######################################################################################################
+### @PROJECT_NAME:		SPLAT: Speech Processing and Linguistic Analysis Tool										 ###
+### @VERSION_NUMBER:																								 ###
+### @PROJECT_SITE:		github.com/meyersbs/SPLAT																     ###
+### @AUTHOR_NAME:		Benjamin S. Meyers																			 ###
+### @CONTACT_EMAIL:		ben@splat-library.org																		 ###
+### @LICENSE_TYPE:		MIT																							 ###
+########################################################################################################################
+########################################################################################################################
+
+#TODO: TextGrid Support
+#TODO: String-Based Yngve
+#TODO: String-Based Frazier
+#TODO: ProsodyLab Aligner Support?
+#TODO: Config File
+#TODO: Moving Window
+
+def command_message():
+	""" Display all available commands and their descriptions. """
+	template = "{0:16}{1:8}{2:16}{3:128}"
+	print(template.format("COMMAND", "ARG1", "ARG2", "DESCRIPTION"))
+	print(template.format("adps", "--", "<input_file>", "Display average disfluencies per sentence."))
+	print(template.format("adpu", "--", "<input_file>", "Display average disfluencies per utterance."))
+	print(template.format("asps", "--", "<input_file>", "Display average syllables per sentence."))
+	print(template.format("aspu", "--", "<input_file>", "Display average syllables per utterance."))
+	print(template.format("als", "--", "<input_file>", "Display average sentence length."))
+	print(template.format("alu", "--", "<input_file>", "Display average utterance length."))
+	print(template.format("annotate", "--", "<input_file>", "Display the annotated SPLAT."))
+	print(template.format("bigrams", "--", "<input_file>", "Display all bigrams."))
+	print(template.format("bubble", "--", "<input_file>", "Display the raw SPLAT."))
+	print(template.format("cdensity", "--", "<input_file>", "Display content density."))
+	print(template.format("cfr", "--", "<input_file>", "Display content-function ratio."))
+	print(template.format("content", "--", "<input_file>", "Display all content words."))
+	print(template.format("disfluencies", "--", "<input_file>", "Display all disfluency counts."))
+	print(template.format("dpa", "--", "<input_file>", "Display disfluencies per dialog act."))
+	print(template.format("dps", "--", "<input_file>", "Display disfluencies per sentence."))
+	print(template.format("dpu", "--", "<input_file>", "Display disfluencies per utterance."))
+	print(template.format("drawtrees", "--", "<input_file>", "Draw syntactic parse trees."))
+	print(template.format("flesch", "--", "<input_file>", "Display Flesch Readability Score."))
+	print(template.format("frazier", "--", "<input_file>", "Display frazier score."))
+	print(template.format("function", "--", "<input_file>", "Display all function words."))
+	print(template.format("idensity", "--", "<input_file>", "Display idea density."))
+	print(template.format("kincaid", "--", "<input_file>", "Display Flesch-Kincaid Grade Level."))
+	print(template.format("leastfreq", "<x>", "<input_file>", "Display the <x> least frequent words."))
+	print(template.format("lwords", "--", "<input_file>", "Display the longest words."))
+	print(template.format("maxdepth", "--", "<input_file>", "Display maxdepth of trees."))
+	print(template.format("mostfreq", "<x>", "<input_file>", "Display the <x> most frequent words."))
+	print(template.format("ngrams", "<n>", "<input_file>", "Display all <n>-grams."))
+	print(template.format("plotfreq", "--", "<input_file>", "Plot the <x> most frequent words."))
+	print(template.format("pos", "--", "<input_file>", "Display tokens with POS tags."))
+	print(template.format("poscounts", "--", "<input_file>", "Display counts for each POS taggers."))
+	print(template.format("sents", "--", "<input_file>", "Display sentences."))
+	print(template.format("sentcount", "--", "<input_file>", "Display number of sentences."))
+	print(template.format("sfrazier", "--", "<input_file>", "Display string-based frazier score."))
+	print(template.format("swords", "--", "<input_file>", "Display the shortest words."))
+	print(template.format("syllables", "--", "<input_file>", "Display number of syllables."))
+	print(template.format("syngve", "--", "<input_file>", "Display string-based yngve score."))
+	print(template.format("tokens", "--", "<input_file>", "Display all tokens."))
+	print(template.format("trees", "--", "<input_file>", "Display all parse trees."))
+	print(template.format("trigrams", "--", "<input_file>", "Display all trigrams."))
+	print(template.format("ttr", "--", "<input_file>", "Display type-token ratio."))
+	print(template.format("types", "--", "<input_file>", "Display all types."))
+	print(template.format("ucontent", "--", "<input_file>", "Display all unique content words."))
+	print(template.format("ufunction", "--", "<input_file>", "Display all unique function words."))
+	print(template.format("unigrams", "--", "<input_file>", "Display all unigrams."))
+	print(template.format("uttcount", "--", "<input_file>", "Display number of utterances."))
+	print(template.format("utts", "--", "<input_file>", "Display utterances."))
+	print(template.format("uwc", "--", "<input_file>", "Display unique wordcount."))
+	print(template.format("wc", "--", "<input_file>", "Display wordcount."))
+	print(template.format("wps", "--", "<input_file>", "Display words per sentence counts."))
+	print(template.format("wpu", "--", "<input_file>", "Display words per utterance counts."))
+	print(template.format("yngve", "--", "<input_file>", "Display yngve score."))
+
+def usage_message():
+	""" Display usage message. """
+	message = "USAGE:\tsplat <command> <options> <text_source>"
+	return message
+
+def help_message():
+	""" Display help message. """
+	message = "USAGE:\tsplat <command> <options> <text_source>\n"
+	message += "\tsplat --commands\tList available commands.\n"
+	message += "\tsplat --info\t\tDisplay licensing information.\n"
+	return message
+
+def info_message():
+	""" Display copyright information. """
+	prog_info = "\n####################################################################"
+	prog_info += "\n# SPLAT - Speech Processing & Linguistic Analysis Tool\t\t   #"
+	prog_info += "\n# Copyright (C) 2016, Benjamin S. Meyers < ben@splat-library.org > #"
+	prog_info += "\n# \t\t\t\t\t\t\t\t   #"
+	prog_info += "\n# Developed by Benjamin S. Meyers under the guidance of:\t   #"
+	prog_info += "\n#\tEmily Prud'hommeaux\tCissi O. Alm\t\t\t   #"
+	prog_info += "\n# \t\t\t\t\t\t\t\t   #"
+	prog_info += "\n# For documentation, visit: http://splat-library.org\t\t   #"
+	prog_info += "\n####################################################################\n"
+	return prog_info
+
+def check_dependencies():
+	"""
+	SPLAT relies on the modules matplotlib and nltk for certain functionality.
+	It also relies on Java being installed in order for the Berkeley Parser to be used.
+	"""
+	try:
+		import nltk
+	except ImportError:
+		print("WARNING: The python library NLTK could not be imported. Some functionality may not be available without NLTK.")
+	try:
+		import matplotlib
+	except ImportError:
+		print("WARNING: The python library matplotlib could not be imported. Some functionality may not be available without matplotlib.")
+	java_status = subprocess.call(["which", "java"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+	if java_status != 0:
+		print("WARNING: Java could not be located. Some functionality may not be available without Java.")
+
+
+def run_command(args):
+	command = args[1]
+	if command not in commands.keys():
+		sys.exit("WARNING: Invalid command. Try '--help' for details.")
+	if len(args) == 2: # splat <command>
+		print(commands[command]())
+	elif len(args) == 3: # splat <command> <option>
+		try:
+			print(commands[command](int(args[2])))
+		except:
+			print("WARNING: Could not run " + str(command) + " with missing arguments.")
+
+def load_bubble(args):
+	global my_bubble
+	if os.path.exists(args[-1] + ".splat"):
+		my_bubble = pickle.load(open(args[-1] + ".splat", 'rb'))
+	else:
+		my_bubble = SPLAT(args[-1])
+		pickle.dump(my_bubble, open(args[-1] + ".splat", 'wb'), protocol=2)
+
+def save_bubble(args):
+	global my_bubble
+	pickle.dump(my_bubble, open(args[-1] + ".splat", "wb"), protocol=2)
+
+def setup_commands():
+	global commands
+	commands = {"wc":my_bubble.wordcount, 							"uwc":my_bubble.unique_wordcount,
+				"tokens":my_bubble.tokens, 							"types":my_bubble.types,
+				"sents":my_bubble.sents, 							"sentcount":my_bubble.sentcount,
+				"ttr":my_bubble.type_token_ratio,					"ngrams":my_bubble.ngrams,
+				"pos":my_bubble.pos,								"alu":my_bubble.average_utterance_length,
+				"cfr":my_bubble.content_function_ratio,				"uttcount":my_bubble.uttcount,
+				"unigrams":my_bubble.unigrams,						"bigrams":my_bubble.bigrams,
+				"trigrams":my_bubble.trigrams,						"content":my_bubble.content_words,
+				"function":my_bubble.function_words,				"ucontent":my_bubble.unique_content_words,
+				"ufunction":my_bubble.unique_function_words,		"trees":my_bubble.treestrings,
+				"drawtrees":my_bubble.drawtrees,					"wpu":my_bubble.words_per_utterance,
+				"wps":my_bubble.words_per_sentence,					"utts":my_bubble.utts,
+				"cdensity":my_bubble.content_density,				"idensity":my_bubble.idea_density,
+				"yngve":my_bubble.tree_based_yngve_score,			"frazier":my_bubble.tree_based_frazier_score,
+				"poscounts":my_bubble.pos_counts,					"maxdepth":my_bubble.max_depth,
+				"mostfreq":my_bubble.get_most_freq,					"leastfreq":my_bubble.get_least_freq,
+				"plotfreq":my_bubble.plot_freq,						"dpu":my_bubble.disfluencies_per_utterance,
+				"dps":my_bubble.disfluencies_per_sentence,			"disfluencies":my_bubble.disfluencies,
+				"als":my_bubble.average_sentence_length,			"syngve":my_bubble.string_based_yngve_score,
+				"sfrazier":my_bubble.string_based_frazier_score,	"bubble":my_bubble.bubble,
+				"annotate":my_bubble.annotated_bubble,				"dpa":my_bubble.disfluencies_per_act,
+				"lwords":my_bubble.longest_words,					"swords":my_bubble.shortest_words,
+				"syllables":my_bubble.syllables,					"flesch":my_bubble.flesch_readability,
+				"kincaid":my_bubble.kincaid_grade_level,			"adpu":my_bubble.average_dpu,
+				"adps":my_bubble.average_dps,						"aspu":my_bubble.average_spu,
+				"asps":my_bubble.average_sps}
+
+def main():
+	args = sys.argv
+	if len(args) < 2:
+		sys.exit("WARNING: Invalid input. Try '--help' for more details.")
+	elif len(args) == 2:
+		check_dependencies()
+		if args[1] == "--help":
+			print(help_message())
+		elif args[1] == "--info":
+			print(info_message())
+		elif args[1] == "--usage":
+			print(usage_message())
+		elif args[1] == "--commands":
+			command_message()
+	else:
+		check_dependencies()
+		load_bubble(args)
+		setup_commands()
+		run_command(args[:-1])
+		save_bubble(args)
+
+if __name__ == "__main__":
+	try:
+		import nltk
+		nltk.download("stopwords")
+		nltk.download("names")
+		nltk.download("punkt")
+		nltk.download("averaged_perceptron_tagger")
+	except:
+		print("WARNING: Essential NLTK data could not be installed. Please run the following:\n pip3 -m nltk.downloader stopwords names punkt averaged_perceptron_tagger")
+	main()
