@@ -23,7 +23,7 @@ class TreeStringParser:
 		self.__grammar_path = grammar_path
 
 	def get_parse_trees(self, sentences):
-		""" Use the Berkeley Parser to obtain parse-tree-strings for each line in the input_file. """
+		""" Use the Berkeley Parser to obtain parsers-tree-strings for each line in the input_file. """
 		parse_file = open("parse_file.txt", 'w')
 		for sentence in sentences:
 			parse_file.write(sentence + "\n")

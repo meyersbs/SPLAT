@@ -98,7 +98,7 @@ def get_content_function_ratio(content, function):
 	return round(ratio, 4)
 
 def draw_trees(treestrings):
-	""" Draws pictures of each parse-tree-string using Matplotlib. """
+	""" Draws pictures of each parsers-tree-string using Matplotlib. """
 	for tree_string in treestrings:
 		print(tree_string)
 		sentence = Tree.fromstring(tree_string)
@@ -118,7 +118,7 @@ def get_pos_counts(tagged_text):
 	return pos_counts
 
 def get_max_depth(treestrings):
-	""" Calculate the max depths for each parse tree. """
+	""" Calculate the max depths for each parsers tree. """
 	depths = []
 
 	for treestring in treestrings:

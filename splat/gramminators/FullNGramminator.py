@@ -4,7 +4,7 @@
 import re
 
 ##### SPLAT IMPORTS ####################################################################################################
-from splat.model.NGramminator import NGramminator
+from splat.gramminators.NGramminator import NGramminator
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
@@ -19,7 +19,7 @@ from splat.model.NGramminator import NGramminator
 class FullNGramminator(NGramminator):
 	"""
 	A FullNGramminator provides the functionality to generate ngrams for a given text sequence.
-	Characters matching r"[\.,:;!\?\(\)\[\]\{\}]" are excluded from the ngram model.
+	Characters matching r"[\.,:;!\?\(\)\[\]\{\}]" are excluded from the ngram gramminators.
 	All characters in the given text are lowercased before being ngramminated.
 	"""
 	def ngrams(self, text, n):

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
+##### PYTHON IMPORTS ###################################################################################################
+import os, pickle
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
@@ -12,14 +14,9 @@
 ########################################################################################################################
 ########################################################################################################################
 
-"""
-This package contains the following files:
-	[01] Dialog Act Annotation Scheme.md
-			An explanation of the annotation scheme used in the MeyersDialogActAnnotator.
-	[02] MeyersDialogActAnnotator.py
-			Provides functionality to semi-automatically insert dialog acts.
-	[03] QuarteroniDialogActAnnotator.py
-			Provides functionality to semi-automatically insert dialog acts.
-	[04] SpeakerIndicatorAnnotator.py
-			Provides functionality to semi-automatically insert speaker markers.
-"""
+curr_dir = os.path.dirname(__file__)
+Google20K = pickle.load(open(curr_dir + '/google-20000-corpora.pkl', 'rb'))
+EOWL = pickle.load(open(curr_dir + '/eowl-corpora.pkl', 'rb'))
+Brown = pickle.load(open(curr_dir + '/brown-corpora.pkl', 'rb'))
+Gutenberg = pickle.load(open(curr_dir + '/gutenberg-corpora.pkl', 'rb'))
+Stopwords = pickle.load(open(curr_dir + '/stopwords-corpora.pkl', 'rb'))

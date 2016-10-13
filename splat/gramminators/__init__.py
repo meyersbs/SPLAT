@@ -13,12 +13,18 @@
 
 """
 This package contains the following files:
-	[01] BerkeleyParser-1.7.jar
-			The Berkeley Parser provides a number of natural language processing functions. It is used by the codebase
-			to generate parse tree strings.
-			Project Site: <https://github.com/slavpetrov/berkeleyparser>
-	[02] eng_sm6.gr
-			A grammar file for English used by the Berkeley Parser
-	[03] TreeStringParser.py
-			Provides functions to run the Berkeley Parser and capture its output.
+	[01] CaseNGramminator.py
+			Provides functions to create ngrams. All characters in the given text are lowercased before ngrams are
+			generated.
+	[02] FullNGramminator.py
+			Provides functions to create ngrams. Characters matching r"[\.,:;!\?\(\)\[\]\{\}]" are excluded from the
+			ngram gramminators. All characters in the given text are lowercased before ngrams are
+			generated. This is essentially a combination of the PunctNGramminator and the CaseNGramminator.
+	[03] NGramminator.py
+			An abstract class implemented by the other NGramminators in this directory.
+	[04] PunctNGramminator.py
+			Provides functions to create ngrams. Characters matching r"[\.,:;!\?\(\)\[\]\{\}]" are excluded from the
+			ngram gramminators.
+	[05] RawNGramminator.py
+			Provides functions to create ngrams. No pre-processing or normalization of the text tokens takes place.
 """

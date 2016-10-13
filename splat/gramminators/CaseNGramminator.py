@@ -1,10 +1,7 @@
 #!/usr/bin/env python3
 
-##### PYTHON IMPORTS ###################################################################################################
-import re
-
 ##### SPLAT IMPORTS ####################################################################################################
-from splat.model.NGramminator import NGramminator
+from splat.gramminators.NGramminator import NGramminator
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
@@ -16,10 +13,10 @@ from splat.model.NGramminator import NGramminator
 ### @LICENSE_TYPE:		MIT																							 ###
 ########################################################################################################################
 ########################################################################################################################
-class PunctNGramminator(NGramminator):
+class CaseNGramminator(NGramminator):
 	"""
-	A PunctNGramminator provides the functionality to generate ngrams for a given text sequence.
-	Characters matching r"[\.,:;!\?\(\)\[\]\{\}]" are excluded from the ngram model.
+	A CaseNGramminator provides the functionality to generate ngrams for a given text sequence.
+	All characters in the given text are lowercased before being ngramminated.
 	"""
 	def ngrams(self, text, n):
 		"""
@@ -33,16 +30,17 @@ class PunctNGramminator(NGramminator):
 		"""
 		temp_text = []
 		if type(text) == str:
-			temp_text = text.split()
+			temp_text = text.lower().split()
 		elif type(text) == list:
+			temp_text = text
+			text = []
+			for temp_word in temp_text:
+				text.append(temp_word.lower())
 			temp_text = text
 		else:
 			raise ValueError
 
-		text = []
-
-		for temp_word in temp_text:
-			text.append(re.sub(r"[\.,:;!\?\(\)\[\]\{\}]", "", temp_word))
+		text = temp_text
 
 		ngram_list = []
 		for i in range(len(text)-n+1):
