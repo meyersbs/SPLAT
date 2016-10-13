@@ -14,7 +14,6 @@ setup(
     package_data={'splat.parsers': ['BerkeleyParser-1.7.jar', 'eng_sm6.gr']},
     packages=[
         'splat',
-        'splat.annotation',
         'splat.classifiers',
         'splat.complexity',
         'splat.corpora',
