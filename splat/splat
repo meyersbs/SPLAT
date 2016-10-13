@@ -144,17 +144,20 @@ def run_command(args):
 def load_bubble(args):
     global my_bubble
     if os.path.exists(args[-1] + ".splat"):
-        my_bubble = jsonpickle.decode(open(args[-1] + ".splat", 'rb'))
+        temp_str = ""
+        with open(args[-1] + ".splat", 'r') as f:
+            temp_str = f.read().replace('\n', '')
+        my_bubble = jsonpickle.decode(temp_str)
     else:
         my_bubble = SPLAT(args[-1])
         new_bubble = jsonpickle.encode(my_bubble)
-        with open(args[-1] + ".splat", 'wb') as f:
+        with open(args[-1] + ".splat", 'w') as f:
             f.write(new_bubble)
 
 def save_bubble(args):
     global my_bubble
     temp_bubble = jsonpickle.encode(my_bubble)
-    with open(args[-1] + ".splat", 'wb') as f:
+    with open(args[-1] + ".splat", 'w') as f:
         f.write(temp_bubble)
 
 def setup_commands():
