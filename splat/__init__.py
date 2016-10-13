@@ -13,11 +13,11 @@
 
 try:
     import nltk
-    from splat.SPLAT import SPLAT
+    from splat import SPLAT
     nltk.download("stopwords")
     nltk.download("names")
     nltk.download("punkt")
     nltk.download("averaged_perceptron_tagger")
 except:
     print(
-        "WARNING: Essential NLTK data could not be installed. Please run the following:\n pip3 -m nltk.downloader stopwords names punkt averaged_perceptron_tagger")
+        "WARNING: Essential NLTK data could not be installed. Please run the following:\n python3 -m nltk.downloader stopwords names punkt averaged_perceptron_tagger")

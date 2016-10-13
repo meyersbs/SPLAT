@@ -5,7 +5,7 @@ import unittest
 
 ##### SPLAT IMPORTS ####################################################################################################
 #from splat.SPLAT import SPLAT
-from splat import *
+from splat.SPLAT import SPLAT
 
 ##### GLOBAL VARIABLES #################################################################################################
 

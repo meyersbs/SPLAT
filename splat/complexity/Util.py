@@ -144,7 +144,7 @@ def calc_yngve_score(tree, parent):
 		return count
 
 def yngve_redux(treestring):
-	""" For the given parse-tree-string, return the word count and the yngve score. """
+	""" For the given parsers-tree-string, return the word count and the yngve score. """
 	tree = Tree.fromstring(treestring)
 	total = float(calc_yngve_score(tree, 0))
 	words = float(get_word_score(tree))
