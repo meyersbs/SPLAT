@@ -17,7 +17,7 @@ try:
 except ImportError:
     print("Oops! It looks like NLTK was not installed. Let's fix that.")
     print("Installing NLTK...")
-    status = subprocess.call("pip3 install nltk", stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    status = subprocess.call(["pip3", "install", "nltk"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if status == 0:
         print("NLTK was successfully installed!")
     else:
@@ -31,7 +31,7 @@ try:
 except ImportError:
     print("Oops! It looks like some essential NLTK was not downloaded. Let's fix that.")
     print("Downloading NLTK data...")
-    status = subprocess.call("python3 -m nltk.downloader stopwords names punkt averaged_perceptron_tagger", stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    status = subprocess.call(["python3", "-m", "nltk.downloader", "stopwords", "names", "punkt", "averaged_perceptron_tagger"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if status == 0:
         print("Essential NLTK data was successfully downloaded!")
     else:
@@ -42,7 +42,7 @@ try:
 except ImportError:
     print("Oops! It looks like matplotlib was not installed. Let's fix that.")
     print("Installing matplotlib...")
-    status = subprocess.call("pip3 install matplotlib", stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    status = subprocess.call(["pip3", "install", "matplotlib"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if status == 0:
         print("matplotlib was successfully installed!")
     else:
@@ -53,7 +53,7 @@ try:
 except ImportError:
     print("Oops! It looks like jsonpickle was not installed. Let's fix that.")
     print("Installing jsonpickle...")
-    status = subprocess.call("pip3 install jsonpickle", stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    status = subprocess.call(["pip3", "install", "jsonpickle"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if status == 0:
         print("jsonpickle was successfully installed!")
     else:
