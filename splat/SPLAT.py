@@ -50,7 +50,7 @@ class SPLAT:
 
     # Discourse Based Variables
     __adpu, __adps = (None,) * 2
-    __bubble = ""
+    __splat = ""
     __dpu, __dps, __disfluencies = ({},) * 3
 
     # Frequency Distribution Variables
@@ -74,10 +74,10 @@ class SPLAT:
             for line in open(text, 'r'):
                 temp_utts.append(line.strip())
                 temp_text += line.strip() + " "
-            self.__bubble = temp_text
+            self.__splat = temp_text
             self.__utterances = temp_utts
         elif type(text) == str:
-            self.__bubble = text
+            self.__splat = text
             temp_utts = []
             for line in text.split("\n"):
                 temp_utts.append(line.strip())
@@ -86,11 +86,11 @@ class SPLAT:
             raise ValueError("WARNING: SPLAT must be of type str or file.")
 
         self.__uttcount = len(self.__utterances)
-        self.__sentences = self.__sentenizer.sentenize(self.__bubble)
+        self.__sentences = self.__sentenizer.sentenize(self.__splat)
         if self.__sentences == []: self.__sentences = self.__utterances
         self.__sentcount = len(self.__sentences)
-        self.__rawtokens = self.__rawtokenizer.tokenize(self.__bubble)
-        self.__tokens = self.__cleantokenizer.tokenize(self.__bubble)
+        self.__rawtokens = self.__rawtokenizer.tokenize(self.__splat)
+        self.__tokens = self.__cleantokenizer.tokenize(self.__splat)
         self.__rawtypes = Util.typify(self.__rawtokens)
         self.__types = Util.typify(self.__tokens)
         self.__wordcount = Util.wordcount(self.__rawtokens)
@@ -300,7 +300,7 @@ class SPLAT:
     def unigrams(self):
         """ Returns a list of unigrams. """
         if self.__unigrams is None:
-            self.__unigrams = self.__ngramminator.unigrams(self.__bubble)
+            self.__unigrams = self.__ngramminator.unigrams(self.__splat)
             return self.__unigrams
         else:
             return self.__unigrams
@@ -308,7 +308,7 @@ class SPLAT:
     def bigrams(self):
         """ Returns a list of bigrams. """
         if self.__bigrams is None:
-            self.__bigrams = self.__ngramminator.bigrams(self.__bubble)
+            self.__bigrams = self.__ngramminator.bigrams(self.__splat)
             return self.__bigrams
         else:
             return self.__bigrams
@@ -316,7 +316,7 @@ class SPLAT:
     def trigrams(self):
         """ Returns a list of trigrams. """
         if self.__trigrams is None:
-            self.__trigrams = self.__ngramminator.trigrams(self.__bubble)
+            self.__trigrams = self.__ngramminator.trigrams(self.__splat)
             return self.__trigrams
         else:
             return self.__trigrams
@@ -332,14 +332,14 @@ class SPLAT:
         elif n == 3:
             return self.trigrams()
         else:
-            return self.__ngramminator.ngrams(self.__bubble, n)
+            return self.__ngramminator.ngrams(self.__splat, n)
 
     ##### PART-OF-SPEECH BASED #########################################################################################
 
     def pos(self):
         """ Returns a list of tuple pairs: (word, POS taggers). """
         if self.__pos is None:
-            self.__pos = self.__postagger.tag(self.__bubble)
+            self.__pos = self.__postagger.tag(self.__splat)
         return self.__pos
 
     def content_function_ratio(self):
@@ -501,8 +501,8 @@ class SPLAT:
         :return:a massive SPLAT of the different features in the SPLAT
         :rtype:str
         """
-        output = "===== Bubble:\n"
-        output += self.__bubble + "\n"
+        output = "===== SPLAT!\n"
+        output += self.__splat + "\n"
         output += "===== Sentences:\n"
         count = 0
         for sentence in self.__sentences:

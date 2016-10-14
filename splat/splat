@@ -7,7 +7,7 @@ import os, jsonpickle, subprocess, sys
 from splat.SPLAT import SPLAT
 
 ##### GLOBAL VARIABLES #################################################################################################
-my_bubble = None
+my_splat = None
 commands = {}
 
 ########################################################################################################################
@@ -39,7 +39,7 @@ def command_message():
     print(template.format("als", "--", "<input_file>", "Display average sentence length."))
     print(template.format("alu", "--", "<input_file>", "Display average utterance length."))
     print(template.format("bigrams", "--", "<input_file>", "Display all bigrams."))
-    print(template.format("bubble", "--", "<input_file>", "Display the raw SPLAT."))
+    print(template.format("splat", "--", "<input_file>", "Display the raw SPLAT."))
     print(template.format("cdensity", "--", "<input_file>", "Display content density."))
     print(template.format("cfr", "--", "<input_file>", "Display content-function ratio."))
     print(template.format("content", "--", "<input_file>", "Display all content words."))
@@ -191,52 +191,52 @@ def run_command(args):
         except:
             print("WARNING: Could not run " + str(command) + " with missing arguments.")
 
-def load_bubble(args):
-    global my_bubble
+def load_splat(args):
+    global my_splat
     if os.path.exists(args[-1] + ".splat"):
         temp_str = ""
         with open(args[-1] + ".splat", 'r') as f:
             temp_str = f.read().replace('\n', '')
-        my_bubble = jsonpickle.decode(temp_str)
+        my_splat = jsonpickle.decode(temp_str)
     else:
-        my_bubble = SPLAT(args[-1])
-        new_bubble = jsonpickle.encode(my_bubble)
+        my_splat = SPLAT(args[-1])
+        new_splat = jsonpickle.encode(my_splat)
         with open(args[-1] + ".splat", 'w') as f:
-            f.write(new_bubble)
+            f.write(new_splat)
 
-def save_bubble(args):
-    global my_bubble
-    temp_bubble = jsonpickle.encode(my_bubble)
+def save_splat(args):
+    global my_splat
+    temp_splat = jsonpickle.encode(my_splat)
     with open(args[-1] + ".splat", 'w') as f:
-        f.write(temp_bubble)
+        f.write(temp_splat)
 
 def setup_commands():
     global commands
-    commands = {"wc":my_bubble.wordcount, 							"uwc":my_bubble.unique_wordcount,
-                "tokens":my_bubble.tokens, 							"types":my_bubble.types,
-                "sents":my_bubble.sents, 							"sentcount":my_bubble.sentcount,
-                "ttr":my_bubble.type_token_ratio,					"ngrams":my_bubble.ngrams,
-                "pos":my_bubble.pos,								"alu":my_bubble.average_utterance_length,
-                "cfr":my_bubble.content_function_ratio,				"uttcount":my_bubble.uttcount,
-                "unigrams":my_bubble.unigrams,						"bigrams":my_bubble.bigrams,
-                "trigrams":my_bubble.trigrams,						"content":my_bubble.content_words,
-                "function":my_bubble.function_words,				"ucontent":my_bubble.unique_content_words,
-                "ufunction":my_bubble.unique_function_words,		"trees":my_bubble.treestrings,
-                "drawtrees":my_bubble.drawtrees,					"wpu":my_bubble.words_per_utterance,
-                "wps":my_bubble.words_per_sentence,					"utts":my_bubble.utts,
-                "cdensity":my_bubble.content_density,				"idensity":my_bubble.idea_density,
-                "yngve":my_bubble.tree_based_yngve_score,			"frazier":my_bubble.tree_based_frazier_score,
-                "poscounts":my_bubble.pos_counts,					"maxdepth":my_bubble.max_depth,
-                "mostfreq":my_bubble.get_most_freq,					"leastfreq":my_bubble.get_least_freq,
-                "plotfreq":my_bubble.plot_freq,						"dpu":my_bubble.disfluencies_per_utterance,
-                "dps":my_bubble.disfluencies_per_sentence,			"disfluencies":my_bubble.disfluencies,
-                "als":my_bubble.average_sentence_length,			"syngve":my_bubble.string_based_yngve_score,
-                "sfrazier":my_bubble.string_based_frazier_score,	"bubble":my_bubble.bubble,
-                "lwords":my_bubble.longest_words,					"swords":my_bubble.shortest_words,
-                "syllables":my_bubble.syllables,					"flesch":my_bubble.flesch_readability,
-                "kincaid":my_bubble.kincaid_grade_level,			"adpu":my_bubble.average_dpu,
-                "adps":my_bubble.average_dps,						"aspu":my_bubble.average_spu,
-                "asps":my_bubble.average_sps}
+    commands = {"wc":my_splat.wordcount, "uwc":my_splat.unique_wordcount,
+                "tokens":my_splat.tokens, "types":my_splat.types,
+                "sents":my_splat.sents, "sentcount":my_splat.sentcount,
+                "ttr":my_splat.type_token_ratio, "ngrams":my_splat.ngrams,
+                "pos":my_splat.pos, "alu":my_splat.average_utterance_length,
+                "cfr":my_splat.content_function_ratio, "uttcount":my_splat.uttcount,
+                "unigrams":my_splat.unigrams, "bigrams":my_splat.bigrams,
+                "trigrams":my_splat.trigrams, "content":my_splat.content_words,
+                "function":my_splat.function_words, "ucontent":my_splat.unique_content_words,
+                "ufunction":my_splat.unique_function_words, "trees":my_splat.treestrings,
+                "drawtrees":my_splat.drawtrees, "wpu":my_splat.words_per_utterance,
+                "wps":my_splat.words_per_sentence, "utts":my_splat.utts,
+                "cdensity":my_splat.content_density, "idensity":my_splat.idea_density,
+                "yngve":my_splat.tree_based_yngve_score, "frazier":my_splat.tree_based_frazier_score,
+                "poscounts":my_splat.pos_counts, "maxdepth":my_splat.max_depth,
+                "mostfreq":my_splat.get_most_freq, "leastfreq":my_splat.get_least_freq,
+                "plotfreq":my_splat.plot_freq, "dpu":my_splat.disfluencies_per_utterance,
+                "dps":my_splat.disfluencies_per_sentence, "disfluencies":my_splat.disfluencies,
+                "als":my_splat.average_sentence_length, "syngve":my_splat.string_based_yngve_score,
+                "sfrazier":my_splat.string_based_frazier_score, "splat":my_splat.splat,
+                "lwords":my_splat.longest_words, "swords":my_splat.shortest_words,
+                "syllables":my_splat.syllables, "flesch":my_splat.flesch_readability,
+                "kincaid":my_splat.kincaid_grade_level, "adpu":my_splat.average_dpu,
+                "adps":my_splat.average_dps, "aspu":my_splat.average_spu,
+                "asps":my_splat.average_sps}
 
 def main():
     args = sys.argv
@@ -254,10 +254,10 @@ def main():
             command_message()
     else:
         check_dependencies()
-        load_bubble(args)
+        load_splat(args)
         setup_commands()
         run_command(args[:-1])
-        save_bubble(args)
+        save_splat(args)
 
 if __name__ == "__main__":
     main()
