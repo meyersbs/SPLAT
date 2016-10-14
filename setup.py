@@ -24,7 +24,7 @@ setup(
         'splat.tokenizers'
     ],
     download_url='https://github.com/meyersbs/SPLAT/archive/v0.3.0.tar.gz',
-    install_requires=['matplotlib', 'nltk', 'jsonpickle'],
+    requires=['matplotlib', 'nltk', 'jsonpickle'],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: End Users/Desktop',
