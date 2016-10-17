@@ -7,7 +7,7 @@ import os, jsonpickle, subprocess, sys, json
 from splat.SPLAT import SPLAT
 
 ##### GLOBAL VARIABLES #################################################################################################
-my_splat = SPLAT('')
+my_splat = SPLAT('NULL NULL')
 commands = {}
 
 ########################################################################################################################

@@ -13,6 +13,9 @@ from splat.tokenizers.CleanTokenizer import CleanTokenizer
 import splat.Util as Util
 import splat.complexity.Util as cUtil
 
+# TODO: Change all function calls to SPLAT-specific objects to function calls to generic objects.
+# TODO: Remove objects from SPLAT class.
+
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
 ### @PROJECT_NAME:		SPLAT: Speech Processing and Linguistic Analysis Tool										 ###
