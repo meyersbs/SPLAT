@@ -98,11 +98,11 @@ class SPLAT:
         self.__types = Util.typify(self.__tokens)
         self.__wordcount = Util.wordcount(self.__rawtokens)
         self.__unique_wordcount = Util.wordcount(self.__types)
-        if type(ngramminator) == dict:
+        if type(ngramminator) is dict:
             self.__ngramminator = FullNGramminator()
         else:
             self.__ngramminator = ngramminator
-        if type(postagger) == dict:
+        if type(postagger) is dict:
             self.__postagger = NLTKPOSTagger()
         else:
             self.__postagger = postagger
