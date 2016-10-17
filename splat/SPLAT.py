@@ -59,15 +59,7 @@ class SPLAT:
     # Frequency Distribution Variables
     __freq_dist = None
 
-    # Object Declarations
-    __ngramminator = FullNGramminator()
-    __cleantokenizer = CleanTokenizer()
-    __rawtokenizer = RawTokenizer()
-    __sentenizer = CleanSentenizer()
-    __postagger = NLTKPOSTagger()
-    __treestring_gen = TreeStringParser()
-
-    def __init__(self, text, ngramminator=FullNGramminator(), postagger=NLTKPOSTagger()):
+    def __init__(self, text):
         """
         Creates a SPLAT Object.
         """
@@ -89,23 +81,15 @@ class SPLAT:
             raise ValueError("WARNING: SPLAT must be of type str or file.")
 
         self.__uttcount = len(self.__utterances)
-        self.__sentences = self.__sentenizer.sentenize(self.__splat)
+        self.__sentences = CleanSentenizer().sentenize(self.__splat)
         if self.__sentences == []: self.__sentences = self.__utterances
         self.__sentcount = len(self.__sentences)
-        self.__rawtokens = self.__rawtokenizer.tokenize(self.__splat)
-        self.__tokens = self.__cleantokenizer.tokenize(self.__splat)
+        self.__rawtokens = RawTokenizer().tokenize(self.__splat)
+        self.__tokens = CleanTokenizer().tokenize(self.__splat)
         self.__rawtypes = Util.typify(self.__rawtokens)
         self.__types = Util.typify(self.__tokens)
         self.__wordcount = Util.wordcount(self.__rawtokens)
         self.__unique_wordcount = Util.wordcount(self.__types)
-        if ngramminator == {}:
-            self.__ngramminator = FullNGramminator()
-        else:
-            self.__ngramminator = ngramminator
-        if postagger == {}:
-            self.__postagger = NLTKPOSTagger()
-        else:
-            self.__postagger = postagger
         self.__ttr = Util.type_token_ratio(self.__types, self.__tokens)
         self.__alu = round(float(self.__wordcount) / float(self.__uttcount), 4) if self.__uttcount != 0 else 0.0
         self.__als = round(float(self.__wordcount) / float(self.__sentcount), 4) if self.__sentcount != 0 else 0.0
@@ -309,7 +293,7 @@ class SPLAT:
     def unigrams(self):
         """ Returns a list of unigrams. """
         if self.__unigrams is None:
-            self.__unigrams = self.__ngramminator.unigrams(self.__splat)
+            self.__unigrams = FullNGramminator().unigrams(self.__splat)
             return self.__unigrams
         else:
             return self.__unigrams
@@ -317,7 +301,7 @@ class SPLAT:
     def bigrams(self):
         """ Returns a list of bigrams. """
         if self.__bigrams is None:
-            self.__bigrams = self.__ngramminator.bigrams(self.__splat)
+            self.__bigrams = FullNGramminator().bigrams(self.__splat)
             return self.__bigrams
         else:
             return self.__bigrams
@@ -325,7 +309,7 @@ class SPLAT:
     def trigrams(self):
         """ Returns a list of trigrams. """
         if self.__trigrams is None:
-            self.__trigrams = self.__ngramminator.trigrams(self.__splat)
+            self.__trigrams = FullNGramminator().trigrams(self.__splat)
             return self.__trigrams
         else:
             return self.__trigrams
@@ -341,14 +325,14 @@ class SPLAT:
         elif n == 3:
             return self.trigrams()
         else:
-            return self.__ngramminator.ngrams(self.__splat, n)
+            return FullNGramminator().ngrams(self.__splat, n)
 
     ##### PART-OF-SPEECH BASED #########################################################################################
 
     def pos(self):
         """ Returns a list of tuple pairs: (word, POS taggers). """
         if self.__pos is None:
-            self.__pos = self.__postagger.tag(self.__splat)
+            self.__pos = NLTKPOSTagger().tag(self.__splat)
         return self.__pos
 
     def content_function_ratio(self):
@@ -392,8 +376,7 @@ class SPLAT:
     def treestrings(self):
         """ Returns a list of parsers trees. """
         if self.__treestrings is None:
-            self.__treestring_gen = TreeStringParser()
-            self.__treestrings = self.__treestring_gen.get_parse_trees(self.__utterances)
+            self.__treestrings = TreeStringParser().get_parse_trees(self.__utterances)
         return self.__treestrings
 
     def drawtrees(self):
