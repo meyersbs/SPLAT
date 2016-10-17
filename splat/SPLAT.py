@@ -13,9 +13,6 @@ from splat.tokenizers.CleanTokenizer import CleanTokenizer
 import splat.Util as Util
 import splat.complexity.Util as cUtil
 
-# TODO: Change all function calls to SPLAT-specific objects to function calls to generic objects.
-# TODO: Remove objects from SPLAT class.
-
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
 ### @PROJECT_NAME:		SPLAT: Speech Processing and Linguistic Analysis Tool										 ###
@@ -103,40 +100,6 @@ class SPLAT:
 
     ##### SYNTACTIC COMPLEXITY #########################################################################################
 
-    def syllables(self):
-        """ Returns the number of syllables in the SPLAT. """
-        if self.__syllables is None:
-            self.__syllables = cUtil.count_syllables(self.__tokens)
-        return self.__syllables
-
-    def average_sps(self):
-        """ Returns the average number of syllables per sentence. """
-        if self.__asps is None:
-            self.__asps = float(self.syllables() / self.__sentcount)
-        return self.__asps
-
-    def average_spu(self):
-        """ Returns the average number of syllables per utterance. """
-        if self.__aspu is None:
-            self.__aspu = float(self.syllables() / self.__uttcount)
-        return self.__aspu
-
-    def flesch_readability(self):
-        """ Returns the flesch readability score. """
-        if self.__flesch is None:
-            self.__flesch = cUtil.calc_flesch_readability(self.__wordcount, self.__sentcount, self.syllables())
-            return self.__flesch
-        else:
-            return self.__flesch
-
-    def kincaid_grade_level(self):
-        """ Returns the flesch-kincaid grade level score. """
-        if self.__kincaid is None:
-            self.__kincaid = cUtil.calc_flesch_kincaid(self.__wordcount, self.__sentcount, self.syllables())
-            return self.__kincaid
-        else:
-            return self.__kincaid
-
     def content_density(self):
         """
         Returns the Content Density.
@@ -205,6 +168,42 @@ class SPLAT:
         """
         print("WARNING: String-Based Frazier Score calculation is under review, and thus not available at this time.")
         return ''
+
+    ##### SYLLABLES ####################################################################################################
+
+    def syllables(self):
+        """ Returns the number of syllables in the SPLAT. """
+        if self.__syllables is None:
+            self.__syllables = cUtil.count_syllables(self.__tokens)
+        return self.__syllables
+
+    def average_sps(self):
+        """ Returns the average number of syllables per sentence. """
+        if self.__asps is None:
+            self.__asps = float(self.syllables() / self.__sentcount)
+        return self.__asps
+
+    def average_spu(self):
+        """ Returns the average number of syllables per utterance. """
+        if self.__aspu is None:
+            self.__aspu = float(self.syllables() / self.__uttcount)
+        return self.__aspu
+
+    def flesch_readability(self):
+        """ Returns the flesch readability score. """
+        if self.__flesch is None:
+            self.__flesch = cUtil.calc_flesch_readability(self.__wordcount, self.__sentcount, self.syllables())
+            return self.__flesch
+        else:
+            return self.__flesch
+
+    def kincaid_grade_level(self):
+        """ Returns the flesch-kincaid grade level score. """
+        if self.__kincaid is None:
+            self.__kincaid = cUtil.calc_flesch_kincaid(self.__wordcount, self.__sentcount, self.syllables())
+            return self.__kincaid
+        else:
+            return self.__kincaid
 
     ##### BASICS #######################################################################################################
 
@@ -288,7 +287,7 @@ class SPLAT:
         else:
             return self.__shortest_words
 
-    ##### LANGUAGE MODELING ############################################################################################
+    ##### N-GRAMS ######################################################################################################
 
     def unigrams(self):
         """ Returns a list of unigrams. """
@@ -490,6 +489,8 @@ class SPLAT:
 
     def splat(self):
         return self.__splat
+
+    ##### JSON SERIALIZATION ###########################################################################################
 
     def dump(self, out_file):
         json.dump(self.__dict__, out_file, default=jdefault)

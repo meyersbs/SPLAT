@@ -6,13 +6,18 @@ import unittest
 ##### SPLAT IMPORTS ####################################################################################################
 from splat.SPLAT import SPLAT
 
-##### GLOBAL VARIABLES #################################################################################################
-
-
 class TestBasics(unittest.TestCase):
     whitman_splat = SPLAT("tests/whitman_test.txt")
     frankenstein_splat = SPLAT("tests/frankenstein_test.txt")
     flesch_splat = SPLAT("tests/flesch_kincaid_test.txt")
+
+    def test_bad_input(self):
+        try:
+            dummy_splat = SPLAT([])
+        except ValueError as e:
+            self.assertEqual(e.args[0], "WARNING: SPLAT must be of type str or file.")
+        except TypeError as e:
+            self.assertEqual(e.args[0], "argument should be string, bytes or integer, not list")
 
     def test_sents(self):
         expected = ['I celebrate myself, and sing myself, And what I assume you shall assume, For every atom belonging to me as good belongs to you.']

@@ -82,18 +82,3 @@ class POSTagger:
 		:rtype:str
 		"""
 		raise NotImplementedError
-
-	def dump(self, out_file):
-		json.dump(self.__dict__, out_file, default=jdefault)
-
-	def dumps(self):
-		return json.dumps(self.__dict__)
-
-	def load(self, in_file):
-		self.__dict__ = json.load(in_file)
-
-	def loads(self, data_str):
-		self.__dict__ = json.loads(data_str)
-
-def jdefault(o):
-	return o.__dict__

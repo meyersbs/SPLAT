@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 ##### PYTHON IMPORTS ###################################################################################################
-import os, jsonpickle, subprocess, sys, json
+import os, subprocess, sys, json
 
 ##### SPLAT IMPORTS ####################################################################################################
 from splat.SPLAT import SPLAT
@@ -29,7 +29,7 @@ commands = {}
 #TODO: Moving Window
 
 def command_message():
-    """ Display all available commands and their descriptions. """
+    """ Display all available command-line arguments and their descriptions. """
     template = "{0:16}{1:8}{2:16}{3:128}"
     print(template.format("COMMAND", "ARG1", "ARG2", "DESCRIPTION"))
     print(template.format("adps", "--", "<input_file>", "Display average disfluencies per sentence."))
@@ -51,6 +51,7 @@ def command_message():
     print(template.format("frazier", "--", "<input_file>", "Display frazier score."))
     print(template.format("function", "--", "<input_file>", "Display all function words."))
     print(template.format("idensity", "--", "<input_file>", "Display idea density."))
+    print(template.format("json", "--", "<input_file>", "Display JSON Object."))
     print(template.format("kincaid", "--", "<input_file>", "Display Flesch-Kincaid Grade Level."))
     print(template.format("leastfreq", "<x>", "<input_file>", "Display the <x> least frequent words."))
     print(template.format("lwords", "--", "<input_file>", "Display the longest words."))
@@ -122,8 +123,7 @@ def check_dependencies():
         if status == 0:
             print("NLTK was successfully installed!")
         else:
-            print(
-                "Hmm... I couldn't install NLTK for you. You probably don't have root privileges. I suggest running this command:\n\tsudo pip3 install nltk")
+            print("Hmm... I couldn't install NLTK for you. You probably don't have root privileges. I suggest running this command:\n\tsudo pip3 install nltk")
 
     try:
         from nltk.corpus import stopwords
@@ -131,8 +131,7 @@ def check_dependencies():
         from nltk.tokenize import punkt
         from nltk import pos_tag
     except ImportError:
-        print(
-            "Oops! It looks like some essential NLTK was not downloaded. Let's fix that.")
+        print("Oops! It looks like some essential NLTK was not downloaded. Let's fix that.")
         print("Downloading NLTK data...")
         status = subprocess.call(
             ["python3", "-m", "nltk.downloader", "stopwords", "names", "punkt",
@@ -141,42 +140,24 @@ def check_dependencies():
         if status == 0:
             print("Essential NLTK data was successfully downloaded!")
         else:
-            print(
-                "Hmm... I couldn't download the essential NLTK data for you. I suggest running this command:\n\tpython3 -m nltk.downloader stopwords names punkt averaged_perceptron_tagger")
+            print("Hmm... I couldn't download the essential NLTK data for you. I suggest running this command:\n\tpython3 -m nltk.downloader stopwords names punkt averaged_perceptron_tagger")
 
     try:
         import matplotlib
     except ImportError:
-        print(
-            "Oops! It looks like matplotlib was not installed. Let's fix that.")
+        print("Oops! It looks like matplotlib was not installed. Let's fix that.")
         print("Installing matplotlib...")
         status = subprocess.call(["pip3", "install", "matplotlib"],
                                  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         if status == 0:
             print("matplotlib was successfully installed!")
         else:
-            print(
-                "Hmm... I couldn't install matplotlib for you. You probably don't have root privileges. I suggest running this command:\n\tsudo pip3 install matplotlib")
-
-    try:
-        import jsonpickle
-    except ImportError:
-        print(
-            "Oops! It looks like jsonpickle was not installed. Let's fix that.")
-        print("Installing jsonpickle...")
-        status = subprocess.call(["pip3", "install", "jsonpickle"],
-                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        if status == 0:
-            print("jsonpickle was successfully installed!")
-        else:
-            print(
-                "Hmm... I couldn't install jsonpickle for you. You probably don't have root privileges. I suggest running this command:\n\tsudo pip3 install jsonpickle")
+            print("Hmm... I couldn't install matplotlib for you. You probably don't have root privileges. I suggest running this command:\n\tsudo pip3 install matplotlib")
 
     java_status = subprocess.call(["which", "java"], stdout=subprocess.PIPE,
                                   stderr=subprocess.PIPE)
     if java_status != 0:
-        print(
-            "Java is not installed on your system. Java needs to be installed in order for me to do any part-of-speech tagging.\n\nPlease install java and try again.")
+        print("Java is not installed on your system. Java needs to be installed in order for me to do any part-of-speech tagging.\n\nPlease install java and try again.")
 
 
 def run_command(args):
@@ -195,21 +176,15 @@ def load_splat(args):
     global my_splat
     if os.path.exists(args[-1] + ".splat"):
         with open(args[-1] + ".splat", 'r') as f:
-            #my_splat = jsonpickle.decode(f.read().replace('\n', ''))
-            #my_splat = json.load(f)
             my_splat.load(f)
-            print(type(my_splat))
     else:
         my_splat = SPLAT(args[-1])
         save_splat(args)
 
 def save_splat(args):
     global my_splat
-    #temp_splat = jsonpickle.encode(my_splat)
     with open(args[-1] + ".splat", 'w') as f:
         my_splat.dump(f)
-        #json.dump(my_splat, f, default=jdefault)
-        #f.write(temp_splat)
 
 def setup_commands():
     global commands
@@ -237,7 +212,7 @@ def setup_commands():
                 "syllables":my_splat.syllables, "flesch":my_splat.flesch_readability,
                 "kincaid":my_splat.kincaid_grade_level, "adpu":my_splat.average_dpu,
                 "adps":my_splat.average_dps, "aspu":my_splat.average_spu,
-                "asps":my_splat.average_sps}
+                "asps":my_splat.average_sps, "json":my_splat.dumps}
 
 def main():
     args = sys.argv

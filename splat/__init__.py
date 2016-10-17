@@ -48,17 +48,6 @@ except ImportError:
     else:
         print("Hmm... I couldn't install matplotlib for you. You probably don't have root privileges. I suggest running this command:\n\tsudo pip3 install matplotlib")
 
-try:
-    import jsonpickle
-except ImportError:
-    print("Oops! It looks like jsonpickle was not installed. Let's fix that.")
-    print("Installing jsonpickle...")
-    status = subprocess.call(["pip3", "install", "jsonpickle"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    if status == 0:
-        print("jsonpickle was successfully installed!")
-    else:
-        print("Hmm... I couldn't install jsonpickle for you. You probably don't have root privileges. I suggest running this command:\n\tsudo pip3 install jsonpickle")
-
 java_status = subprocess.call(["which", "java"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 if java_status != 0:
     print("Java is not installed on your system. Java needs to be installed in order for me to do any part-of-speech tagging.\n\nPlease install java and try again.")
