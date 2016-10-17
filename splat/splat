@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 
 ##### PYTHON IMPORTS ###################################################################################################
-import os, jsonpickle, subprocess, sys
+import os, jsonpickle, subprocess, sys, json
 
 ##### SPLAT IMPORTS ####################################################################################################
 from splat.SPLAT import SPLAT
 
 ##### GLOBAL VARIABLES #################################################################################################
-my_splat = None
+my_splat = SPLAT('')
 commands = {}
 
 ########################################################################################################################
@@ -194,21 +194,22 @@ def run_command(args):
 def load_splat(args):
     global my_splat
     if os.path.exists(args[-1] + ".splat"):
-        temp_str = ""
         with open(args[-1] + ".splat", 'r') as f:
-            temp_str = f.read().replace('\n', '')
-        my_splat = jsonpickle.decode(temp_str)
+            #my_splat = jsonpickle.decode(f.read().replace('\n', ''))
+            #my_splat = json.load(f)
+            my_splat.load(f)
+            print(type(my_splat))
     else:
         my_splat = SPLAT(args[-1])
-        new_splat = jsonpickle.encode(my_splat)
-        with open(args[-1] + ".splat", 'w') as f:
-            f.write(new_splat)
+        save_splat(args)
 
 def save_splat(args):
     global my_splat
-    temp_splat = jsonpickle.encode(my_splat)
+    #temp_splat = jsonpickle.encode(my_splat)
     with open(args[-1] + ".splat", 'w') as f:
-        f.write(temp_splat)
+        my_splat.dump(f)
+        #json.dump(my_splat, f, default=jdefault)
+        #f.write(temp_splat)
 
 def setup_commands():
     global commands

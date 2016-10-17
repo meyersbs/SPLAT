@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 ##### PYTHON IMPORTS ###################################################################################################
-import os.path, sys
+import os.path, sys, json
 
 ##### SPLAT IMPORTS ####################################################################################################
 from splat.gramminators.FullNGramminator import FullNGramminator
@@ -497,25 +497,20 @@ class SPLAT:
     ##### UNCATEGORIZED ################################################################################################
 
     def splat(self):
-        """
-        :return:a massive SPLAT of the different features in the SPLAT
-        :rtype:str
-        """
-        output = "===== SPLAT!\n"
-        output += self.__splat + "\n"
-        output += "===== Sentences:\n"
-        count = 0
-        for sentence in self.__sentences:
-            output += "[" + str(count) + "] " + str(sentence) + "\n"
-            count += 1
-        output += "Sentence Count: " + str(self.__sentcount) + "\n"
-        output += "===== Tokens:\n"
-        output += str(self.__tokens) + "\n"
-        output += "Word Count: " + str(self.__wordcount) + "\n"
-        output += "===== Types:\n"
-        output += str(self.__types) + "\n"
-        output += "Unique Word Count: " + str(self.__unique_wordcount) + "\n"
-        output += "===== Type-Token Ratio:\n"
-        output += str(self.__ttr) + "\n"
+        return self.__splat
 
-        return output
+    def dump(self, out_file):
+        json.dump(self.__dict__, out_file, default=jdefault)
+
+    def dumps(self):
+        return json.dumps(self.__dict__)
+
+    def load(self, in_file):
+        self.__dict__ = json.load(in_file)
+
+    def loads(self, data_str):
+        self.__dict__ = json.loads(data_str)
+
+
+def jdefault(o):
+    return o.__dict__
