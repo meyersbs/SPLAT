@@ -2,11 +2,8 @@
  [![PyPI](https://img.shields.io/pypi/pyversions/SPLAT-library.svg?maxAge=2592000)](https://pypi.python.org/pypi/SPLAT-library/0.2.3) [![PyPI](https://img.shields.io/pypi/v/SPLAT-library.svg?maxAge=2592000)](https://pypi.python.org/pypi/SPLAT-library/0.2.3) [![Website](https://img.shields.io/website-up-down-green-red/http/www.splat-library.org.svg?maxAge=2592000)](http://www.splat-library.org/)
 
 <img src="https://cdn.rawgit.com/meyersbs/SPLAT/master/logo.svg" width="20%">
-<img src="https://cdn.rawgit.com/meyersbs/SPLAT/master/logo.svg" width="20%">
-
-
-# SPLAT
-## Speech Processing \& Linguistic Analysis Tool
+<br>
+<img src="https://cdn.rawgit.com/meyersbs/SPLAT/master/tag.svg" width="60%">
 
 - - - -
 ## Contact Information
