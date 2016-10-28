@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/meyersbs/SPLAT.svg?branch=master)](https://travis-ci.org/meyersbs/SPLAT) [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE.md) [![codecov](https://codecov.io/gh/meyersbs/SPLAT/branch/master/graph/badge.svg)](https://codecov.io/gh/meyersbs/SPLAT)
- [![PyPI](https://img.shields.io/pypi/pyversions/SPLAT-library.svg?maxAge=2592000)](https://pypi.python.org/pypi/SPLAT-library/0.3.7) [![PyPI](https://img.shields.io/pypi/v/SPLAT-library.svg?maxAge=2592000)](https://pypi.python.org/pypi/SPLAT-library/0.3.7) [![Website](https://img.shields.io/website-up-down-green-red/http/splat-library.org.svg?maxAge=2592000)](http://www.splat-library.org/)
+ [![PyPI](https://img.shields.io/pypi/pyversions/SPLAT-library.svg?maxAge=2592000)](https://pypi.python.org/pypi/SPLAT-library/0.3.7) [![PyPI](https://img.shields.io/pypi/v/SPLAT-library.svg?maxAge=2592000)](https://pypi.python.org/pypi/SPLAT-library/0.3.7) [![Website](https://img.shields.io/website-up-down-green-red/http/splat-library.org.svg?maxAge=2592000)](http://splat-library.org/)
 
 <img src="https://cdn.rawgit.com/meyersbs/SPLAT/master/logo.svg" width="20%">
 <br>
