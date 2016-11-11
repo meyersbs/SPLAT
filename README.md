@@ -5,6 +5,12 @@
 <br>
 <img src="https://cdn.rawgit.com/meyersbs/SPLAT/master/tag.svg" width="60%">
 
+# <em>WARNING!</em>
+Errors in the calculation of some metrics have been found. Calculations of the following metrics may be innaccurate:
+* Idea Density
+* Content Density
+* Syllable Counts
+
 - - - -
 ## Contact Information
 &nbsp;&nbsp;&nbsp;&nbsp;Benjamin S. Meyers < <ben@splat-library.org> >
