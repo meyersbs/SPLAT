@@ -14,6 +14,7 @@ import subprocess
 
 try:
     import nltk
+    from nltk import pos_tag
 except ImportError:
     print("Oops! It looks like NLTK was not installed. Let's fix that.")
     print("Installing NLTK...")
@@ -26,12 +27,14 @@ except ImportError:
 try:
     from nltk.corpus import stopwords
     from nltk.corpus import names
+    from nltk.corpus import cmudict
+    from nltk.corpus import brown
+    from nltk.tag.perceptron import averaged_perceptron_tagger
     from nltk.tokenize import punkt
-    from nltk import pos_tag
 except ImportError:
-    print("Oops! It looks like some essential NLTK was not downloaded. Let's fix that.")
+    print("Oops! It looks like some essential NLTK data was not downloaded. Let's fix that.")
     print("Downloading NLTK data...")
-    status = subprocess.call(["python3", "-m", "nltk.downloader", "stopwords", "names", "punkt", "averaged_perceptron_tagger"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    status = subprocess.call(["python3", "-m", "nltk.downloader", "stopwords", "names", "brown", "cmudict", "punkt", "averaged_perceptron_tagger"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if status == 0:
         print("Essential NLTK data was successfully downloaded!")
     else:

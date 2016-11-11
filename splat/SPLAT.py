@@ -11,7 +11,7 @@ from splat.taggers.NLTKPOSTagger import NLTKPOSTagger
 from splat.tokenizers.RawTokenizer import RawTokenizer
 from splat.tokenizers.CleanTokenizer import CleanTokenizer
 import splat.Util as Util
-import splat.complexity.Util as cUtil
+import splat.complexity as cUtil
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
@@ -112,7 +112,7 @@ class SPLAT:
     def idea_density(self):
         """
         Returns the Idea Density.
-        Idea Density is the ratio of prepositions to total word count.
+        Idea Density is the ratio of propositions to total word count.
         """
         if self.__idensity is None:
             self.__idensity = cUtil.calc_idea_density(self.pos())
@@ -174,7 +174,7 @@ class SPLAT:
     def syllables(self):
         """ Returns the number of syllables in the SPLAT. """
         if self.__syllables is None:
-            self.__syllables = cUtil.count_syllables(self.__tokens)
+            self.__syllables = cUtil.num_syllables(self.__tokens)
         return self.__syllables
 
     def average_sps(self):

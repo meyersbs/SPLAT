@@ -6,13 +6,15 @@ import re
 ##### NLTK IMPORTS #####################################################################################################
 from nltk.tree import Tree
 from nltk.probability import FreqDist
-from nltk.corpus import stopwords
+
+##### SPLAT IMPORTS ####################################################################################################
+from splat.corpora import STOPWORDS_EN
 
 ##### GLOBAL VARIABLES #################################################################################################
-open_class_list = ['NN', 'NNS', 'NNP', 'NNPS', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ', 'JJ', 'JJR', 'JJS', 'RB', 'RBR', 'RBS', 'FW']
-ignore_list = [ 'LCB', '-LCB-', 'LRB', '-LRB-', 'LS', 'LSB', '-LSB-', '-RRB-', 'RCB', '-RCB-', 'RSB', '-RSB-', 'SYM', 'UH', '$', '``', '"', '\'\'', '(', ')', '()', '( )', ',', '--', '.', ':', 'SBAR', 'SBARQ']
-preposition_list = ['CC', 'CD', 'DT', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ', 'JJ', 'JJR', 'JJS', 'RB', 'RBR', 'RBS', 'IN', 'CC', 'PDT', 'POS', 'PP$', 'PRP$', 'TO', 'WDT', 'WP', 'WPS', 'WRB']
-Stopwords = stopwords.words('english')
+open_class_list = ["FW", "JJ", "JJR", "JJS", "LS", "NN", "NNS", "NNP", "NNPS", "RB", "RBR", "RBS", "SYM", "VB", "VBD", "VBG", "VBN", "VBP", "VBZ"]
+closed_class_list = ["BES", "AUX", "AUXG", "CC", "CD", "DT", "EX", "IN", "MD", "PDT", "POS", "PRP", "PRP$", "RP", "TO", "WDT", "WP", "UH", "WP$", "WRB"]
+ignore_list = ['LCB', '-LCB-', 'LRB', '-LRB-', 'LS', 'LSB', '-LSB-', '-RRB-', 'RCB', '-RCB-', 'RSB', '-RSB-', 'SYM', 'UH', '$', '``', '"', '\'\'', '(', ')', '()', '( )', ',', '--', '.', ':', 'SBAR', 'SBARQ']
+proposition_list = ['CC', 'CD', 'DT', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ', 'JJ', 'JJR', 'JJS', 'RB', 'RBR', 'RBS', 'IN', 'CC', 'PDT', 'POS', 'PP$', 'PRP$', 'TO', 'WDT', 'WP', 'WPS', 'WRB']
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
@@ -59,7 +61,7 @@ def get_content_words(tokens):
 	""" Get a list of all content words. """
 	content_words = []
 	for word in tokens:
-		if word.lower() not in Stopwords:
+		if word.lower() not in STOPWORDS_EN:
 			content_words.append(word)
 
 	return content_words
@@ -68,7 +70,7 @@ def get_unique_content_words(types):
 	""" Get a list of unique content words. """
 	content_words = []
 	for (word, count) in types:
-		if word.lower() not in Stopwords:
+		if word.lower() not in STOPWORDS_EN:
 			content_words.append(word)
 
 	return content_words
@@ -77,7 +79,7 @@ def get_function_words(tokens):
 	""" Get a list of all function words. """
 	function_words = []
 	for word in tokens:
-		if word.lower() in Stopwords:
+		if word.lower() in STOPWORDS_EN:
 			function_words.append(word)
 
 	return function_words
@@ -86,7 +88,7 @@ def get_unique_function_words(types):
 	""" Get a list of unique function words. """
 	function_words = []
 	for (word, count) in types:
-		if word.lower() in Stopwords:
+		if word.lower() in STOPWORDS_EN:
 			function_words.append(word)
 
 	return function_words
