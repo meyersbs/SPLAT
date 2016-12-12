@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 ##### PYTHON IMPORTS ###################################################################################################
-import unittest
+import unittest, sys
 
 ##### SPLAT IMPORTS ####################################################################################################
 from splat.SPLAT import SPLAT
@@ -161,11 +161,18 @@ class TestComplexity(unittest.TestCase):
         self.assertNotEqual(output, unexpected)
 
     def test_content_density(self):
-        expected = 0.5
-        output = self.whitman_splat.content_density()
-        unexpected = self.frankenstein_splat.content_density()
-        self.assertAlmostEqual(output, expected, 3)
-        self.assertNotEqual(output, unexpected)
+        expected_whitman = 0.846
+        output_whitman = self.whitman_splat.content_density()
+        self.assertAlmostEqual(output_whitman, expected_whitman, 3)
+        expected_frankenstein = 1.130
+        output_frankenstein = self.frankenstein_splat.content_density()
+        self.assertAlmostEqual(output_frankenstein, expected_frankenstein, 3)
+        expected_roark = 1.000
+        output_roark = self.roark_splat.content_density()
+        self.assertAlmostEqual(output_roark, expected_roark, 3)
+        expected_flesch = 1.600
+        output_flesch = self.flesch_splat.content_density()
+        self.assertAlmostEqual(output_flesch, expected_flesch, 3)
 
     def test_tree_based_yngve(self):
         expected = 1.1250
@@ -322,4 +329,21 @@ class TestSyllables(unittest.TestCase):
         self.assertLessEqual(abs(expected_ares - output_ares), 1)
 
 if __name__ == '__main__':
-    unittest.main()
+    args = sys.argv
+    print(args)
+    if len(args) >= 2:
+        for arg in args[1:]:
+            if arg == "TestSyllables":
+                unittest.main()
+            elif arg == "TestComplexity":
+                pass
+            elif arg == "TestParsing":
+                pass
+            elif arg == "TestBasics":
+                pass
+            else:
+                print("WARNING: Invalid argument " + arg)
+                print("Running all tests...")
+                unittest.main()
+    else:
+        unittest.main()

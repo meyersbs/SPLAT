@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 ##### PYTHON IMPORTS ###################################################################################################
-import re, difflib
+import re, difflib, itertools
 
 ##### NLTK IMPORTS #####################################################################################################
 from nltk.tree import Tree
@@ -103,7 +103,7 @@ def calc_flesch_kincaid(wordcount, sentcount, syllcount):
 	""" Calculates the Flesach-Kincaid Grade Level Score. """
 	return round(float(0.39 * (float(wordcount / sentcount))) + float(float(11.8 * (float(syllcount / wordcount))) - 15.59), 1)
 
-def calc_content_density(tagged_text):
+def calc_content_density(treestrings):
 	"""
 	Calculate the content density.
 
@@ -126,18 +126,24 @@ def calc_content_density(tagged_text):
 			Technology and Aging (ICTA).
 
 	"""
-	open_class_count, closed_class_count = 0, 0
-	for item in tagged_text:
-		if item[1] in open_class_list:
-			open_class_count += 1
-		elif item[1] in closed_class_list:
-			closed_class_count += 1
-		elif item[1] in ignore_list:
-			pass
+	open_class_count = 0.0
+	closed_class_count = 0.0
+	for t in treestrings:
+		tags = re.findall("\((\S+) [^\(^\)]*\)", t)
+		if not tags:
+			return 0
 		else:
-			print("WARNING: Found unknown tag '" + item[1] + "'")
+			for tag in tags:
+				if tag in open_class_list:
+					open_class_count += 1
+				elif tag in closed_class_list:
+					closed_class_count += 1
+				elif tag in ignore_list:
+					continue
+				else:
+					System.out.println("WARNING: Unknown tag " + tag + "\n")
 
-	return float(open_class_count) / float(closed_class_count) if float(closed_class_count) != 0 else 0
+	return float(open_class_count / closed_class_count) if closed_class_count != 0 else 0
 
 def calc_idea_density(tagged_text):
 	""" Calculate the idea density. """

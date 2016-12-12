@@ -106,7 +106,9 @@ class SPLAT:
         Content Density is the ratio of open class words to closed class words.
         """
         if self.__cdensity is None:
-            self.__cdensity = cUtil.calc_content_density(self.pos())
+            if self.__treestrings is None:
+                self.__treestrings = self.treestrings()
+            self.__cdensity = cUtil.calc_content_density(self.treestrings())
         return self.__cdensity
 
     def idea_density(self):
