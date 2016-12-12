@@ -56,6 +56,10 @@ def command_message():
     print(template.format("leastfreq", "<x>", "<input_file>", "Display the <x> least frequent words."))
     print(template.format("lwords", "--", "<input_file>", "Display the longest words."))
     print(template.format("maxdepth", "--", "<input_file>", "Display maxdepth of trees."))
+    print(template.format("maxcdensity", "--", "<input_file>", "Display max content density."))
+    print(template.format("maxidensity", "--", "<input_file>", "Display max idea density."))
+    print(template.format("mincdensity", "--", "<input_file>", "Display min content density."))
+    print(template.format("mincdensity", "--", "<input_file>", "Display min idea density."))
     print(template.format("mostfreq", "<x>", "<input_file>", "Display the <x> most frequent words."))
     print(template.format("ngrams", "<n>", "<input_file>", "Display all <n>-grams."))
     print(template.format("plotfreq", "--", "<input_file>", "Plot the <x> most frequent words."))
@@ -212,7 +216,9 @@ def setup_commands():
                 "syllables":my_splat.syllables, "flesch":my_splat.flesch_readability,
                 "kincaid":my_splat.kincaid_grade_level, "adpu":my_splat.average_dpu,
                 "adps":my_splat.average_dps, "aspu":my_splat.average_spu,
-                "asps":my_splat.average_sps, "json":my_splat.dumps}
+                "asps":my_splat.average_sps, "json":my_splat.dumps,
+                "maxcdensity":my_splat.max_content_density, "mincdensity":my_splat.min_content_density,
+                "maxidensity":my_splat.max_idea_density, "minidensity":my_splat.min_idea_density}
 
 def main():
     args = sys.argv

@@ -153,26 +153,89 @@ class TestComplexity(unittest.TestCase):
     flesch_splat = SPLAT("tests/flesch_kincaid_test.txt")
     roark_splat = SPLAT("tests/roark_sample.txt")
 
-    def test_idea_density(self):
-        expected = 0.5833
-        output = self.whitman_splat.idea_density()
-        unexpected = self.frankenstein_splat.idea_density()
-        self.assertAlmostEqual(output, expected, 3)
-        self.assertNotEqual(output, unexpected)
+    def test_mean_idea_density(self):
+        expected_whitman = 0.5137
+        output_whitman = self.whitman_splat.idea_density()
+        self.assertAlmostEqual(output_whitman, expected_whitman, 4)
+        expected_frankenstein = 0.5623
+        output_frankenstein = self.frankenstein_splat.idea_density()
+        self.assertAlmostEqual(output_frankenstein, expected_frankenstein, 4)
+        expected_roark = 0.2500
+        output_roark = self.roark_splat.idea_density()
+        self.assertAlmostEqual(output_roark, expected_roark, 4)
+        expected_flesch = 0.3846
+        output_flesch = self.flesch_splat.idea_density()
+        self.assertAlmostEqual(output_flesch, expected_flesch, 4)
 
-    def test_content_density(self):
-        expected_whitman = 0.846
+    def test_max_idea_density(self):
+        expected_whitman = 0.6364
+        output_whitman = self.whitman_splat.max_idea_density()
+        self.assertAlmostEqual(output_whitman, expected_whitman, 4)
+        expected_frankenstein = 0.7500
+        output_frankenstein = self.frankenstein_splat.max_idea_density()
+        self.assertAlmostEqual(output_frankenstein, expected_frankenstein, 4)
+        expected_roark = 0.2500
+        output_roark = self.roark_splat.max_idea_density()
+        self.assertAlmostEqual(output_roark, expected_roark, 4)
+        expected_flesch = 0.3846
+        output_flesch = self.flesch_splat.max_idea_density()
+        self.assertAlmostEqual(output_flesch, expected_flesch, 4)
+
+    def test_min_idea_density(self):
+        expected_whitman = 0.3333
+        output_whitman = self.whitman_splat.min_idea_density()
+        self.assertAlmostEqual(output_whitman, expected_whitman, 4)
+        expected_frankenstein = 0.3913
+        output_frankenstein = self.frankenstein_splat.min_idea_density()
+        self.assertAlmostEqual(output_frankenstein, expected_frankenstein, 4)
+        expected_roark = 0.2500
+        output_roark = self.roark_splat.min_idea_density()
+        self.assertAlmostEqual(output_roark, expected_roark, 4)
+        expected_flesch = 0.3846
+        output_flesch = self.flesch_splat.min_idea_density()
+        self.assertAlmostEqual(output_flesch, expected_flesch, 4)
+
+    def test_mean_content_density(self):
+        expected_whitman = 1.0778
         output_whitman = self.whitman_splat.content_density()
-        self.assertAlmostEqual(output_whitman, expected_whitman, 3)
-        expected_frankenstein = 1.130
+        self.assertAlmostEqual(output_whitman, expected_whitman, 4)
+        expected_frankenstein = 1.6970
         output_frankenstein = self.frankenstein_splat.content_density()
-        self.assertAlmostEqual(output_frankenstein, expected_frankenstein, 3)
-        expected_roark = 1.000
+        self.assertAlmostEqual(output_frankenstein, expected_frankenstein, 4)
+        expected_roark = 1.0000
         output_roark = self.roark_splat.content_density()
-        self.assertAlmostEqual(output_roark, expected_roark, 3)
-        expected_flesch = 1.600
+        self.assertAlmostEqual(output_roark, expected_roark, 4)
+        expected_flesch = 1.6000
         output_flesch = self.flesch_splat.content_density()
-        self.assertAlmostEqual(output_flesch, expected_flesch, 3)
+        self.assertAlmostEqual(output_flesch, expected_flesch, 4)
+
+    def test_max_content_density(self):
+        expected_whitman = 2.0000
+        output_whitman = self.whitman_splat.max_content_density()
+        self.assertAlmostEqual(output_whitman, expected_whitman, 4)
+        expected_frankenstein = 3.0000
+        output_frankenstein = self.frankenstein_splat.max_content_density()
+        self.assertAlmostEqual(output_frankenstein, expected_frankenstein, 4)
+        expected_roark = 1.0000
+        output_roark = self.roark_splat.max_content_density()
+        self.assertAlmostEqual(output_roark, expected_roark, 4)
+        expected_flesch = 1.6000
+        output_flesch = self.flesch_splat.max_content_density()
+        self.assertAlmostEqual(output_flesch, expected_flesch, 4)
+
+    def test_min_content_density(self):
+        expected_whitman = 0.4000
+        output_whitman = self.whitman_splat.min_content_density()
+        self.assertAlmostEqual(output_whitman, expected_whitman, 4)
+        expected_frankenstein = 1.0000
+        output_frankenstein = self.frankenstein_splat.min_content_density()
+        self.assertAlmostEqual(output_frankenstein, expected_frankenstein, 4)
+        expected_roark = 1.0000
+        output_roark = self.roark_splat.min_content_density()
+        self.assertAlmostEqual(output_roark, expected_roark, 4)
+        expected_flesch = 1.6000
+        output_flesch = self.flesch_splat.min_content_density()
+        self.assertAlmostEqual(output_flesch, expected_flesch, 4)
 
     def test_tree_based_yngve(self):
         expected = 1.1250
@@ -328,19 +391,33 @@ class TestSyllables(unittest.TestCase):
         #self.assertEqual(output_ares, expected_ares)
         self.assertLessEqual(abs(expected_ares - output_ares), 1)
 
+def run_test_suite(cla):
+    if cla == "TestSyllables":
+        suite = unittest.TestSuite()
+        suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(TestSyllables))
+        unittest.TextTestRunner(verbosity=2).run(suite)
+    elif cla == "TestComplexity":
+        suite = unittest.TestSuite()
+        suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(TestComplexity))
+        unittest.TextTestRunner(verbosity=2).run(suite)
+    elif cla == "TestParsing":
+        suite = unittest.TestSuite()
+        suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(TestParsing))
+        unittest.TextTestRunner(verbosity=2).run(suite)
+    elif cla == "TestBasics":
+        suite = unittest.TestSuite()
+        suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(TestBasics))
+        unittest.TextTestRunner(verbosity=2).run(suite)
+
 if __name__ == '__main__':
     args = sys.argv
     print(args)
     if len(args) >= 2:
         for arg in args[1:]:
-            if arg == "TestSyllables":
-                unittest.main()
-            elif arg == "TestComplexity":
-                pass
-            elif arg == "TestParsing":
-                pass
-            elif arg == "TestBasics":
-                pass
+            if arg == "TestSyllables": run_test_suite(arg)
+            elif arg == "TestComplexity": run_test_suite(arg)
+            elif arg == "TestParsing": run_test_suite(arg)
+            elif arg == "TestBasics": run_test_suite(arg)
             else:
                 print("WARNING: Invalid argument " + arg)
                 print("Running all tests...")

@@ -9,6 +9,7 @@ from nltk.tree import Tree
 ##### SPLAT IMPORTS ####################################################################################################
 from splat.Util import open_class_list, ignore_list, proposition_list, closed_class_list
 from splat.corpora import PROPER_NAMES, CMUDICT
+import splat.complexity.idea_density
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
@@ -22,6 +23,8 @@ from splat.corpora import PROPER_NAMES, CMUDICT
 ########################################################################################################################
 
 ##### GLOBAL VARIABLES #################################################################################################
+
+########################################################################################################################
 
 def num_syllables(tokens):
 	total = 0
@@ -126,9 +129,10 @@ def calc_content_density(treestrings):
 			Technology and Aging (ICTA).
 
 	"""
-	open_class_count = 0.0
-	closed_class_count = 0.0
+	results = []
 	for t in treestrings:
+		open_class_count = 0.0
+		closed_class_count = 0.0
 		tags = re.findall("\((\S+) [^\(^\)]*\)", t)
 		if not tags:
 			return 0
@@ -141,21 +145,41 @@ def calc_content_density(treestrings):
 				elif tag in ignore_list:
 					continue
 				else:
-					System.out.println("WARNING: Unknown tag " + tag + "\n")
+					print("WARNING: Unknown tag " + tag + "\n")
 
-	return float(open_class_count / closed_class_count) if closed_class_count != 0 else 0
+		results.append(float(open_class_count / closed_class_count) if closed_class_count != 0 else 0)
 
-def calc_idea_density(tagged_text):
-	""" Calculate the idea density. """
-	proposition_count = 0
-	len_count = 0
-	for item in tagged_text:
-		if item[1] in proposition_list:
-			proposition_count += 1
-		if item[1] not in ignore_list:
-			len_count += 1
+	# print("RESULTS: " + str(results))
+	# print("MEAN: " + str(float(sum(results) / len(results))))
+	# print("MIN: " + str(float(min(results))))
+	# print("MAX: " + str(float(max(results))))
 
-	return float(proposition_count) / float(len_count) if float(len_count) != 0 else 0
+	return float(sum(results)/len(results)), float(min(results)), float(max(results))
+
+def calc_idea_density(treestrings):
+	"""
+	Calculate the idea density (also known as proposition density or p-density).
+
+	Idea density is the ratio of expressed propositions words to total words. Word classes are determined by the
+	part-of-speech tags assigned by the Berkeley Parser. The categorization of POS tags and the algorithm used to
+	calculate idea density is based on the work of Margaret Mitchell and Kristy Hollingshead, under the guidance of
+	Brian Roark. For questions or concerns regarding this calculation, please contact Margaret Mitchell
+	(m.mitchell@abdn.ac.uk) or Brian Roark (roark@cslu.ogi.edu), or consult the following publications:
+
+		Brian Roark, Margaret Mitchell, John-Paul Hosom, Kristy Hollingshead and Jeffrey A. Kaye. 2011. Spoken language
+			derived measures for detecting Mild Cognitive Impairment. IEEE Transactions on Audio, Speech and Language
+			Processing, 19(8).
+
+		Brian Roark, Margaret Mitchell and Kristy Hollingshead. 2007. Syntactic complexity measures for detecting Mild
+			Cognitive Impairment. In Proceedings of the ACL 2007 Workshop on Biomedical Natural Language Processing
+			(BioNLP), pp. 1-8.
+
+		Brian Roark, John-Paul Hosom, Margaret Mitchell and Jeffrey A. Kaye. 2007. Automatically derived spoken language
+			markers for detecting Mild Cognitive Impairment. In Proceedings of the 2nd International Conference on
+			Technology and Aging (ICTA).
+
+	"""
+	return idea_density.calc_idea(treestrings)
 
 # The code contained in this section was adapted based on the code located here:
 # https://github.com/neubig/util-scripts/blob/96c91e43b650136bb88bbb087edb1d31b65d389f/syntactic-complexity.py

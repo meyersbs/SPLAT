@@ -36,7 +36,8 @@ class SPLAT:
     __alu, __ttr, __als = (0.0,) * 3
 
     # Syntactic Complexity Variables
-    __yngve_score, __frazier_score, __string_yngve, __string_frazier, __cdensity, __idensity = (None,) * 6
+    __yngve_score, __frazier_score, __string_yngve, __string_frazier, __cdensity, __min_cdensity, __max_cdensity,\
+    __idensity, __min_idensity, __max_idensity = (None,) * 10
     __flesch, __kincaid, __syllables, __asps, __aspu = (None,) * 5
 
     # Parsing Variables
@@ -102,14 +103,36 @@ class SPLAT:
 
     def content_density(self):
         """
-        Returns the Content Density.
+        Returns the Mean Content Density.
         Content Density is the ratio of open class words to closed class words.
         """
         if self.__cdensity is None:
             if self.__treestrings is None:
                 self.__treestrings = self.treestrings()
-            self.__cdensity = cUtil.calc_content_density(self.treestrings())
+            self.__cdensity, self.__min_cdensity, self.__max_cdensity = cUtil.calc_content_density(self.treestrings())
         return self.__cdensity
+
+    def min_content_density(self):
+        """
+        Returns the Min Content Density.
+        Content Density is the ratio of open class words to closed class words.
+        """
+        if self.__min_cdensity is None:
+            if self.__treestrings is None:
+                self.__treestrings = self.treestrings()
+            self.__cdensity, self.__min_cdensity, self.__max_cdensity = cUtil.calc_content_density(self.treestrings())
+        return self.__min_cdensity
+
+    def max_content_density(self):
+        """
+        Returns the Max Content Density.
+        Content Density is the ratio of open class words to closed class words.
+        """
+        if self.__max_cdensity is None:
+            if self.__treestrings is None:
+                self.__treestrings = self.treestrings()
+            self.__cdensity, self.__min_cdensity, self.__max_cdensity = cUtil.calc_content_density(self.treestrings())
+        return self.__max_cdensity
 
     def idea_density(self):
         """
@@ -117,8 +140,32 @@ class SPLAT:
         Idea Density is the ratio of propositions to total word count.
         """
         if self.__idensity is None:
-            self.__idensity = cUtil.calc_idea_density(self.pos())
+            if self.__treestrings is None:
+                self.__treestrings = self.treestrings()
+            self.__idensity, self.__min_idensity, self.__max_idensity = cUtil.calc_idea_density(self.treestrings())
         return self.__idensity
+
+    def min_idea_density(self):
+        """
+        Returns the Min Idea Density.
+        Idea Density is the ratio of propositions to total word count.
+        """
+        if self.__min_idensity is None:
+            if self.__treestrings is None:
+                self.__treestrings = self.treestrings()
+            self.__idensity, self.__min_idensity, self.__max_idensity = cUtil.calc_idea_density(self.treestrings())
+        return self.__min_idensity
+
+    def max_idea_density(self):
+        """
+        Returns the Max Idea Density.
+        Idea Density is the ratio of propositions to total word count.
+        """
+        if self.__max_idensity is None:
+            if self.__treestrings is None:
+                self.__treestrings = self.treestrings()
+            self.__idensity, self.__min_idensity, self.__max_idensity = cUtil.calc_idea_density(self.treestrings())
+        return self.__max_idensity
 
     def tree_based_yngve_score(self):
         """
@@ -378,6 +425,7 @@ class SPLAT:
         """ Returns a list of parsers trees. """
         if self.__treestrings is None:
             self.__treestrings = TreeStringParser().get_parse_trees(self.__utterances)
+        #print("Treestrings: " + str(self.__treestrings))
         return self.__treestrings
 
     def drawtrees(self):
