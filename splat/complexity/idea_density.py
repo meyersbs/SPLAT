@@ -13,8 +13,8 @@ import sys, re
 
 ##### GLOBAL VARIABLES #################################################################################################
 
-global ADJ, ADV, VERB, NOUN, INTERR, PROP, FILLER, BE, NT, COMEGO, AUX
-global BEING, BECOMING, SEEMING, LINKING, CLINKING, CORREL, NEGPOL1, NEGPOL2
+# global ADJ, ADV, VERB, NOUN, INTERR, PROP, FILLER, BE, NT, COMEGO, AUX
+# global BEING, BECOMING, SEEMING, LINKING, CLINKING, CORREL, NEGPOL1, NEGPOL2
 
 ##### WORD CLASSES #####################################################################################################
 
@@ -153,7 +153,10 @@ def apply_counting_rules(word_list, speech_mode=False):
 	i = -1
 	while i < len(word_list) - 1:
 		i += 1
+
+		################################################################################################################
 		##### RULE GROUP 000 - Identify Words and Adjust Tags ##########################################################
+		################################################################################################################
 
 		##### RULE 000 #####
 		## If it's a null item, skip the rest of these tests. There will always be at least 10 null items at the
@@ -162,9 +165,9 @@ def apply_counting_rules(word_list, speech_mode=False):
 
 		##### RULE 001 #####
 		## The symbol '^' is used to mark broken-off spoken sentences.
-
-		# NOTE: I have chosen to ignore this rule because it does not seem to apply to the sorts of input SPLAT is
-		#       expecting.
+		##
+		## NOTE: I have chosen to ignore this rule because it does not seem to apply to the sorts of input SPLAT is
+		## expecting.
 
 		##### RULE 002 #####
 		## The item is a word if its token starts with a letter or digit and its tag is not SYM (symbol).
@@ -211,6 +214,7 @@ def apply_counting_rules(word_list, speech_mode=False):
 		## Repetition of the form "A B A" is simplified to "A B". Both "A"s remain in the word count. The first A may
 		## be an initial substring of the second one.
 
+		"""
 		if speech_mode:
 			if likely_repetition(word_list[i-2].token, word_list[i].token) and not contains(PUNCT, word_list[i].tag):
 				# Mark the first A to be ignored
@@ -224,12 +228,14 @@ def apply_counting_rules(word_list, speech_mode=False):
 					word_list[i-1].isword = False
 					word_list[i-1].isprop = False
 					word_list[i-1].rulenumber = 21
+		"""
 
 		##### RULE 023 #####
-        ## Repetition of the form "A B Punctuation A B" is simplified to "A B". Both "A"s and "B"s remain in the word
+		## Repetition of the form "A B Punctuation A B" is simplified to "A B". Both "A"s and "B"s remain in the word
 		## count. The first "A" (or "B") can be an initial substring of the second one. Punctuation is anything with tag
 		## ".", ",", or ":".
 
+		"""
 		if speech_mode:
 			if likely_repetition(word_list[i-3].token, word_list[i].token) \
 				and likely_repetition(word_list[i-4].token, word_list[i-1].token) \
@@ -238,6 +244,7 @@ def apply_counting_rules(word_list, speech_mode=False):
 				word_list[i-4].isword = word_list[i-3].isword = word_list[i-2].isword = False
 				word_list[i-4].isprop = word_list[i-3].isprop = word_list[i-2].isprop = False
 				word_list[i-4].rulenumber = word_list[i-3].rulenumber = word_list[i-2].rulenumber = 23
+		"""
 
 		##### RULE 050 #####
 		## 'not' and any word ending in "n't" are not putatively propositions and their tag is changed to NOT.
@@ -250,364 +257,312 @@ def apply_counting_rules(word_list, speech_mode=False):
 		## "that/DT" or "this/DT" is a pronoun, not a determiner, if the following word is a verb or an adverb.
 		if (word_list[i-1].token == "that" or word_list[i-1].token == "this") and (contains(VERB, word_list[i].tag) or
 			contains(ADV, word_list[i].tag)):
-			word_list[i - 1].tag = "PRP"
-			word_list[i - 1].rulenumber = 54
-			word_list[i - 1].isprop = False
+			word_list[i-1].tag = "PRP"
+			word_list[i-1].rulenumber = 54
+			word_list[i-1].isprop = False
 
-		# TODO: Pick up here.
-		## Rule group 100 - Word order adjustment
-		# Since all the rules apply in one pass,
-		# this must be approached carefully.
+		################################################################################################################
+		##### RULE GROUP 100 - Word Order Adjustment ###################################################################
+		################################################################################################################
 
-		# 101
-		# Subject-Aux inversion
-		""" If the current word is an Aux,
-			and the current word is the first word of the sentence
-				or the sentence begins with an interrogative,
-				move the current word rightward to put it in front
-				of the first verb, or the end of the sentence.
-				In some cases this will move a word too far to the right,
-				but the effect on proposition counting is benign.
-		"""
+		##### RULE 101 #####
+		## If the current word is an auxiliary word, and 1) the current word is the first word of the sentence, or 2)
+		## the sentence begins with an interrogative, move the current word rightward to put it in front of the first
+		## verb, or at the end of the sentence. In some cases, this will move a word too far to the right, but the
+		## effect of this on proposition counting is benign.
 		if contains(AUX, word_list[i].token):
-			bos = sent_beginning(word_list, i)
-			if bos == i or contains(INTERR, word_list[bos].tag):
-				# find out where to move to
-				dest = i
-				# Is this right?
+			sent_start = sent_beginning(word_list, i)
+			if sent_start == i or contains(INTERR, word_list[sent_start].tag):
+				dest = i # destination
 				while dest < len(word_list) - 1:
 					dest += 1
-					if word_list[dest].tag == "." \
-							or contains(VERB, word_list[dest].tag):
-						break
-				# if movement is called for,
+					if word_list[dest].tag == "." or contains(VERB, word_list[dest].tag): break
 				if dest > (i + 1):
-					# insert a copy in the new location
 					word_list.insert(dest, WordObj(word_list[i].token, word_list[i].tag, True, True, 101))
-					# mark the old item as to be ignored
 					word_list[i].tag = ""
 					word_list[i].isprop = False
 					word_list[i].isword = False
 					word_list[i].token += "/moved"
 
+		################################################################################################################
+		##### RULE GROUP 200 - Preliminary Proposition Identification ##################################################
+		################################################################################################################
 
-				## Rule group 200 - Preliminary identification of propositions ##
-
-		# 200
-		# The tags in Prop are taken to indicate propositions.
+		##### Rule 200 #####
+		## The tags in PROP are taken to indicate propositions.
 		if contains(PROP, word_list[i].tag):
 			word_list[i].isprop = True
 			word_list[i].rulenumber = 200
 
-		# 201
-		# 'The', 'a', and 'an' are not propositions.
+		##### RULE 201 #####
+		## The tokens 'the', 'a', and 'an' are not propositions.
 		if word_list[i].token == "the" or word_list[i].token == "an" or word_list[i].token == "a":
 			word_list[i].isprop = False
 			word_list[i].rulenumber = 201
 
-		# Better agreement with Turner & Greene without this rule.
-		# 202
-		# //// An attriword_listutive noun (such as 'lion' in 'lion tamer') is a proposition
-		# //// (like an adjective).
-		# //if (Contains(Noun, word_list[i].tag) and (word_list[i - 1].tag == "NN"))
-		# //{
-		# //  word_list[i - 1].isprop = True;
-		# //  word_list[i - 1].rulenumber = 202;
-		# //}
+		##### RULE 202 #####
+		## An attributive noun (such as 'lion' in 'ion tamer') is a proposition, similar to an adjective.
+		##
+		## Excluding this rule results in better agreement with Turner & Greene.
 
+		# if contains(NOUN, word_list[i].tag) and word_list[i-1].tag == "NN":
+		# 	word_list[i-1].isprop = True
+		# 	word_list[i-1].rulenumber = 202
 
-		# 203
-		""" The first word in a correlating conjunction such as
-				"either...or", "neither...nor", "both...and"
-			is not a proposition. The second word is tagged CC;
-				the first word may have been tagged CC, RB, or DT.
-		NB:  "nor" is tagged as RB once in the SWBD corpus!!
-		"""
+		##### RULE 203 #####
+		## The first word in a correlating conjunction ('either...or', 'neither...nor', 'both...and', etc.) is not a
+		## proposition. The second word is tagged CC; the first word may have been tagged CC, RB, or DT.
+		## NOTE: 'nor' is tagged as RB once in the Switchboard Corpus.
 		if word_list[i].tag == "CC" and not contains(CORREL, word_list[i].token):
-			# Search back up to 10 words, but not across a sentence end.
-			# In our case, this is true if i = 0
 			j = i
 			while j > i - 10:
 				j -= 1
-				# if word_list[j].tag == ".":
-				if j == -1:
-					break
+				if j == -1: break
 				if contains(CORREL, word_list[j].token):
 					word_list[j].isprop = False
 					word_list[j].rulenumber = 203
 					break
 
-		# 204
-		"""  "And then" and "or else" are each a single proposition """
-		if word_list[i - 1].token == "and" and word_list[i].token == "then" or \
-								word_list[i - 1].token == "or" and word_list[i].token == "else":
+		##### RULE 204 #####
+		## The bigrams 'and then' and 'or else' are each a single proposition.
+		if (word_list[i-1].token == "and" and word_list[i].token == "then") or (word_list[i-1].token == "or" and word_list[i].token == "else"):
 			word_list[i].isprop = False
 			word_list[i].rulenumber = 204
 
-		# 206
-		""" "To" is not a proposition when it is last word in sentence. """
-		if word_list[i].tag == "." and word_list[i - 1].tag == "TO":
-			word_list[i - 1].isprop = False
-			word_list[i - 1].rulenumber = 206
+		##### RULE 206 #####
+		## The token 'to' is not a proposition when it is the last word in a sentence.
+		if word_list[i].tag == "." and word_list[i-1].tag == "TO":
+			word_list[i-1].isprop = False
+			word_list[i-1].rulenumber = 206
 
-		# 207
-		""" Modal is a proposition when it is last word in sentence. """
-		if word_list[i].tag == "." and word_list[i - 1].tag == "MD":
-			word_list[i - 1].isprop = True
-			word_list[i - 1].rulenumber = 207
+		##### RULE 207 #####
+		## Modal is a proposition when it is last word in sentence.
+		if word_list[i].tag == "." and word_list[i-1].tag == "MD":
+			word_list[i-1].isprop = True
+			word_list[i-1].rulenumber = 207
 
-		# 210
-		""" Cardinal number is a proposition only if there is a noun
-			within 5 words after it (not crossing a sentence boundary).
-			This is so "in 3 parts" is 2 props but "in 1941" is only one.
-		"""
+		##### RULE 210 #####
+		## Cardinal numbers are propositions (only) if there is a NOUN within five words after it (not crossing a
+		## sentence boundary). This rule ensures that 'in 3 parts' is two propositions, but 'in 1941' is only one.
 		if word_list[i].tag == "CD":
 			word_list[i].isprop = False
 			word_list[i].rulenumber = 210
-			# This rule looks forward up to 5 words, but not past
-			# an end-of-sentence marker or the end of the WordList.
 			j = i
-			while (j < (len(word_list) - 1) and j < i + 6):
+			while j < (len(word_list) - 1) and j < i + 6:
 				j += 1
-				# if word_list[j].tag == ".":
-				if j == -1:
-					break
+				if j == -1: break
 				if contains(NOUN, word_list[j].tag):
 					word_list[i].isprop = True
 					break
-		# 211
-		""" 'Not...unless' and similar pairs count as one proposition
-				(the second word is the one counted).
-		"""
+
+		##### RULE 211 #####
+		## Pairs such as 'not...unless' are counted as a single proposition, with the second word in the pair being
+		## tagged as a proposition.
 		if contains(NEGPOL2, word_list[i].token):
-			# Much the same algorithm as for correlating conjunctions.
-			# Search back up to 10 words, but not across a sentence end.
 			j = i
 			while i > i - 10:
 				j -= 1
-				# if word_list[j].tag == ".":
-				if j == -1:
-					break
+				if j == -1: break
 				if word_list[j].tag == "NOT":
 					word_list[j].isprop = False
 					word_list[j].rulenumber = 211
 					break
 
-		# 212
-		""" 'Not...any' and similar pairs count as one proposition
-			(the first word is the one counted).
-		"""
+		##### RULE 212 #####
+		## Pairs such as 'not...any' are counted as a single proposition, with the first word in the pair being tagged
+		## as a proposition.
 		if contains(NEGPOL1, word_list[i].token):
-			# Much the same algorithm as for correlating conjunctions.
-			# Search back up to 10 words, but not across a sentence end.
 			j = i
 			while j > i - 10:
 				j -= 1
-				# if word_list[j].tag == ".":
-				if j == -1:
-					break
+				if j == -1: break
 				if word_list[j].tag == "NOT":
 					word_list[i].isprop = False
 					word_list[i].rulenumber = 212
 					break
 
-		# 213
-		""" "Going to" is not a proposition when immediately preceding a verb. """
-		if contains(VERB, word_list[i].tag) and word_list[i - 1].token == "to" and \
-						word_list[i - 2].token == "going":
-			word_list[i - 1].isprop = False
-			word_list[i - 1].rulenumber = 213
-			word_list[i - 2].isprop = False
-			word_list[i - 2].rulenumber = 213
+		##### RULE 213 #####
+		## The bigram 'going to' is not a proposition when is immediately precedes a verb.
+		if contains(VERB, word_list[i].tag) and word_list[i-1].token == "to" and word_list[i-2].token == "going":
+			word_list[i-1].isprop = False
+			word_list[i-1].rulenumber = 213
+			word_list[i-2].isprop = False
+			word_list[i-2].rulenumber = 213
 
-		# 214
-		""" "If ... then" is 1 conjunction, not two.
-			Actually checking for "if ... then (word)"
-			because "then" as last word of sentence is more likely to be adverb.
-		"""
-		if word_list[i].isword and word_list[i - 1].token == "then":
-			# Much the same algorithm as for correlating conjunctions.
-			# Search back up to 10 words, but not across a sentence end.
+		##### RULE 214 #####
+		## The pair 'if...then' is a single conjunction, not two. This rule actually checks for 'if...then (token)'
+		## because 'then' as the last word of a sentence is most likely an adverb.
+		if word_list[i].isword and word_list[i-1].token == "then":
 			j = i
 			while j > i - 10:
 				j -= 1
-				# if word_list[j].tag == ".":
-				if j == -1:
-					break
+				if j == -1: break
 				if word_list[j].token == "if":
-					word_list[i - 1].isprop = False
-					word_list[i - 1].rulenumber = 214
+					word_list[i-1].isprop = False
+					word_list[i-1].rulenumber = 214
 					break
 
-		# 225
-		""" "each other" is a pronoun (to be tagged as PRP PRP). """
-		if word_list[i].token == "other" and word_list[i - 1].token == "each":
-			word_list[i].tag = word_list[i - 1].tag = "PRP"
-			word_list[i].isprop = word_list[i - 1].isprop = False
-			word_list[i].rulenumber = word_list[i - 1].rulenumber = 225
+		##### RULE 225 #####
+		## The bigram 'each other' is a pronoun and should be tagged as 'PRP PRP'.
+		if word_list[i].token == "other" and word_list[i-1].token == "each":
+			word_list[i].tag = word_list[i-1].tag = "PRP"
+			word_list[i].isprop = word_list[i-1].isprop = False
+			word_list[i].rulenumber = word_list[i-1].rulenumber = 225
 
-		# 230
-		""" "how come" and "how many" are each 1 proposition, not two. """
-		if (word_list[i].token == "come" or word_list[i].token == "many") \
-				and word_list[i - 1].token == "how":
+		##### RULE 230 #####
+		## The bigrams 'how come' and 'how many' are considered one proposition, not two.
+		if (word_list[i].token == "come" or word_list[i].token == "many") and word_list[i-1].token == "how":
 			word_list[i].isprop = False
-			word_list[i].tag = word_list[i - 1].tag
+			word_list[i].tag = word_list[i-1].tag
 			word_list[i].rulenumber = 230
 
-		### Rule group 300 - Linking verbs ###
+		################################################################################################################
+		##### RULE GROUP 300 - Linking Verbs ###########################################################################
+		################################################################################################################
 
-		# 301
-		""" A linking verb is not a proposition if followed by adj. or adv.
-				(Apparently, adverbs are frequent tagging mistakes for adjectives.)
-		"""
-		if (contains(ADJ, word_list[i].tag) or contains(ADV, word_list[i].tag)) \
-				and contains(LINKING, word_list[i - 1].token):
-			word_list[i - 1].isprop = False
-			word_list[i - 1].rulenumber = 301
+		##### RULE 301 #####
+		## A linking verb is not a proposition if it precedes an adjective or an adverb. (Apparently, adverbs are
+		## frequent tagging mistakes for adjectives.)
+		if (contains(ADJ, word_list[i].tag) or contains(ADV, word_list[i].tag)) and contains(LINKING, word_list[i-1].token):
+			word_list[i-1].isprop = False
+			word_list[i-1].rulenumber = 301
 
-		# 302
-		""" "Be" is not a proposition when followed by a preposition.
-				(May want to modify this to allow an intervening adverb.)
-		"""
-		if word_list[i].tag == "IN" and contains(BE, word_list[i - 1].token):
-			word_list[i - 1].isprop = False
-			word_list[i - 1].rulenumber = 302
+		##### RULE 302 #####
+		## The token 'be' is not a proposition when it precedes a pr(e)position.
+		## TODO: Modify to allow for intervening adverbs.
+		if word_list[i].tag == "IN" and contains(BE, word_list[i-1].token):
+			word_list[i-1].isprop = False
+			word_list[i-1].rulenumber = 302
 
-		# 310
-		""" Linking verb + Adverb + { PDT, DT } is 2 propositions
-			(e.g., "he is now the president").
-				   (Would otherwise be undercounted because of rule 201).
-		"""
+		##### RULE 310 #####
+		## Sequences of the following form are considered to be two propositions: Linking Verb + Adverb + ( PDT || DT )
+		## For example, 'he is now the president'. This would not be counted because of RULE 201.
 		if word_list[i].tag == "DT" or word_list[i].tag == "PDT":
-			if contains(ADV, word_list[i - 1].tag) and contains(LINKING, word_list[i - 2].token):
-				word_list[i - 1].isprop = True
-				word_list[i - 1].rulenumber = 310
-				word_list[i - 2].isprop = True
-				word_list[i - 2].rulenumber = 310
+			if contains(ADV, word_list[i-1].tag) and contains(LINKING, word_list[i-2].token):
+				word_list[i-1].isprop = True
+				word_list[i-1].rulenumber = 310
+				word_list[i-2].isprop = True
+				word_list[i-2].rulenumber = 310
 
-		# 311
-		""" Causative linking verbs: 'make it better' and similar
-			phrases do not count the adjective as a new proposition
-			(since the verb was counted).
-		"""
+		##### RULE 311 #####
+		## Causative linking verbs (such as 'make it better') and similar phrases do not count the adjective as a new
+		## proposition because the verb was counted.
 		if contains(ADJ, word_list[i].tag):
-			# Much the same algorithm as for correlating conjunctions.
-			# Search back up to 10 words, but not across a sentence end.
 			j = i
 			while j > i - 10:
 				j -= 1
-				# if word_list[j].tag == ".":
-				if j == -1:
-					break
+				if j == -1: break
 				if contains(CLINKING, word_list[j].token):
 					word_list[i].isprop = False
 					word_list[i].rulenumber = 311
 					break
 
-		## Rule group 400 - Auxiliary verbs are not propositions ##
+		################################################################################################################
+		##### RULE GROUP 400 - Auxiliary Verbs Are Not Propositions ####################################################
+		## NOTE: VERB is a list of tags, but AUX is a list of tokens.
+		## NOTE: AUX is a subset of VERB.
+		################################################################################################################
 
-		# Note that VERB is a list of tags but AUX is a list of tokens.
-		# Note also that VERB includes all AUX.
+		##### RULE 401 #####
+		## Bigrams of the form 'AUX not' are considered one proposition, not two.
+		if word_list[i].token == "not" and contains(AUX, word_list[i-1].token):
+			word_list[i-1].isprop = False
+			word_list[i-1].rulenumber = 401
 
-		# 401
-		""" "Aux not" is one proposition, not two """
-		if word_list[i].token == "not" and contains(AUX, word_list[i - 1].token):
-			word_list[i - 1].isprop = False
-			word_list[i - 1].rulenumber = 401
+		##### RULE 402 #####
+		## Bigrams of the form 'AUX VERB' are considered one proposition, not two.
+		if contains(VERB, word_list[i].tag) and contains(AUX, word_list[i-1].token):
+			word_list[i-1].isprop = False
+			word_list[i-1].rulenumber = 402
 
-		# 402
-		""" "Aux Verb" is one proposition, not two """
-		if contains(VERB, word_list[i].tag) and contains(AUX, word_list[i - 1].token):
-			word_list[i - 1].isprop = False
-			word_list[i - 1].rulenumber = 402
+		##### RULE 405 #####
+		## In trigrams of the form 'AUX NOT VERB', NOT and VERB are tagged as propositions. The same is true for
+		## trigrams of the form 'AUX ADV VERB'. For example: 'had always sung', 'would rather go'.
+		if (contains(VERB, word_list[i].tag) and (word_list[i-1].tag == "NOT") or
+		   (contains(ADV, word_list[i-1].tag)) and contains(AUX, word_list[i-2].token)):
+			word_list[i-2].isprop = False
+			word_list[i-2].rulenumber = 405
 
-		# 405
-		""" "Aux NOT Verb"        (NOT and the second Verb are propositions)
-			Also "Aux Adverb Verb"  (e.g., "had always sung", "would rather go")
-		"""
-		if contains(VERB, word_list[i].tag) and (word_list[i - 1].tag == "NOT" \
-														 or contains(ADV, word_list[i - 1].tag)) \
-				and contains(AUX, word_list[i - 2].token):
-			word_list[i - 2].isprop = False
-			word_list[i - 2].rulenumber = 405
+		################################################################################################################
+		##### RULE GROUP 500 - Constructions Involving 'to' ############################################################
+		################################################################################################################
 
-		## Rule group 500 - Constructions involving 'to' ##
+		##### RULE 510 #####
+		## Bigrams of the form 'TO VB' are considered to be one proposition, not two.
+		if (word_list[i].tag == "VB") and (word_list[i-1].tag == "TO"):
+			word_list[i-1].isprop = False
+			word_list[i-1].rulenumber = 510
 
-		# 510
-		""" "TO VB" is one proposition, not two """
-		if ((word_list[i].tag == "VB") and (word_list[i - 1].tag == "TO")):
-			word_list[i - 1].isprop = False
-			word_list[i - 1].rulenumber = 510
-
-		# 511
-		""" "for ... TO VB": "for" is not a proposition """
-		if ((word_list[i].tag == "VB") and (word_list[i - 1].tag == "TO")):
-			# Search back up to 10 words, but not across a sentence end.
+		##### RULE 511 #####
+		## In sequences of the form 'for...TO VB', 'for' is not a proposition.
+		if (word_list[i].tag == "VB") and (word_list[i-1].tag == "TO"):
 			j = i
 			while j > i - 10:
 				j -= 1
-				# if word_list[j].tag == ".":
-				if j == -1:
-					break
-				if (word_list[j].token == "for"):
+				if j == -1: break
+				if word_list[j].token == "for":
 					word_list[j].isprop = False
 					word_list[j].rulenumber = 511
 					break
-		# 512
-		""" "From" and "to" form a single proposition with
-			preceding "go", "come", or their synonyms.
-			(Better agreement with Turner & Greene without this rule.) """
-		# if ((word_list[i].token == "to") or (word_list[i].token == "from")) and \
-		#   (Contains(COMEGO, word_list[i - 1].token) or Contains(COMEGO, word_list[i - 2].token)):
-		# //   )
-		# //{
-		# //  word_list[i].isprop = False;
-		# //  word_list[i].rulenumber = 512;
-		# //}
 
+		##### RULE 512 #####
+		## When 'go', 'come', and their synonyms precede 'from' and 'to', 'from' and 'to' are considered to be one
+		## proposition, not two.
+		##
+		## Excluding this rule results in better agreement with Turner & Greene.
 
-		## Rule group 600 - Fillers ##
+		"""
+		if (word_list[i].token == "to" or word_list[i].token == "from") and \
+			contains(COMEGO, word_list[i-1].token or contains(COMEGO, word_list[i-2].token)):
+			word_list[i].isprop = False
+			word_list[i].rulenumber = 512
+		"""
 
-		# 610
-		""" A sentence consisting entirely of probable filler words is propositionless """
-		if (speech_mode and word_list[i].tag == "."):
-			bos = sent_beginning(word_list, i)
+		################################################################################################################
+		##### RULE GROUP 600 - Fillers #################################################################################
+		################################################################################################################
+
+		##### RULE 610 #####
+		## A sentence consisting entirely of probable filler words is considered to be propositionless.
+		if speech_mode and word_list[i].tag == ".":
+			sent_start = sent_beginning(word_list, i)
 			k = 0
-			j = bos
+			j = sent_start
 			while j < i:
-				if ((word_list[j].tag != "UH") and not contains(FILLER, word_list[j].token)):
-					k += 1
+				if (word_list[j].tag != "UH") and not contains(FILLER, word_list[j].token): k += 1
 				j += 1
-			if (k == 0):
-				j = bos
+			if k == 0:
+				j = sent_start
 				while j < i:
 					word_list[j].tag = ""
 					word_list[j].isprop = False
 					word_list[j].rulenumber = 610
 					j += 1
-		# 632
-		""" In speech mode, "like" is a filler when not immediately preceded by a form of "be". """
-		if (speech_mode):
-			if ((word_list[i].token == "like") and not contains(BE, word_list[i - 1].token)):
+
+		##### RULE 632 #####
+		## If speech_mode is True, 'like' is considered to be a filler when it does not immediately follow BE.
+		if speech_mode:
+			if word_list[i].token == "like" and not contains(BE, word_list[i - 1].token):
 				word_list[i].tag = ""
 				word_list[i].isprop = False
 				word_list[i].rulenumber = 632
 
-		# 634
-		""" In speech mode, "you know" is a filler and counts as one word, not two. """
-		if (speech_mode):
-			if ((word_list[i - 1].token == "you") and (word_list[i].token == "know")):
-				# back up one
+		##### RULE 634 #####
+		## If speech_mode is True, the bigram 'you know' is considered to be a single word, not two.
+		if speech_mode:
+			if word_list[i-1].token == "you" and word_list[i].token == "know":
 				i -= 1
-				# delete forward one
-				word_list.pop(i + 1)
-				# reset data for the current item
+				word_list.pop(i+1)
 				word_list[i].token = "you_know"
 				word_list[i].tag = ""
 				word_list[i].isprop = False
 				word_list[i].isword = True
 				word_list[i].rulenumber = 634
-	# end for
+
+	####################################################################################################################
+	##### END RULES ####################################################################################################
+	####################################################################################################################
+
 	return word_list
 
 def calc_propositions(word_list):
