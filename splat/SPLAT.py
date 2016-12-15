@@ -425,7 +425,6 @@ class SPLAT:
         """ Returns a list of parsers trees. """
         if self.__treestrings is None:
             self.__treestrings = TreeStringParser().get_parse_trees(self.__utterances)
-        #print("Treestrings: " + str(self.__treestrings))
         return self.__treestrings
 
     def drawtrees(self):
@@ -540,20 +539,32 @@ class SPLAT:
     def splat(self):
         return self.__splat
 
+    def __str__(self):
+        """ Equivalent to Java's toString(). """
+        return self.splat()
+
     ##### JSON SERIALIZATION ###########################################################################################
 
     def dump(self, out_file):
+        """ Dumps the JSON dictionary of this SPLAT to the specified file. """
         json.dump(self.__dict__, out_file, default=jdefault)
 
     def dumps(self):
+        """ Returns a string representation of the JSON dictionary for this SPLAT. """
         return json.dumps(self.__dict__)
 
     def load(self, in_file):
+        """ Given a file containing a JSON dictionary of a SPLAT, load that dictionary into a new SPLAT object. """
         self.__dict__ = json.load(in_file)
 
     def loads(self, data_str):
+        """ Given a string containing a JSON dictionary of a SPLAT, load that dictionary into a new SPLAT object. """
         self.__dict__ = json.loads(data_str)
 
 
 def jdefault(o):
+    """
+    By default, JSON serialization doesn't do what I want it to do, so we have to explicitly tell it to serialize the
+    Python dictionary representation of the SPLAT object.
+    """
     return o.__dict__

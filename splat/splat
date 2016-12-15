@@ -8,7 +8,34 @@ from splat.SPLAT import SPLAT
 
 ##### GLOBAL VARIABLES #################################################################################################
 my_splat = SPLAT('NULL NULL')
-commands = {}
+commands = {"wc":my_splat.wordcount, "uwc":my_splat.unique_wordcount, "tokens":my_splat.tokens, "types":my_splat.types,
+            "sents":my_splat.sents, "sentcount":my_splat.sentcount, "ttr":my_splat.type_token_ratio,
+            "ngrams":my_splat.ngrams, "pos":my_splat.pos, "alu":my_splat.average_utterance_length,
+            "cfr":my_splat.content_function_ratio, "uttcount":my_splat.uttcount, "unigrams":my_splat.unigrams,
+            "bigrams":my_splat.bigrams, "trigrams":my_splat.trigrams, "content":my_splat.content_words,
+            "function":my_splat.function_words, "ucontent":my_splat.unique_content_words, "asps":my_splat.average_sps,
+            "ufunction":my_splat.unique_function_words, "trees":my_splat.treestrings, "drawtrees":my_splat.drawtrees,
+            "wpu":my_splat.words_per_utterance, "wps":my_splat.words_per_sentence, "utts":my_splat.utts,
+            "cdensity":my_splat.content_density, "idensity":my_splat.idea_density, "aspu":my_splat.average_spu,
+            "yngve":my_splat.tree_based_yngve_score, "frazier":my_splat.tree_based_frazier_score, "json":my_splat.dumps,
+            "poscounts":my_splat.pos_counts, "maxdepth":my_splat.max_depth, "mostfreq":my_splat.get_most_freq,
+            "leastfreq":my_splat.get_least_freq, "plotfreq":my_splat.plot_freq, "disfluencies":my_splat.disfluencies,
+            "dpu":my_splat.disfluencies_per_utterance, "dps":my_splat.disfluencies_per_sentence, "splat":my_splat.splat,
+            "als":my_splat.average_sentence_length, "syngve":my_splat.string_based_yngve_score,
+            "sfrazier":my_splat.string_based_frazier_score, "lwords":my_splat.longest_words,
+            "swords":my_splat.shortest_words, "syllables":my_splat.syllables, "flesch":my_splat.flesch_readability,
+            "kincaid":my_splat.kincaid_grade_level, "adpu":my_splat.average_dpu, "adps":my_splat.average_dps,
+            "maxcdensity":my_splat.max_content_density, "mincdensity":my_splat.min_content_density,
+            "maxidensity":my_splat.max_idea_density, "minidensity":my_splat.min_idea_density}
+prog_info = "\n####################################################################" \
+            "\n# SPLAT - Speech Processing & Linguistic Analysis Tool\t\t   #" \
+            "\n# Copyright (C) 2016, Benjamin S. Meyers < ben@splat-library.org > #" \
+            "\n# \t\t\t\t\t\t\t\t   #" \
+            "\n# Developed by Benjamin S. Meyers under the guidance of:\t   #" \
+            "\n#\tEmily Prud'hommeaux\tCissi O. Alm\t\t\t   #" \
+            "\n# \t\t\t\t\t\t\t\t   #" \
+            "\n# For documentation, visit: http://splat-library.org\t\t   #" \
+            "\n####################################################################\n"
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
@@ -89,27 +116,16 @@ def command_message():
 
 def usage_message():
     """ Display usage message. """
-    message = "USAGE:\tsplat <command> <options> <text_source>"
-    return message
+    return "USAGE:\tsplat <command> <options> <text_source>"
 
 def help_message():
     """ Display help message. """
-    message = "USAGE:\tsplat <command> <options> <text_source>\n"
-    message += "\tsplat --commands\tList available commands.\n"
-    message += "\tsplat --info\t\tDisplay licensing information.\n"
-    return message
+    return "USAGE:\tsplat <command> <options> <text_source>\n\tsplat --commands\tList available commands.\n\tsplat " \
+           "--info\t\tDisplay licensing information.\n"
 
 def info_message():
     """ Display copyright information. """
-    prog_info = "\n####################################################################"
-    prog_info += "\n# SPLAT - Speech Processing & Linguistic Analysis Tool\t\t   #"
-    prog_info += "\n# Copyright (C) 2016, Benjamin S. Meyers < ben@splat-library.org > #"
-    prog_info += "\n# \t\t\t\t\t\t\t\t   #"
-    prog_info += "\n# Developed by Benjamin S. Meyers under the guidance of:\t   #"
-    prog_info += "\n#\tEmily Prud'hommeaux\tCissi O. Alm\t\t\t   #"
-    prog_info += "\n# \t\t\t\t\t\t\t\t   #"
-    prog_info += "\n# For documentation, visit: http://splat-library.org\t\t   #"
-    prog_info += "\n####################################################################\n"
+    global prog_info
     return prog_info
 
 def check_dependencies():
@@ -122,12 +138,12 @@ def check_dependencies():
     except ImportError:
         print("Oops! It looks like NLTK was not installed. Let's fix that.")
         print("Installing NLTK...")
-        status = subprocess.call(["pip3", "install", "nltk"],
-                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        status = subprocess.call(["pip3", "install", "nltk"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         if status == 0:
             print("NLTK was successfully installed!")
         else:
-            print("Hmm... I couldn't install NLTK for you. You probably don't have root privileges. I suggest running this command:\n\tsudo pip3 install nltk")
+            print("Hmm... I couldn't install NLTK for you. You probably don't have root privileges. I suggest running"
+                  "this command:\n\tsudo pip3 install nltk")
 
     try:
         from nltk.corpus import stopwords
@@ -138,30 +154,30 @@ def check_dependencies():
         print("Oops! It looks like some essential NLTK was not downloaded. Let's fix that.")
         print("Downloading NLTK data...")
         status = subprocess.call(
-            ["python3", "-m", "nltk.downloader", "stopwords", "names", "punkt",
-             "averaged_perceptron_tagger"], stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
+            ["python3", "-m", "nltk.downloader", "stopwords", "names", "punkt", "averaged_perceptron_tagger"],
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         if status == 0:
             print("Essential NLTK data was successfully downloaded!")
         else:
-            print("Hmm... I couldn't download the essential NLTK data for you. I suggest running this command:\n\tpython3 -m nltk.downloader stopwords names punkt averaged_perceptron_tagger")
+            print("Hmm... I couldn't download the essential NLTK data for you. I suggest running this command:\n\t"
+                  "python3 -m nltk.downloader stopwords names punkt averaged_perceptron_tagger")
 
     try:
         import matplotlib
     except ImportError:
         print("Oops! It looks like matplotlib was not installed. Let's fix that.")
         print("Installing matplotlib...")
-        status = subprocess.call(["pip3", "install", "matplotlib"],
-                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        status = subprocess.call(["pip3", "install", "matplotlib"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         if status == 0:
             print("matplotlib was successfully installed!")
         else:
-            print("Hmm... I couldn't install matplotlib for you. You probably don't have root privileges. I suggest running this command:\n\tsudo pip3 install matplotlib")
+            print("Hmm... I couldn't install matplotlib for you. You probably don't have root privileges. I suggest"
+                  "running this command:\n\tsudo pip3 install matplotlib")
 
-    java_status = subprocess.call(["which", "java"], stdout=subprocess.PIPE,
-                                  stderr=subprocess.PIPE)
+    java_status = subprocess.call(["which", "java"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if java_status != 0:
-        print("Java is not installed on your system. Java needs to be installed in order for me to do any part-of-speech tagging.\n\nPlease install java and try again.")
+        print("Java is not installed on your system. Java needs to be installed in order for me to do any"
+              "part-of-speech tagging.\n\nPlease install java and try again.")
 
 
 def run_command(args):
@@ -190,36 +206,6 @@ def save_splat(args):
     with open(args[-1] + ".splat", 'w') as f:
         my_splat.dump(f)
 
-def setup_commands():
-    global commands
-    commands = {"wc":my_splat.wordcount, "uwc":my_splat.unique_wordcount,
-                "tokens":my_splat.tokens, "types":my_splat.types,
-                "sents":my_splat.sents, "sentcount":my_splat.sentcount,
-                "ttr":my_splat.type_token_ratio, "ngrams":my_splat.ngrams,
-                "pos":my_splat.pos, "alu":my_splat.average_utterance_length,
-                "cfr":my_splat.content_function_ratio, "uttcount":my_splat.uttcount,
-                "unigrams":my_splat.unigrams, "bigrams":my_splat.bigrams,
-                "trigrams":my_splat.trigrams, "content":my_splat.content_words,
-                "function":my_splat.function_words, "ucontent":my_splat.unique_content_words,
-                "ufunction":my_splat.unique_function_words, "trees":my_splat.treestrings,
-                "drawtrees":my_splat.drawtrees, "wpu":my_splat.words_per_utterance,
-                "wps":my_splat.words_per_sentence, "utts":my_splat.utts,
-                "cdensity":my_splat.content_density, "idensity":my_splat.idea_density,
-                "yngve":my_splat.tree_based_yngve_score, "frazier":my_splat.tree_based_frazier_score,
-                "poscounts":my_splat.pos_counts, "maxdepth":my_splat.max_depth,
-                "mostfreq":my_splat.get_most_freq, "leastfreq":my_splat.get_least_freq,
-                "plotfreq":my_splat.plot_freq, "dpu":my_splat.disfluencies_per_utterance,
-                "dps":my_splat.disfluencies_per_sentence, "disfluencies":my_splat.disfluencies,
-                "als":my_splat.average_sentence_length, "syngve":my_splat.string_based_yngve_score,
-                "sfrazier":my_splat.string_based_frazier_score, "splat":my_splat.splat,
-                "lwords":my_splat.longest_words, "swords":my_splat.shortest_words,
-                "syllables":my_splat.syllables, "flesch":my_splat.flesch_readability,
-                "kincaid":my_splat.kincaid_grade_level, "adpu":my_splat.average_dpu,
-                "adps":my_splat.average_dps, "aspu":my_splat.average_spu,
-                "asps":my_splat.average_sps, "json":my_splat.dumps,
-                "maxcdensity":my_splat.max_content_density, "mincdensity":my_splat.min_content_density,
-                "maxidensity":my_splat.max_idea_density, "minidensity":my_splat.min_idea_density}
-
 def main():
     args = sys.argv
     if len(args) < 2:
@@ -237,7 +223,6 @@ def main():
     else:
         check_dependencies()
         load_splat(args)
-        setup_commands()
         run_command(args[:-1])
         save_splat(args)
 

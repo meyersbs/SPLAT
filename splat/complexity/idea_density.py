@@ -1,4 +1,7 @@
-import sys, re
+#!/usr/bin/env python3
+
+##### PYTHON IMPORTS ###################################################################################################
+import re
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
@@ -11,21 +14,16 @@ import sys, re
 ########################################################################################################################
 ########################################################################################################################
 
-##### GLOBAL VARIABLES #################################################################################################
-
-# global ADJ, ADV, VERB, NOUN, INTERR, PROP, FILLER, BE, NT, COMEGO, AUX
-# global BEING, BECOMING, SEEMING, LINKING, CLINKING, CORREL, NEGPOL1, NEGPOL2
-
 ##### WORD CLASSES #####################################################################################################
 
 ADJ = ["JJ", "JJR", "JJS"]
 ADV = ["RB", "RBR", "RBS", "WRB"]
-VERB = ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "BES"]
+VRB = ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "BES"]
 NOUN = ["NN", "NNS", "NNP", "NNPS"]
 INTERR = ["WDT", "WP", "WPS", "WRB"]
 
 # By default, words classified as one of these parts-of-speech is considered a proposition.
-PROP = ADJ + ADV + VERB + INTERR + ["CC", "CD", "DT", "IN", "PDT", "POS", "PRP$", "PP$", "TO"]
+PROP = ADJ + ADV + VRB + INTERR + ["CC", "CD", "DT", "IN", "PDT", "POS", "PRP$", "PP$", "TO"]
 
 # A sentence consisting wholly of 'non-propositional fillers' is considered to be propositionless.
 FILLER = ["and", "or", "but", "if", "that", "just", "you", "know"]
@@ -130,7 +128,7 @@ def apply_counting_rules(word_list, speech_mode=False):
 	True when analyzing transcribed speech that contains repetitions and filler words. It may result in undercounting
 	of well-edited English.
 	"""
-	global ADJ, ADV, VERB, NOUN, INTERR, PROP, FILLER, BE, NT, COMEGO, AUX, BEING, BECOMING, SEEMING, LINKING,\
+	global ADJ, ADV, VRB, NOUN, INTERR, PROP, FILLER, BE, NT, COMEGO, AUX, BEING, BECOMING, SEEMING, LINKING,\
 		CLINKING, CORREL, NEGPOL1, NEGPOL2, PUNCT
 
 	"""
@@ -255,7 +253,7 @@ def apply_counting_rules(word_list, speech_mode=False):
 
 		##### RULE 054 #####
 		## "that/DT" or "this/DT" is a pronoun, not a determiner, if the following word is a verb or an adverb.
-		if (word_list[i-1].token == "that" or word_list[i-1].token == "this") and (contains(VERB, word_list[i].tag) or
+		if (word_list[i-1].token == "that" or word_list[i-1].token == "this") and (contains(VRB, word_list[i].tag) or
 			contains(ADV, word_list[i].tag)):
 			word_list[i-1].tag = "PRP"
 			word_list[i-1].rulenumber = 54
@@ -276,7 +274,7 @@ def apply_counting_rules(word_list, speech_mode=False):
 				dest = i # destination
 				while dest < len(word_list) - 1:
 					dest += 1
-					if word_list[dest].tag == "." or contains(VERB, word_list[dest].tag): break
+					if word_list[dest].tag == "." or contains(VRB, word_list[dest].tag): break
 				if dest > (i + 1):
 					word_list.insert(dest, WordObj(word_list[i].token, word_list[i].tag, True, True, 101))
 					word_list[i].tag = ""
@@ -383,7 +381,7 @@ def apply_counting_rules(word_list, speech_mode=False):
 
 		##### RULE 213 #####
 		## The bigram 'going to' is not a proposition when is immediately precedes a verb.
-		if contains(VERB, word_list[i].tag) and word_list[i-1].token == "to" and word_list[i-2].token == "going":
+		if contains(VRB, word_list[i].tag) and word_list[i-1].token == "to" and word_list[i-2].token == "going":
 			word_list[i-1].isprop = False
 			word_list[i-1].rulenumber = 213
 			word_list[i-2].isprop = False
@@ -471,14 +469,14 @@ def apply_counting_rules(word_list, speech_mode=False):
 
 		##### RULE 402 #####
 		## Bigrams of the form 'AUX VERB' are considered one proposition, not two.
-		if contains(VERB, word_list[i].tag) and contains(AUX, word_list[i-1].token):
+		if contains(VRB, word_list[i].tag) and contains(AUX, word_list[i-1].token):
 			word_list[i-1].isprop = False
 			word_list[i-1].rulenumber = 402
 
 		##### RULE 405 #####
 		## In trigrams of the form 'AUX NOT VERB', NOT and VERB are tagged as propositions. The same is true for
 		## trigrams of the form 'AUX ADV VERB'. For example: 'had always sung', 'would rather go'.
-		if (contains(VERB, word_list[i].tag) and (word_list[i-1].tag == "NOT") or
+		if (contains(VRB, word_list[i].tag) and (word_list[i-1].tag == "NOT") or
 		   (contains(ADV, word_list[i-1].tag)) and contains(AUX, word_list[i-2].token)):
 			word_list[i-2].isprop = False
 			word_list[i-2].rulenumber = 405
