@@ -7,7 +7,7 @@ import re, difflib, itertools
 from nltk.tree import Tree
 
 ##### SPLAT IMPORTS ####################################################################################################
-from splat.Util import open_class_list, ignore_list, proposition_list, closed_class_list
+from splat.Util import open_class_list, ignore_list, closed_class_list
 from splat.corpora import PROPER_NAMES, CMUDICT
 import splat.complexity.idea_density
 
@@ -26,7 +26,43 @@ import splat.complexity.idea_density
 
 ########################################################################################################################
 
+def levenshtein_distance(w1, w2):
+	"""
+	Calculates the Levenshtein (minimum edit) distance between two words. This implementation is based on the one
+	provided by Stavros Korokithakis ( https://www.stavros.io/posts/finding-the-levenshtein-distance-in-python/ ),
+	licensed under BSD with Attribution. For questions concerning the original implementation, Stavros can be
+	contacted via email at hi@stavros.io .
+
+	Levenshtein Distance summary: https://en.wikipedia.org/wiki/Levenshtein_distance
+	"""
+	if len(w1) > len(w2): w1, w2 = w2, w1
+	if len(w2) == 0: return len(w1)
+	len_w1 = len(w1) + 1
+	len_w2 = len(w2) + 1
+	dist_matrix = [[0] * len_w2 for x in range(len_w1)]
+	for i in range(len_w1): dist_matrix[i][0] = i
+	for j in range(len_w2): dist_matrix[0][j] = j
+	for i in range(1, len_w1):
+		for j in range(1, len_w2):
+			del_cost = dist_matrix[i-1][j] + 1
+			ins_cost = dist_matrix[i][j-1] + 1
+			sub_cost = dist_matrix[i-1][j-1]
+			if w1[i-1] != w2[j-1]: sub_cost += 1
+			dist_matrix[i][j] = min(ins_cost, del_cost, sub_cost)
+	return dist_matrix[len_w1-1][len_w2-1]
+
 def num_syllables(tokens):
+	"""
+	Returns an ESTIMATE of the total number of syllables for the given list of tokens. An outline of the algorithm is
+	provided here:
+		1) For each token in the list, check and see if that token exists in the CMUDICT.
+		2) If it does, set pron = CMUDICT[word]. If it doesn't, try and find the closest matching entry in the CMUDICT.
+		3) If a token contains no vowels, assume it has only one syllable. Otherwise, use difflib to find the top five
+			closest matching entries in the CMUDICT.
+			A) For each of the five matches, calculate the Levenshtein Distance between the given token and the match.
+			B) Set pron equal to the match that results in the smallest Levenshtein Distance.
+		4) Count all of the numerical characters contained in pron, then append that value to total.
+	"""
 	total = 0
 	pron = []
 	for token in tokens:
@@ -34,8 +70,20 @@ def num_syllables(tokens):
 		try:
 			pron = CMUDICT[word.lower()]
 		except KeyError:
-			closest = difflib.get_close_matches(word.lower(), CMUDICT.keys(), 1)[0]
-			pron = CMUDICT[closest]
+			if re.search(r'[aeiouy]', word.lower()) is not None:
+				closest_matches = difflib.get_close_matches(word.lower(), CMUDICT.keys(), 5)
+				levs = {}
+				for match in closest_matches:
+					l = levenshtein_distance(match, word.lower())
+					if l not in levs.keys(): levs[l] = []
+					levs[l].append(match)
+				min_lev = min(levs.keys())
+				closest = levs[min_lev][0]
+				pron = CMUDICT[closest]
+			else:
+				# The token 'to' was chosen arbitrarily; I just needed a token that when looked up in the CMUDICT would
+				# return a syllable count of 1.
+				pron = CMUDICT['to']
 
 		temp_count = max([len(list(y for y in x if y[-1].isdigit())) for x in pron])
 		total += temp_count
@@ -148,11 +196,6 @@ def calc_content_density(treestrings):
 					print("WARNING: Unknown tag " + tag + "\n")
 
 		results.append(float(open_class_count / closed_class_count) if closed_class_count != 0 else 0)
-
-	# print("RESULTS: " + str(results))
-	# print("MEAN: " + str(float(sum(results) / len(results))))
-	# print("MIN: " + str(float(min(results))))
-	# print("MAX: " + str(float(max(results))))
 
 	return float(sum(results)/len(results)), float(min(results)), float(max(results))
 
