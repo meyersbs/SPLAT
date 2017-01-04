@@ -1,11 +1,8 @@
 ### Specific Files
 MANIFEST
 output.txt
-reference_data/graham_neubig.py
 ### Directories
-test_data/**/*
-reference_data/**/*
-dist/**/*
+dist/*
 .idea/**/*
 ### File Types
 *~
