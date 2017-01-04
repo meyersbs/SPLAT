@@ -2,7 +2,7 @@
 
 ##### PYTHON IMPORTS ###################################################################################################
 from abc import abstractmethod
-import os.path
+import os.path, re
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
@@ -36,7 +36,7 @@ class Tokenizer:
 		"""
 		tokens = []
 		for item in text:
-			for word in item.split(" "):
+			for word in re.split(r'\s+', item):
 				tokens.append(word)
 
 		return tokens
@@ -51,7 +51,7 @@ class Tokenizer:
 		:rtype:list
 		"""
 		tokens = []
-		for word in text.split(" "):
+		for word in re.split(r'\s+', text):
 			tokens.append(word.strip("\n"))
 
 		return tokens
@@ -68,7 +68,7 @@ class Tokenizer:
 		tokens = []
 		with open(text, 'r') as f:
 			for line in f:
-				for word in line.split(" "):
+				for word in re.split(r'\s+', line):
 					tokens.append(word)
 
 		return tokens
