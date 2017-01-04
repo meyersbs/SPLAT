@@ -370,8 +370,13 @@ class TestSyllables(unittest.TestCase):
         self.assertEqual(output_forebodings, expected_forebodings)
         expected_pterodactyl = 4
         output_pterodactyl = SPLAT("pterodactyl").syllables()
-        #self.assertEqual(output_pterodactyl, expected_pterodactyl)
         self.assertLessEqual(abs(expected_pterodactyl - output_pterodactyl), 1)
+        expected_wh = 1
+        output_wh = SPLAT("wh").syllables()
+        self.assertEqual(output_wh, expected_wh)
+        expected_s_hyphen = 1
+        output_s_hyphen = SPLAT("s-").syllables()
+        self.assertEqual(output_s_hyphen, expected_s_hyphen)
 
     def test_proper_names(self):
         expected_benjamin = 3
