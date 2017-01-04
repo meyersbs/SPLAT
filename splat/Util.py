@@ -14,7 +14,6 @@ from splat.corpora import STOPWORDS_EN
 open_class_list = ["FW", "JJ", "JJR", "JJS", "LS", "NN", "NNS", "NNP", "NNPS", "RB", "RBR", "RBS", "SYM", "VB", "VBD", "VBG", "VBN", "VBP", "VBZ"]
 closed_class_list = ["BES", "AUX", "AUXG", "CC", "CD", "DT", "EX", "IN", "MD", "PDT", "POS", "PRP", "PRP$", "RP", "TO", "WDT", "WP", "UH", "WP$", "WRB"]
 ignore_list = ['LCB', '-LCB-', 'LRB', '-LRB-', 'LS', 'LSB', '-LSB-', '-RRB-', 'RCB', '-RCB-', 'RSB', '-RSB-', 'SYM', 'UH', '$', '``', '"', '\'\'', '(', ')', '()', '( )', ',', '--', '.', ':', 'SBAR', 'SBARQ']
-proposition_list = ['CC', 'CD', 'DT', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ', 'JJ', 'JJR', 'JJS', 'RB', 'RBR', 'RBS', 'IN', 'CC', 'PDT', 'POS', 'PP$', 'PRP$', 'TO', 'WDT', 'WP', 'WPS', 'WRB']
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
