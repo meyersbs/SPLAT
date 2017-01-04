@@ -62,6 +62,8 @@ def num_syllables(tokens):
 			A) For each of the five matches, calculate the Levenshtein Distance between the given token and the match.
 			B) Set pron equal to the match that results in the smallest Levenshtein Distance.
 		4) Count all of the numerical characters contained in pron, then append that value to total.
+		5) In some special cases ('am'), the result returned is wrong (2 instead of 1). See below for details on how I
+			counteract this.
 	"""
 	total = 0
 	pron = []
@@ -86,7 +88,14 @@ def num_syllables(tokens):
 				pron = CMUDICT['to']
 
 		temp_count = max([len(list(y for y in x if y[-1].isdigit())) for x in pron])
-		total += temp_count
+
+		# In some special cases, the CMUDICT has multiple pronunciations that just aren't accurate. For example:
+		#	AM  AE1 M
+		#	AM(1)  EY1 EH1 M
+		# The second pronunciation results in temp_count = 2, which is incorrect. So, in these special cases, we
+		# assume that words with only one vowel and multiple pronunciations have only 1 syllable.
+		if len(re.findall(r'[aeiouy]', word.lower())) == 1 and len(pron) > 1: total += 1
+		else: total += temp_count
 
 	return total
 

@@ -374,6 +374,9 @@ class TestSyllables(unittest.TestCase):
         expected_wh = 1
         output_wh = SPLAT("wh").syllables()
         self.assertEqual(output_wh, expected_wh)
+        expected_am = 1
+        output_am = SPLAT("am").syllables()
+        self.assertEqual(output_am, expected_am)
         expected_s_hyphen = 1
         output_s_hyphen = SPLAT("s-").syllables()
         self.assertEqual(output_s_hyphen, expected_s_hyphen)
