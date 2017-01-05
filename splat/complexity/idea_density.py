@@ -597,15 +597,22 @@ def calc_idea(treestrings):
 	for utterance in treestrings:
 		word_list = []
 		tags_tokens = re.findall("\((\S+) ([^\(^\)]+)\)", utterance)
-		num_words = float(len(tags_tokens))
-		for (tag, token) in tags_tokens:
-			word = WordObj()
-			word.token = token
-			word.tag = tag
-			word_list += [word]
-		word_list = apply_counting_rules(word_list)
-		props = calc_propositions(word_list)
-		p_density = (float(props)) / float(num_words)
+		num_words = len(tags_tokens)
+		if num_words > 0:
+			for (tag, token) in tags_tokens:
+				word = WordObj()
+				word.token = token
+				word.tag = tag
+				word_list += [word]
+			word_list = apply_counting_rules(word_list)
+			props = calc_propositions(word_list)
+			try:
+				p_density = float(props) / float(num_words)
+			except ZeroDivisionError as e:
+				print("Caught ZeroDivisionError in /splat/complexity/idea_density.py at line 610.")
+				p_density = 0.0
+		else:
+			p_density = 0.0
 		results.append(p_density)
 
 	# return (mean, min, max) idea density
