@@ -64,11 +64,19 @@ class SPLAT:
         if os.path.exists(text):
             temp_text = ""
             temp_utts = []
-            for line in open(text, 'r'):
-                temp_utts.append(line.strip())
-                temp_text += line.strip() + " "
-            self.__splat = temp_text
-            self.__utterances = temp_utts
+            try:
+                for line in open(text, 'r'):
+                    temp_utts.append(line.strip())
+                    temp_text += line.strip() + " "
+                self.__splat = temp_text
+                self.__utterances = temp_utts
+            except IsADirectoryError:
+                print("WARNING: '" + text + "' is a directory. It is being treated as a string.")
+                self.__splat = text
+                temp_utts = []
+                for line in text.split("\n"):
+                    temp_utts.append(line.strip())
+                self.__utterances = temp_utts
         elif type(text) == str:
             self.__splat = text
             temp_utts = []
