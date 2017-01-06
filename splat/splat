@@ -4,7 +4,12 @@
 import os, subprocess, sys, json
 
 ##### SPLAT IMPORTS ####################################################################################################
-from splat.SPLAT import SPLAT
+try:
+    from splat.SPLAT import SPLAT
+except ImportError:
+    sys.path.append(".")
+    #this_dir = os.path.dirname(os.path.abspath(__file__))
+    from .SPLAT import SPLAT
 
 ##### GLOBAL VARIABLES #################################################################################################
 my_splat = SPLAT('NULL NULL NULL')
@@ -73,7 +78,8 @@ def command_message():
     print(template.format("ngrams", "<n>", "<input_file>", "Display all <n>-grams."))
     print(template.format("plotfreq", "--", "<input_file>", "Plot the <x> most frequent words."))
     print(template.format("pos", "--", "<input_file>", "Display tokens with POS tags."))
-    print(template.format("poscounts", "--", "<input_file>", "Display counts for each POS taggers."))
+    print(template.format("poscounts", "--", "<input_file>", "Display counts for each POS tag."))
+    print(template.format("pronouns", "--", "<input_file>", "Display counts for each Pronoun."))
     print(template.format("sents", "--", "<input_file>", "Display sentences."))
     print(template.format("sentcount", "--", "<input_file>", "Display number of sentences."))
     print(template.format("sfrazier", "--", "<input_file>", "Display string-based frazier score."))
@@ -120,7 +126,7 @@ def setup_commands():
                 "flesch": my_splat.flesch_readability, "kincaid": my_splat.kincaid_grade_level,
                 "adpu": my_splat.average_dpu, "adps": my_splat.average_dps, "maxcdensity": my_splat.max_content_density,
                 "mincdensity": my_splat.min_content_density, "maxidensity": my_splat.max_idea_density,
-                "minidensity": my_splat.min_idea_density}
+                "minidensity": my_splat.min_idea_density, "pronouns": my_splat.pronouns}
 
 def usage_message():
     """ Display usage message. """

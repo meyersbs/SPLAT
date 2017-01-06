@@ -14,6 +14,16 @@ from splat.corpora import STOPWORDS_EN
 open_class_list = ["FW", "JJ", "JJR", "JJS", "LS", "NN", "NNS", "NNP", "NNPS", "RB", "RBR", "RBS", "SYM", "VB", "VBD", "VBG", "VBN", "VBP", "VBZ"]
 closed_class_list = ["BES", "AUX", "AUXG", "CC", "CD", "DT", "EX", "IN", "MD", "PDT", "POS", "PRP", "PRP$", "RP", "TO", "WDT", "WP", "UH", "WP$", "WRB"]
 ignore_list = ['LCB', '-LCB-', 'LRB', '-LRB-', 'LS', 'LSB', '-LSB-', '-RRB-', 'RCB', '-RCB-', 'RSB', '-RSB-', 'SYM', 'UH', '$', '``', '"', '\'\'', '(', ')', '()', '( )', ',', '--', '.', ':', 'SBAR', 'SBARQ']
+singular_pronouns_1 = {"personal": ['I', 'ME'], "reflexive": ["MYSELF"], "possessive": ['MY', 'MINE']}
+plural_pronouns_1 = {"personal": ['WE', 'US'], "reflexive": ['OURSELVES'], "possessive": ['OUR', 'OURS']}
+singular_pronouns_2 = {"personal": ['YOU'], "reflexive": ['YOURSELF'], "possessive": ['YOUR', 'YOURS']}
+plural_pronouns_2 = {"personal": ['YOU'], "reflexive": ['YOURSELVES'], "possessive": ['YOUR', 'YOURS']}
+singular_pronouns_3 = {"personal": ['SHE', 'HER', 'HE', 'HIM', 'IT'], "reflexive": ['HIMSELF', 'HERSELF', 'ITSELF'],
+					   "possessive": ['ITS', 'HERS', 'HIS', 'HER']}
+plural_pronouns_3 = {"personal": ['THEY', 'THEM'], "reflexive": ['THEMSELVES'], "possessive": ['THEIR', 'THEIRS']}
+all_pronouns = ['I', 'ME', 'MYSELF', 'MY', 'MINE', 'WE', 'US', 'OURSELVES', 'OUR', 'OURS', 'YOU', 'YOURSELF', 'YOUR',
+				'YOURS', 'YOURSELVES', 'SHE', 'HER', 'HE', 'HIM', 'IT', 'HIMSELF', 'HERSELF', 'ITSELF', 'ITS', 'HERS',
+				'HIS', 'THEY', 'THEM', 'THEMSELVES', 'THEIR', 'THEIRS']
 
 ########################################################################################################################
 ##### INFORMATION ######################################################################################################
@@ -285,3 +295,36 @@ def get_disfluencies_per_act(text):
 				last_word = word
 
 	return temp_dpa
+
+def count_pronouns(tokens):
+	pronouns = {'I': [0, '1st-Person', 'Personal', 'Singular'], 'ME': [0, '1st-Person', 'Personal', 'Singular'],
+				'MYSELF': [0, '1st-Person', 'Reflexive', 'Singular'], 'MY': [0, '1st-Person', 'Possessive', 'Singular'],
+				'MINE': [0, '1st-Person', 'Possessive', 'Singular'], 'WE': [0, '1st-Person', 'Personal', 'Plural'],
+				'US': [0, '1st-Person', 'Personal', 'Plural'], 'OURSELVES': [0, '1st-Person', 'Reflexive', 'Plural'],
+				'OUR': [0, '1st-Person', 'Possessive', 'Plural'], 'OURS': [0, '1st-Person', 'Possessive', 'Plural'],
+				'YOU': [0, '2nd-Person', 'Personal', 'Singular/Plural'],
+				'YOURSELF': [0, '2nd-Person', 'Reflexive', 'Singular'],
+				'YOUR': [0, '2nd-Person', 'Possessive', 'Singular/Plural'],
+				'YOURS': [0, '2nd-Person', 'Possessive', 'Singular/Plural'],
+				'YOURSELVES': [0, '2nd-Person', 'Reflexive', 'Plural'],
+				'SHE': [0, '3rd-Person', 'Personal', 'Singular'], 'ITSELF': [0, '3rd-Person', 'Reflexive', 'Singular'],
+				'HER': [0, '3rd-Person', 'Personal/Possessive', 'Singular/Plural'],
+				'HE': [0, '3rd-Person', 'Personal', 'Singular'], 'ITS': [0, '3rd-Person', 'Possessive', 'Singular'],
+				'HIM': [0, '3rd-Person', 'Personal', 'Singular'], 'IT': [0, '3rd-Person', 'Personal', 'Singular'],
+				'HIMSELF': [0, '3rd-Person', 'Reflexive', 'Singular'],
+				'HERSELF': [0, '3rd-Person', 'Reflexive', 'Singular'],
+				'HERS': [0, '3rd-Person', 'Possessive', 'Singular'], 'HIS': [0, '3rd-Person', 'Possessive', 'Singular'],
+				'THEY': [0, '3rd-Person', 'Personal', 'Plural'], 'THEM': [0, '3rd-Person', 'Personal', 'Plural'],
+				'THEMSELVES': [0, '3rd-Person', 'Reflexive', 'Plural'],
+				'THEIR': [0, '3rd-Person', 'Possessive', 'Plural'], 'THEIRS': [0, '3rd-Person', 'Possessive', 'Plural']}
+	if type(tokens) == list:
+		for token in tokens:
+			for k, v in pronouns.items():
+				if token.upper() == k:
+					v[0] += 1
+					break
+
+		return pronouns
+	else:
+		print("WARNING: Expected input of type list, found input of type " + type(tokens))
+		return False

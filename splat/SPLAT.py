@@ -52,7 +52,7 @@ class SPLAT:
     # Discourse Based Variables
     __adpu, __adps = (None,) * 2
     __splat = ""
-    __dpu, __dps, __disfluencies = ({},) * 3
+    __dpu, __dps, __disfluencies, __pronouns = ({},) * 4
 
     # Frequency Distribution Variables
     __freq_dist = None
@@ -224,6 +224,24 @@ class SPLAT:
         Frazier score is... http://www.m-mitchell.com/papers/RoarkEtAl-07-SynplexityforMCI.pdf
         """
         print("WARNING: String-Based Frazier Score calculation is under review, and thus not available at this time.")
+        return ''
+
+    def raw_pronouns(self):
+        """ Returns the raw output of /splat/Util.count_pronouns(). """
+        if self.__pronouns == {}:
+            self.__pronouns = Util.count_pronouns(self.tokens())
+        return self.__pronouns
+
+    def pronouns(self):
+        """ Prints out the pronoun statistics nicely. """
+        if self.__pronouns == {}:
+            self.__pronouns = Util.count_pronouns(self.tokens())
+
+        template = "{0:12} {1:^12} {2:50}"
+        print(template.format("Pronoun", "Frequency", "Type"))
+        for k, v in self.__pronouns.items():
+            print(template.format(k, v[0], v[1] + " " + v[2] + " (" + v[3] + ")"))
+
         return ''
 
     ##### SYLLABLES ####################################################################################################
