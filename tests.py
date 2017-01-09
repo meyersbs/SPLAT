@@ -6,10 +6,12 @@ import unittest, sys
 ##### SPLAT IMPORTS ####################################################################################################
 from splat.SPLAT import SPLAT
 
-class TestBasics(unittest.TestCase):
-    whitman_splat = SPLAT("tests/whitman_test.txt")
-    frankenstein_splat = SPLAT("tests/frankenstein_test.txt")
-    flesch_splat = SPLAT("tests/flesch_kincaid_test.txt")
+whitman_splat = SPLAT("tests/whitman_test.txt")
+frankenstein_splat = SPLAT("tests/frankenstein_test.txt")
+flesch_splat = SPLAT("tests/flesch_kincaid_test.txt")
+roark_splat = SPLAT("tests/roark_sample.txt")
+
+class TestLogistics(unittest.TestCase):
 
     def test_bad_input(self):
         try:
@@ -19,120 +21,128 @@ class TestBasics(unittest.TestCase):
         except TypeError as e:
             self.assertEqual(e.args[0], "argument should be string, bytes or integer, not list")
 
-    def test_sents(self):
-        expected = ['I celebrate myself, and sing myself, And what I assume you shall assume, For every atom belonging to me as good belongs to you.']
-        output = self.whitman_splat.sents()
-        unexpected = self.frankenstein_splat.sents()
-        self.assertEqual(output, expected)
-        self.assertNotEqual(output, unexpected)
-
-    def test_sentcount(self):
-        expected = 2
-        output = self.frankenstein_splat.sentcount()
-        unexpected = self.whitman_splat.sentcount()
-        self.assertEqual(output, expected)
-        self.assertNotEqual(output, unexpected)
-
-    def test_utts(self):
-        expected = ['I celebrate myself, and sing myself,', 'And what I assume you shall assume,', 'For every atom belonging to me as good belongs to you.']
-        output = self.whitman_splat.utts()
-        unexpected = self.frankenstein_splat.utts()
-        self.assertEqual(output, expected)
-        self.assertNotEqual(output, unexpected)
-
-    def test_uttcount(self):
-        expected = 3
-        output = self.frankenstein_splat.uttcount()
-        unexpected = self.flesch_splat.uttcount()
-        self.assertEqual(output, expected)
-        self.assertNotEqual(output, unexpected)
+class TestLexicalFeatures(unittest.TestCase):
+    global whitman_splat, frankenstein_splat
 
     def test_tokens(self):
         expected = ['i', 'celebrate', 'myself', 'and', 'sing', 'myself', 'and', 'what', 'i', 'assume', 'you', 'shall', 'assume', 'for', 'every', 'atom', 'belonging', 'to', 'me', 'as', 'good', 'belongs', 'to', 'you']
-        output = self.whitman_splat.tokens()
-        unexpected = self.frankenstein_splat.tokens()
+        output = whitman_splat.tokens()
+        unexpected = frankenstein_splat.tokens()
         self.assertEqual(output, expected)
         self.assertNotEqual(output, unexpected)
 
     def test_rawtokens(self):
         expected = ['I', 'celebrate', 'myself,', 'and', 'sing', 'myself,', 'And', 'what', 'I', 'assume', 'you', 'shall', 'assume,', 'For', 'every', 'atom', 'belonging', 'to', 'me', 'as', 'good', 'belongs', 'to', 'you.']
-        output = self.whitman_splat.rawtokens()
-        unexpected = self.whitman_splat.tokens()
+        output = whitman_splat.rawtokens()
+        unexpected = whitman_splat.tokens()
         self.assertEqual(output, expected)
         self.assertNotEqual(output, unexpected)
 
     def test_types(self):
         expected = [('and', 2), ('as', 1), ('assume', 2), ('atom', 1), ('belonging', 1), ('belongs', 1), ('celebrate', 1), ('every', 1), ('for', 1), ('good', 1), ('i', 2), ('me', 1), ('myself', 2), ('shall', 1), ('sing', 1), ('to', 2), ('what', 1), ('you', 2)]
-        output = self.whitman_splat.types()
-        unexpected = self.frankenstein_splat.types()
+        output = whitman_splat.types()
+        unexpected = frankenstein_splat.types()
         self.assertEqual(output, expected)
         self.assertNotEqual(output, unexpected)
 
     def test_rawtypes(self):
         expected = [('And', 1), ('For', 1), ('I', 2), ('and', 1), ('as', 1), ('assume', 1), ('assume,', 1), ('atom', 1), ('belonging', 1), ('belongs', 1), ('celebrate', 1), ('every', 1), ('good', 1), ('me', 1), ('myself,', 2), ('shall', 1), ('sing', 1), ('to', 2), ('what', 1), ('you', 1), ('you.', 1)]
-        output = self.whitman_splat.rawtypes()
-        unexpected = self.whitman_splat.types()
+        output = whitman_splat.rawtypes()
+        unexpected = whitman_splat.types()
         self.assertEqual(output, expected)
         self.assertNotEqual(output, unexpected)
 
     def test_type_token_ratio(self):
         expected = 0.8163
-        output = self.frankenstein_splat.type_token_ratio()
-        unexpected = self.whitman_splat.type_token_ratio()
+        output = frankenstein_splat.type_token_ratio()
+        unexpected = whitman_splat.type_token_ratio()
         self.assertEqual(output, expected)
         self.assertNotEqual(output, unexpected)
 
-    def test_syllables(self):
-        expected = 25
-        output = self.flesch_splat.syllables()
-        self.assertLessEqual(abs(expected - output), 1)
-
     def test_wordcount(self):
         expected = 49
-        output = self.frankenstein_splat.wordcount()
-        unexpected = self.whitman_splat.wordcount()
+        output = frankenstein_splat.wordcount()
+        unexpected = whitman_splat.wordcount()
         self.assertEqual(output, expected)
         self.assertNotEqual(output, unexpected)
 
     def test_unique_wordcount(self):
         expected = 18
-        output = self.whitman_splat.unique_wordcount()
-        unexpected = self.frankenstein_splat.unique_wordcount()
+        output = whitman_splat.unique_wordcount()
+        unexpected = frankenstein_splat.unique_wordcount()
         self.assertEqual(output, expected)
         self.assertNotEqual(output, unexpected)
 
+class TestSyntacticFeatures(unittest.TestCase):
+    global whitman_splat, frankenstein_splat, flesch_splat
+
+    def test_sents(self):
+        expected = ['I celebrate myself, and sing myself, And what I assume you shall assume, For every atom belonging to me as good belongs to you.']
+        output = whitman_splat.sents()
+        unexpected = frankenstein_splat.sents()
+        self.assertEqual(output, expected)
+        self.assertNotEqual(output, unexpected)
+
+    def test_sentcount(self):
+        expected = 2
+        output = frankenstein_splat.sentcount()
+        unexpected = whitman_splat.sentcount()
+        self.assertEqual(output, expected)
+        self.assertNotEqual(output, unexpected)
+
+    def test_utts(self):
+        expected = ['I celebrate myself, and sing myself,', 'And what I assume you shall assume,',
+                    'For every atom belonging to me as good belongs to you.']
+        output = whitman_splat.utts()
+        unexpected = frankenstein_splat.utts()
+        self.assertEqual(output, expected)
+        self.assertNotEqual(output, unexpected)
+
+    def test_uttcount(self):
+        expected = 3
+        output = frankenstein_splat.uttcount()
+        unexpected = flesch_splat.uttcount()
+        self.assertEqual(output, expected)
+        self.assertNotEqual(output, unexpected)
+
+class TestGrammaticalFeatures(unittest.TestCase):
+    global whitman_splat, frankenstein_splat
+
     def test_content_words(self):
-        expected = ['rejoice', 'hear', 'disaster', 'accompanied', 'commencement', 'enterprise', 'regarded', 'evil', 'forebodings', 'arrived', 'yesterday', 'first', 'task', 'assure', 'dear', 'sister', 'welfare', 'increasing', 'confidence', 'success', 'undertaking']
-        output = self.frankenstein_splat.content_words()
-        unexpected = self.whitman_splat.content_words()
+        expected = ['rejoice', 'hear', 'disaster', 'accompanied', 'commencement', 'enterprise', 'regarded', 'evil',
+                    'forebodings', 'arrived', 'yesterday', 'first', 'task', 'assure', 'dear', 'sister', 'welfare',
+                    'increasing', 'confidence', 'success', 'undertaking']
+        output = frankenstein_splat.content_words()
+        unexpected = whitman_splat.content_words()
         self.assertEqual(output, expected)
         self.assertNotEqual(output, unexpected)
 
     def test_function_words(self):
-        expected = ['you', 'will', 'to', 'that', 'no', 'has', 'the', 'of', 'an', 'which', 'you', 'have', 'with', 'such', 'i', 'here', 'and', 'my', 'is', 'to', 'my', 'of', 'my', 'and', 'in', 'the', 'of', 'my']
-        output = self.frankenstein_splat.function_words()
-        unexpected = self.whitman_splat.function_words()
+        expected = ['you', 'will', 'to', 'that', 'no', 'has', 'the', 'of', 'an', 'which', 'you', 'have', 'with', 'such',
+                    'i', 'here', 'and', 'my', 'is', 'to', 'my', 'of', 'my', 'and', 'in', 'the', 'of', 'my']
+        output = frankenstein_splat.function_words()
+        unexpected = whitman_splat.function_words()
         self.assertEqual(output, expected)
         self.assertNotEqual(output, unexpected)
 
     def test_content_function_ratio(self):
         expected = 0.75
-        output = self.frankenstein_splat.content_function_ratio()
-        unexpected = self.whitman_splat.content_function_ratio()
+        output = frankenstein_splat.content_function_ratio()
+        unexpected = whitman_splat.content_function_ratio()
         self.assertEqual(output, expected)
         self.assertNotEqual(output, unexpected)
 
     def test_unique_content_words(self):
         expected = ['assume', 'atom', 'belonging', 'belongs', 'celebrate', 'every', 'good', 'shall', 'sing']
-        output = self.whitman_splat.unique_content_words()
-        unexpected = self.frankenstein_splat.unique_content_words()
+        output = whitman_splat.unique_content_words()
+        unexpected = frankenstein_splat.unique_content_words()
         self.assertEqual(output, expected)
         self.assertNotEqual(output, unexpected)
 
     def test_unique_function_words(self):
         expected = ['and', 'as', 'for', 'i', 'me', 'myself', 'to', 'what', 'you']
-        output = self.whitman_splat.unique_function_words()
-        unexpected = self.frankenstein_splat.unique_function_words()
+        output = whitman_splat.unique_function_words()
+        unexpected = frankenstein_splat.unique_function_words()
         self.assertEqual(output, expected)
         self.assertNotEqual(output, unexpected)
 
@@ -148,118 +158,115 @@ class TestParsing(unittest.TestCase):
         pass
 
 class TestComplexity(unittest.TestCase):
-    whitman_splat = SPLAT("tests/whitman_test.txt")
-    frankenstein_splat = SPLAT("tests/frankenstein_test.txt")
-    flesch_splat = SPLAT("tests/flesch_kincaid_test.txt")
-    roark_splat = SPLAT("tests/roark_sample.txt")
+    global whitman_splat, frankenstein_splat, flesch_splat, roark_splat
 
     def test_mean_idea_density(self):
         expected_whitman = 0.5137
-        output_whitman = self.whitman_splat.idea_density()
+        output_whitman = whitman_splat.idea_density()
         self.assertAlmostEqual(output_whitman, expected_whitman, 4)
         expected_frankenstein = 0.5623
-        output_frankenstein = self.frankenstein_splat.idea_density()
+        output_frankenstein = frankenstein_splat.idea_density()
         self.assertAlmostEqual(output_frankenstein, expected_frankenstein, 4)
         expected_roark = 0.2500
-        output_roark = self.roark_splat.idea_density()
+        output_roark = roark_splat.idea_density()
         self.assertAlmostEqual(output_roark, expected_roark, 4)
         expected_flesch = 0.3846
-        output_flesch = self.flesch_splat.idea_density()
+        output_flesch = flesch_splat.idea_density()
         self.assertAlmostEqual(output_flesch, expected_flesch, 4)
 
     def test_max_idea_density(self):
         expected_whitman = 0.6364
-        output_whitman = self.whitman_splat.max_idea_density()
+        output_whitman = whitman_splat.max_idea_density()
         self.assertAlmostEqual(output_whitman, expected_whitman, 4)
         expected_frankenstein = 0.7500
-        output_frankenstein = self.frankenstein_splat.max_idea_density()
+        output_frankenstein = frankenstein_splat.max_idea_density()
         self.assertAlmostEqual(output_frankenstein, expected_frankenstein, 4)
         expected_roark = 0.2500
-        output_roark = self.roark_splat.max_idea_density()
+        output_roark = roark_splat.max_idea_density()
         self.assertAlmostEqual(output_roark, expected_roark, 4)
         expected_flesch = 0.3846
-        output_flesch = self.flesch_splat.max_idea_density()
+        output_flesch = flesch_splat.max_idea_density()
         self.assertAlmostEqual(output_flesch, expected_flesch, 4)
 
     def test_min_idea_density(self):
         expected_whitman = 0.3333
-        output_whitman = self.whitman_splat.min_idea_density()
+        output_whitman = whitman_splat.min_idea_density()
         self.assertAlmostEqual(output_whitman, expected_whitman, 4)
         expected_frankenstein = 0.3913
-        output_frankenstein = self.frankenstein_splat.min_idea_density()
+        output_frankenstein = frankenstein_splat.min_idea_density()
         self.assertAlmostEqual(output_frankenstein, expected_frankenstein, 4)
         expected_roark = 0.2500
-        output_roark = self.roark_splat.min_idea_density()
+        output_roark = roark_splat.min_idea_density()
         self.assertAlmostEqual(output_roark, expected_roark, 4)
         expected_flesch = 0.3846
-        output_flesch = self.flesch_splat.min_idea_density()
+        output_flesch = flesch_splat.min_idea_density()
         self.assertAlmostEqual(output_flesch, expected_flesch, 4)
 
     def test_mean_content_density(self):
         expected_whitman = 1.0778
-        output_whitman = self.whitman_splat.content_density()
+        output_whitman = whitman_splat.content_density()
         self.assertAlmostEqual(output_whitman, expected_whitman, 4)
         expected_frankenstein = 1.6970
-        output_frankenstein = self.frankenstein_splat.content_density()
+        output_frankenstein = frankenstein_splat.content_density()
         self.assertAlmostEqual(output_frankenstein, expected_frankenstein, 4)
         expected_roark = 1.0000
-        output_roark = self.roark_splat.content_density()
+        output_roark = roark_splat.content_density()
         self.assertAlmostEqual(output_roark, expected_roark, 4)
         expected_flesch = 1.6000
-        output_flesch = self.flesch_splat.content_density()
+        output_flesch = flesch_splat.content_density()
         self.assertAlmostEqual(output_flesch, expected_flesch, 4)
 
     def test_max_content_density(self):
         expected_whitman = 2.0000
-        output_whitman = self.whitman_splat.max_content_density()
+        output_whitman = whitman_splat.max_content_density()
         self.assertAlmostEqual(output_whitman, expected_whitman, 4)
         expected_frankenstein = 3.0000
-        output_frankenstein = self.frankenstein_splat.max_content_density()
+        output_frankenstein = frankenstein_splat.max_content_density()
         self.assertAlmostEqual(output_frankenstein, expected_frankenstein, 4)
         expected_roark = 1.0000
-        output_roark = self.roark_splat.max_content_density()
+        output_roark = roark_splat.max_content_density()
         self.assertAlmostEqual(output_roark, expected_roark, 4)
         expected_flesch = 1.6000
-        output_flesch = self.flesch_splat.max_content_density()
+        output_flesch = flesch_splat.max_content_density()
         self.assertAlmostEqual(output_flesch, expected_flesch, 4)
 
     def test_min_content_density(self):
         expected_whitman = 0.4000
-        output_whitman = self.whitman_splat.min_content_density()
+        output_whitman = whitman_splat.min_content_density()
         self.assertAlmostEqual(output_whitman, expected_whitman, 4)
         expected_frankenstein = 1.0000
-        output_frankenstein = self.frankenstein_splat.min_content_density()
+        output_frankenstein = frankenstein_splat.min_content_density()
         self.assertAlmostEqual(output_frankenstein, expected_frankenstein, 4)
         expected_roark = 1.0000
-        output_roark = self.roark_splat.min_content_density()
+        output_roark = roark_splat.min_content_density()
         self.assertAlmostEqual(output_roark, expected_roark, 4)
         expected_flesch = 1.6000
-        output_flesch = self.flesch_splat.min_content_density()
+        output_flesch = flesch_splat.min_content_density()
         self.assertAlmostEqual(output_flesch, expected_flesch, 4)
 
     def test_tree_based_yngve(self):
         expected = 1.1250
-        output = self.roark_splat.tree_based_yngve_score()
-        unexpected = self.whitman_splat.tree_based_yngve_score()
+        output = roark_splat.tree_based_yngve_score()
+        unexpected = whitman_splat.tree_based_yngve_score()
         self.assertEqual(output, expected)
         self.assertNotEqual(output, unexpected)
 
     def test_tree_based_frazier(self):
         expected = 0.9375
-        output = self.roark_splat.tree_based_frazier_score()
-        unexpected = self.whitman_splat.tree_based_frazier_score()
+        output = roark_splat.tree_based_frazier_score()
+        unexpected = whitman_splat.tree_based_frazier_score()
         self.assertEqual(output, expected)
         self.assertNotEqual(output, unexpected)
 
     def test_flesch_readability(self):
         expected = 37.5
-        output = self.flesch_splat.flesch_readability()
+        output = flesch_splat.flesch_readability()
         self.assertAlmostEqual(output, expected, 1)
 
     def test_flesch_kincaid(self):
         expected = 11.3
-        output = self.flesch_splat.kincaid_grade_level()
-        unexpected = self.whitman_splat.kincaid_grade_level()
+        output = flesch_splat.kincaid_grade_level()
+        unexpected = whitman_splat.kincaid_grade_level()
         self.assertEqual(output, expected)
         self.assertNotEqual(output, unexpected)
 
@@ -412,20 +419,31 @@ def run_test_suite(cla):
         suite = unittest.TestSuite()
         suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(TestParsing))
         unittest.TextTestRunner(verbosity=2).run(suite)
-    elif cla == "TestBasics":
+    elif cla == "TestLogistics":
         suite = unittest.TestSuite()
-        suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(TestBasics))
+        suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(TestLogistics))
+        unittest.TextTestRunner(verbosity=2).run(suite)
+    elif cla == "TestSyntacticFeatures":
+        suite = unittest.TestSuite()
+        suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(TestSyntacticFeatures))
+        unittest.TextTestRunner(verbosity=2).run(suite)
+    elif cla == "TestLexicalFeatures":
+        suite = unittest.TestSuite()
+        suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(TestLexicalFeatures))
+        unittest.TextTestRunner(verbosity=2).run(suite)
+    elif cla == "TestGrammaticalFeatures":
+        suite = unittest.TestSuite()
+        suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(TestGrammaticalFeatures))
         unittest.TextTestRunner(verbosity=2).run(suite)
 
 if __name__ == '__main__':
     args = sys.argv
     print(args)
+    test_suites = ['TestSyllables', 'TestComplexity', 'TestParsing', 'TestLogistics', 'TestLexicalFeatures',
+                   'TestSyntacticFeatures', 'TestGrammaticalFeatures']
     if len(args) >= 2:
         for arg in args[1:]:
-            if arg == "TestSyllables": run_test_suite(arg)
-            elif arg == "TestComplexity": run_test_suite(arg)
-            elif arg == "TestParsing": run_test_suite(arg)
-            elif arg == "TestBasics": run_test_suite(arg)
+            if arg in test_suites: run_test_suite(arg)
             else:
                 print("WARNING: Invalid argument " + arg)
                 print("Running all tests...")
