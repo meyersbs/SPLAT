@@ -26,21 +26,82 @@ except ImportError:
 
 try:
     from nltk.corpus import stopwords
+except ImportError:
+    print("Oops! It looks like some essential NLTK data was not downloaded. Let's fix that.")
+    print("Downloading 'stopwords' from NLTK ...")
+    status = subprocess.call(["python3", "-m", "nltk.downloader", "stopwords"],
+                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if status == 0:
+        print("NLTK data 'stopwords' was successfully downloaded!")
+    else:
+        print("Hmm... I couldn't download the essential NLTK data for you. I suggest running this command:\n\tpython3"
+              "-m nltk.downloader stopwords")
+
+try:
     from nltk.corpus import names
+except ImportError:
+    print("Oops! It looks like some essential NLTK data was not downloaded. Let's fix that.")
+    print("Downloading 'names' from NLTK ...")
+    status = subprocess.call(["python3", "-m", "nltk.downloader", "names"],
+                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if status == 0:
+        print("NLTK data 'names' was successfully downloaded!")
+    else:
+        print("Hmm... I couldn't download the essential NLTK data for you. I suggest running this command:\n\tpython3"
+              "-m nltk.downloader names")
+
+try:
     from nltk.corpus import cmudict
+except ImportError:
+    print("Oops! It looks like some essential NLTK data was not downloaded. Let's fix that.")
+    print("Downloading 'cmudict' from NLTK ...")
+    status = subprocess.call(["python3", "-m", "nltk.downloader", "cmudict"],
+                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if status == 0:
+        print("NLTK data 'cmudict' was successfully downloaded!")
+    else:
+        print("Hmm... I couldn't download the essential NLTK data for you. I suggest running this command:\n\tpython3"
+              "-m nltk.downloader cmudict")
+
+try:
     from nltk.corpus import brown
-    from nltk.tag.perceptron import averaged_perceptron_tagger
+except ImportError:
+    print("Oops! It looks like some essential NLTK data was not downloaded. Let's fix that.")
+    print("Downloading 'brown' from NLTK ...")
+    status = subprocess.call(["python3", "-m", "nltk.downloader", "brown"],
+                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if status == 0:
+        print("NLTK data 'brown' was successfully downloaded!")
+    else:
+        print("Hmm... I couldn't download the essential NLTK data for you. I suggest running this command:\n\tpython3"
+              "-m nltk.downloader brown")
+
+try:
     from nltk.tokenize import punkt
 except ImportError:
     print("Oops! It looks like some essential NLTK data was not downloaded. Let's fix that.")
-    print("Downloading NLTK data...")
-    status = subprocess.call(["python3", "-m", "nltk.downloader", "stopwords", "names", "brown", "cmudict", "punkt",
-                              "averaged_perceptron_tagger"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    print("Downloading 'punkt' from NLTK ...")
+    status = subprocess.call(["python3", "-m", "nltk.downloader", "punkt"],
+                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if status == 0:
-        print("Essential NLTK data was successfully downloaded!")
+        print("NLTK data 'punkt' was successfully downloaded!")
     else:
         print("Hmm... I couldn't download the essential NLTK data for you. I suggest running this command:\n\tpython3"
-              "-m nltk.downloader stopwords names punkt averaged_perceptron_tagger")
+              "-m nltk.downloader punkt")
+
+try:
+    #from nltk.corpus import averaged_perceptron_tagger
+    from nltk.tag import PerceptronTagger
+except ImportError:
+    print("Oops! It looks like some essential NLTK data was not downloaded. Let's fix that.")
+    print("Downloading 'averaged_perceptron_tagger' from NLTK ...")
+    status = subprocess.call(["python3", "-m", "nltk.downloader", "averaged_perceptron_tagger"],
+                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if status == 0:
+        print("NLTK data 'averaged_perceptron_tagger' was successfully downloaded!")
+    else:
+        print("Hmm... I couldn't download the essential NLTK data for you. I suggest running this command:\n\tpython3"
+              "-m nltk.downloader averaged_perceptron_tagger")
 
 try:
     import matplotlib
