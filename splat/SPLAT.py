@@ -57,6 +57,9 @@ class SPLAT:
     # Frequency Distribution Variables
     __freq_dist = None
 
+    # Unique Name
+    __name = ""
+
     def __init__(self, text):
         """
         Creates a SPLAT Object.
@@ -64,6 +67,7 @@ class SPLAT:
         if os.path.exists(text):
             temp_text = ""
             temp_utts = []
+            self.__name = text
             try:
                 for line in open(text, 'r'):
                     temp_utts.append(line.strip())
@@ -78,6 +82,7 @@ class SPLAT:
                     temp_utts.append(line.strip())
                 self.__utterances = temp_utts
         elif type(text) == str:
+            self.__name = text[0:20]
             self.__splat = text
             temp_utts = []
             for line in text.split("\n"):
@@ -564,6 +569,9 @@ class SPLAT:
 
     def splat(self):
         return self.__splat
+
+    def name(self):
+        return self.__name
 
     def __str__(self):
         """ Equivalent to Java's toString(). """

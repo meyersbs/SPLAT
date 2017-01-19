@@ -211,6 +211,9 @@ def load_splat(args):
     if os.path.exists(args[-1] + ".splat"):
         with open(args[-1] + ".splat", 'r') as f:
             my_splat.load(f)
+    elif os.path.exists(args[-1][0:20] + ".splat"):
+        with open(args[-1][0:20] + ".splat", 'r') as f:
+            my_splat.load(f)
     else:
         my_splat = SPLAT(args[-1])
         save_splat(args)
