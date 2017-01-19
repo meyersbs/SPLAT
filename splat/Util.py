@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 ##### PYTHON IMPORTS ###################################################################################################
-import re
+import re, string
 
 ##### NLTK IMPORTS #####################################################################################################
 from nltk.tree import Tree
@@ -187,23 +187,24 @@ def count_disfluencies(utterances):
 		words = 0
 		last_word = ""
 		for word in utt.split(" "):
+			clean_word = word.lower().rstrip(".,!?")
 			words += 1
-			if word.lower() == "um":
+			if clean_word == "um":
 				um_count += 1
-			elif word.lower() == "uh":
+			elif clean_word == "uh":
 				uh_count += 1
-			elif word.lower() == "ah":
+			elif clean_word == "ah":
 				ah_count += 1
-			elif word.lower() == "er":
+			elif clean_word == "er":
 				er_count += 1
-			elif word.lower() == "hm":
+			elif clean_word == "hm":
 				hm_count += 1
-			elif word.lower() == "{sl}":
+			elif clean_word == "{sl}":
 				pause_count += 1
-			elif word == last_word:
+			elif clean_word == last_word:
 				repetition_count += 1
-				last_word = word
-			elif re.search(r"-$", word):
+				last_word = clean_word
+			elif re.search(r"-$", clean_word):
 				break_count += 1
 			else:
 				pass
