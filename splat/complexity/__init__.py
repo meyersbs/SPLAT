@@ -79,9 +79,12 @@ def num_syllables(tokens):
 					l = levenshtein_distance(match, word.lower())
 					if l not in levs.keys(): levs[l] = []
 					levs[l].append(match)
-				min_lev = min(levs.keys())
-				closest = levs[min_lev][0]
-				pron = CMUDICT[closest]
+				try:
+					min_lev = min(levs.keys())
+					closest = levs[min_lev][0]
+					pron = CMUDICT[closest]
+				except:
+					pron = CMUDICT['to']
 			else:
 				# The token 'to' was chosen arbitrarily; I just needed a token that when looked up in the CMUDICT would
 				# return a syllable count of 1.
