@@ -1,121 +1,43 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
-########################################################################################################################
-##### INFORMATION ######################################################################################################
-### @PROJECT_NAME:		SPLAT: Speech Processing and Linguistic Analysis Tool										 ###
-### @VERSION_NUMBER:																								 ###
-### @PROJECT_SITE:		github.com/meyersbs/SPLAT																     ###
-### @AUTHOR_NAME:		Benjamin S. Meyers																			 ###
-### @CONTACT_EMAIL:		ben@splat-library.org																		 ###
-### @LICENSE_TYPE:		MIT																							 ###
-########################################################################################################################
-########################################################################################################################
-import subprocess
+""" Defines objects/constants for the splat module. """
 
-try:
-    import nltk
-    from nltk import pos_tag
-except ImportError:
-    print("Oops! It looks like NLTK was not installed. Let's fix that.")
-    print("Installing NLTK...")
-    status = subprocess.call(["pip3", "install", "nltk"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    if status == 0:
-        print("NLTK was successfully installed!")
-    else:
-        print("Hmm... I couldn't install NLTK for you. You probably don't have root privileges. I suggest running this command:\n\tsudo pip3 install nltk")
+__author__ = "Benjamin S. Meyers"
+__copyright__ = "Copyright 2015-2017, Benjamin S. Meyers"
+__credits__ = ["Benjamin S. Meyers"]
+__version__ = "1.0.0"
+__maintainer__ = "Benjamin S. Meyers"
+__email__ = "ben@splat-library.org"
+__status__ = "Development"
 
-try:
-    from nltk.corpus import stopwords
-except ImportError:
-    print("Oops! It looks like some essential NLTK data was not downloaded. Let's fix that.")
-    print("Downloading 'stopwords' from NLTK ...")
-    status = subprocess.call(["python3", "-m", "nltk.downloader", "stopwords"],
-                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    if status == 0:
-        print("NLTK data 'stopwords' was successfully downloaded!")
-    else:
-        print("Hmm... I couldn't download the essential NLTK data for you. I suggest running this command:\n\tpython3"
-              "-m nltk.downloader stopwords")
+#### IMPORTS ###################################################################
+from nltk.corpus import wordnet
 
-try:
-    from nltk.corpus import names
-except ImportError:
-    print("Oops! It looks like some essential NLTK data was not downloaded. Let's fix that.")
-    print("Downloading 'names' from NLTK ...")
-    status = subprocess.call(["python3", "-m", "nltk.downloader", "names"],
-                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    if status == 0:
-        print("NLTK data 'names' was successfully downloaded!")
-    else:
-        print("Hmm... I couldn't download the essential NLTK data for you. I suggest running this command:\n\tpython3"
-              "-m nltk.downloader names")
+from splat.config import Configuration
+from splat.logger import Logger
+from splat.sentence import Sentence
+from splat.word import Word
 
-try:
-    from nltk.corpus import cmudict
-except ImportError:
-    print("Oops! It looks like some essential NLTK data was not downloaded. Let's fix that.")
-    print("Downloading 'cmudict' from NLTK ...")
-    status = subprocess.call(["python3", "-m", "nltk.downloader", "cmudict"],
-                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    if status == 0:
-        print("NLTK data 'cmudict' was successfully downloaded!")
-    else:
-        print("Hmm... I couldn't download the essential NLTK data for you. I suggest running this command:\n\tpython3"
-              "-m nltk.downloader cmudict")
+CONFIG = Configuration()
+LOGGER = Logger()
+UNCERTAINTY_MAP = {'E': 'Epistemic', 'D': 'Doxastic', 'I': 'Investiation',
+                   'N': 'Condition', 'U': 'Uncertain', 'C': 'Certain'}
+WORDNET_POS_MAP = {'N': wordnet.NOUN, 'V': wordnet.VERB, 'J': wordnet.ADJ,
+                   'R': wordnet.ADV}
+SUPPORTED_LANGS = ['danish', 'dutch', 'english', 'finnish', 'french', 'german',
+                   'hungarian', 'italian', 'kazakh', 'norwegian', 'portuguese',
+                   'russian', 'spanish', 'swedish', 'turkish']
+FIXES_EN = {"'m": 'am', "'ll": 'will', "n't": 'not', "'ve": 'have',
+            "'re": 'are', "won't": 'will not', "can't": 'can not',
+            "aren't": 'are not', "wouldn't": 'would not',
+            "couldn't": 'could not', "shouldn't": 'should not',
+            "would've": 'would have', "could've": 'could have',
+            "should've": 'should have', "i'll": 'i will', "she'll": 'she will',
+            "he'll": 'he will', "they'll": 'they will', "you'll": 'you will',
+            "we'll": 'we will', "they're": 'they are', "you're": 'you are',
+            "we're": 'we are', "they've": 'they have', "we've": 'we have',
+            "you've": 'you have', "i've": 'i have'}
 
-try:
-    from nltk.corpus import brown
-except ImportError:
-    print("Oops! It looks like some essential NLTK data was not downloaded. Let's fix that.")
-    print("Downloading 'brown' from NLTK ...")
-    status = subprocess.call(["python3", "-m", "nltk.downloader", "brown"],
-                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    if status == 0:
-        print("NLTK data 'brown' was successfully downloaded!")
-    else:
-        print("Hmm... I couldn't download the essential NLTK data for you. I suggest running this command:\n\tpython3"
-              "-m nltk.downloader brown")
 
-try:
-    from nltk.tokenize import punkt
-except ImportError:
-    print("Oops! It looks like some essential NLTK data was not downloaded. Let's fix that.")
-    print("Downloading 'punkt' from NLTK ...")
-    status = subprocess.call(["python3", "-m", "nltk.downloader", "punkt"],
-                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    if status == 0:
-        print("NLTK data 'punkt' was successfully downloaded!")
-    else:
-        print("Hmm... I couldn't download the essential NLTK data for you. I suggest running this command:\n\tpython3"
-              "-m nltk.downloader punkt")
 
-try:
-    #from nltk.corpus import averaged_perceptron_tagger
-    from nltk.tag import PerceptronTagger
-except ImportError:
-    print("Oops! It looks like some essential NLTK data was not downloaded. Let's fix that.")
-    print("Downloading 'averaged_perceptron_tagger' from NLTK ...")
-    status = subprocess.call(["python3", "-m", "nltk.downloader", "averaged_perceptron_tagger"],
-                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    if status == 0:
-        print("NLTK data 'averaged_perceptron_tagger' was successfully downloaded!")
-    else:
-        print("Hmm... I couldn't download the essential NLTK data for you. I suggest running this command:\n\tpython3"
-              "-m nltk.downloader averaged_perceptron_tagger")
 
-try:
-    import matplotlib
-except ImportError:
-    print("Oops! It looks like matplotlib was not installed. Let's fix that.")
-    print("Installing matplotlib...")
-    status = subprocess.call(["pip3", "install", "matplotlib"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    if status == 0:
-        print("matplotlib was successfully installed!")
-    else:
-        print("Hmm... I couldn't install matplotlib for you. You probably don't have root privileges. I suggest running"
-              "this command:\n\tsudo pip3 install matplotlib")
-
-java_status = subprocess.call(["which", "java"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-if java_status != 0:
-    print("Java is not installed on your system. Java needs to be installed in order for me to do any part-of-speech"
-          "tagging.\n\nPlease install java and try again.")

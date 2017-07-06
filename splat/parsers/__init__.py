@@ -1,24 +1,15 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
-########################################################################################################################
-##### INFORMATION ######################################################################################################
-### @PROJECT_NAME:		SPLAT: Speech Processing and Linguistic Analysis Tool										 ###
-### @VERSION_NUMBER:																								 ###
-### @PROJECT_SITE:		github.com/meyersbs/SPLAT																     ###
-### @AUTHOR_NAME:		Benjamin S. Meyers																			 ###
-### @CONTACT_EMAIL:		ben@splat-library.org																		 ###
-### @LICENSE_TYPE:		MIT																							 ###
-########################################################################################################################
-########################################################################################################################
+"""  """
 
-"""
-This package contains the following files:
-	[01] BerkeleyParser-1.7.jar
-			The Berkeley Parser provides a number of natural language processing functions. It is used by the codebase
-			to generate parsers tree strings.
-			Project Site: <https://github.com/slavpetrov/berkeleyparser>
-	[02] eng_sm6.gr
-			A grammar file for English used by the Berkeley Parser
-	[03] TreeStringParser.py
-			Provides functions to run the Berkeley Parser and capture its output.
-"""
+__author__ = "Benjamin S. Meyers"
+__copyright__ = "Copyright 2015-2017, Benjamin S. Meyers"
+__credits__ = ["Benjamin S. Meyers", "Emily Prud'hommeaux", "Cecilia O. Alm",
+               "Bryan T. Meyers", "Nuthan Munaiah"]
+__license__ = "MIT"
+__version__ = "1.0.0"
+__maintainer__ = "Benjamin S. Meyers"
+__email__ = "ben@splat-library.org"
+__status__ = "Development"
+
+

@@ -1,7 +1,18 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
-##### PYTHON IMPORTS ###################################################################################################
-import os.path, sys, json
+""" The heart of the library. """
+
+__author__ = "Benjamin S. Meyers"
+__copyright__ = "Copyright 2015-2017, Benjamin S. Meyers"
+__credits__ = ["Benjamin S. Meyers"]
+__version__ = "1.0.0"
+__maintainer__ = "Benjamin S. Meyers"
+__email__ = "ben@splat-library.org"
+__status__ = "Development"
+
+#### IMPORTS ###################################################################
+import json
+import os.path
 
 ##### SPLAT IMPORTS ####################################################################################################
 from splat.gramminators.FullNGramminator import FullNGramminator
