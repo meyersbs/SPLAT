@@ -64,7 +64,7 @@ class SPLAT:
         """
         Creates a SPLAT Object.
         """
-        if os.path.exists(text):
+        if os.path.isfile(text):
             temp_text = ""
             temp_utts = []
             self.__name = text

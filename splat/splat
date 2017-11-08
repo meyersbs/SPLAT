@@ -208,10 +208,10 @@ def run_command(args):
 
 def load_splat(args):
     global my_splat
-    if os.path.exists(args[-1] + ".splat"):
+    if os.path.isfile(args[-1] + ".splat"):
         with open(args[-1] + ".splat", 'r') as f:
             my_splat.load(f)
-    elif os.path.exists(args[-1][0:20] + ".splat"):
+    elif os.path.isfile(args[-1][0:20] + ".splat"):
         with open(args[-1][0:20] + ".splat", 'r') as f:
             my_splat.load(f)
     else:

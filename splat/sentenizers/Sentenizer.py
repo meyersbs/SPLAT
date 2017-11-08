@@ -118,7 +118,7 @@ class Sentenizer:
 		"""
 		sentences = []
 		if type(text) == str:
-			if os.path.exists(text):
+			if os.path.isfile(text):
 				sentences = self.__sentenize_file(self, text)
 			else:
 				sentences = self.__sentenize_string(self, text)

@@ -34,7 +34,7 @@ class NLTKSentenizer(Sentenizer):
 		"""
 		sentences = ""
 		if type(text) == str:
-			if os.path.exists(text):
+			if os.path.isfile(text):
 				sentences = " ".join(self.__sentenize_file(self, text))
 			else:
 				sentences = text

@@ -28,7 +28,7 @@ class NLTKCleanTokenizer(Tokenizer):
 	def tokenize(self, text):
 		raw_tokens = []
 		if type(text) == str:
-			if os.path.exists(text):
+			if os.path.isfile(text):
 				raw_tokens = self.__tokenize_file(text)
 			else:
 				raw_tokens = text
