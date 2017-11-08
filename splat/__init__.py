@@ -115,7 +115,7 @@ except ImportError:
         print("Hmm... I couldn't install matplotlib for you. You probably don't have root privileges. I suggest running"
               "this command:\n\tsudo pip3 install matplotlib")
 
-java_status = subprocess.call(["which", "java"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+java_status = subprocess.call(["java", "-version"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 if java_status != 0:
     print("Java is not installed on your system. Java needs to be installed in order for me to do any part-of-speech"
           "tagging.\n\nPlease install java and try again.")

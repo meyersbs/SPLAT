@@ -21,6 +21,8 @@ SPLAT is being developed and tested on 64-bit Ubuntu 15.10 with Python 3.4.3. Mi
 * Python 3.4 or Later
 * NLTK 3.1 or Later
 * Java (for the Berkeley Parser)
+* NLTK packages `brown`, `stopwords`, `names`, and `cmudict`
+
 
 - - - -
 ## Installation
