@@ -1,0 +1,8 @@
+# Files
+.coverage
+*.pyc
+
+# Directories
+.idea/*
+*/__pycache__/*
+doc/*
